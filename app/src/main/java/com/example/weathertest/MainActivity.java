@@ -90,6 +90,7 @@ public class MainActivity extends AppCompatActivity implements RecyclerviewAdapt
     }
 
     public String getlocation() {
+        //get city name in setting page (user enter this city )
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         String location = sharedPreferences.getString("location", "");
 
