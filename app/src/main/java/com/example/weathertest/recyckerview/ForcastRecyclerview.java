@@ -1,9 +1,10 @@
 package com.example.weathertest.recyckerview;
 
+import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -12,19 +13,22 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.weathertest.R;
 import com.example.weathertest.model.recyclerview_item;
+import com.example.weathertest.util.sharepreferenced_setting;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
-public class RecyclerviewAdapter extends RecyclerView.Adapter<RecyclerviewAdapter.viewholder> {
+public class ForcastRecyclerview extends RecyclerView.Adapter<ForcastRecyclerview.viewholder> {
 
     List<recyclerview_item> list;
-    private Onitemclick monitemclicl;
+    sharepreferenced_setting sharepreferenced_setting;
+    private final Onitemclick monitemclicl;
 
 
-    public RecyclerviewAdapter(List<recyclerview_item> list, Onitemclick onitemclick) {
+    public ForcastRecyclerview(List<recyclerview_item> list, Onitemclick onitemclick , Context context) {
         this.list = list;
         this.monitemclicl = onitemclick;
+        sharepreferenced_setting = new sharepreferenced_setting(context);
     }
 
     @NonNull
@@ -37,13 +41,22 @@ public class RecyclerviewAdapter extends RecyclerView.Adapter<RecyclerviewAdapte
 
     @Override
     public void onBindViewHolder(@NonNull viewholder holder, int position) {
-
-        holder.temp.setText(Math.round(Double.parseDouble(list.get(position).temp)) + "\u2103");
-        holder.min.setText("Min" + "\n" + Math.round(Double.parseDouble(list.get(position).min)) + "\u2103");
-        holder.max.setText("Max" + "\n" + Math.round(Double.parseDouble(list.get(position).max)) + "\u2103");
+        String units;
+        if(position==0){
+            Log.d("TAG", "onBindViewHolder: " + getItemId(position));
+            holder.test.setText("Tomorrow");
+        } else {
+            holder.test.setText(list.get(position).time);
+        }
+        if (sharepreferenced_setting.temp_symbol().equals("M")){
+            units="\u2103";
+        } else {
+            units="\u2109";
+        }
+        holder.temp.setText(Math.round(Double.parseDouble(list.get(position).temp)) + " "+units);
+        holder.min.setText(Math.round(Double.parseDouble(list.get(position).min)) + " "+units);
+        holder.max.setText(Math.round(Double.parseDouble(list.get(position).max)) + " "+units);
         Picasso.get().load(list.get(position).icon).fit().into(holder.imageView);
-        holder.test.setText(list.get(position).time);
-
     }
 
     @Override
@@ -70,8 +83,6 @@ public class RecyclerviewAdapter extends RecyclerView.Adapter<RecyclerviewAdapte
             itemView.setOnClickListener(this);
 
         }
-
-
         @Override
         public void onClick(View v) {
             onitemclick.onclick(getAdapterPosition());
@@ -81,5 +92,4 @@ public class RecyclerviewAdapter extends RecyclerView.Adapter<RecyclerviewAdapte
     public interface Onitemclick {
         void onclick(int p);
     }
-
 }
