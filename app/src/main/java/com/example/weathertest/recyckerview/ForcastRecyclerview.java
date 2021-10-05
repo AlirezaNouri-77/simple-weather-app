@@ -23,7 +23,7 @@ public class ForcastRecyclerview extends RecyclerView.Adapter<ForcastRecyclervie
     List<recyclerview_item> list;
     sharepreferenced_setting sharepreferenced_setting;
     private final Onitemclick monitemclicl;
-
+    
 
     public ForcastRecyclerview(List<recyclerview_item> list, Onitemclick onitemclick , Context context) {
         this.list = list;
@@ -43,7 +43,6 @@ public class ForcastRecyclerview extends RecyclerView.Adapter<ForcastRecyclervie
     public void onBindViewHolder(@NonNull viewholder holder, int position) {
         String units;
         if(position==0){
-            Log.d("TAG", "onBindViewHolder: " + getItemId(position));
             holder.test.setText("Tomorrow");
         } else {
             holder.test.setText(list.get(position).time);
@@ -58,6 +57,8 @@ public class ForcastRecyclerview extends RecyclerView.Adapter<ForcastRecyclervie
         holder.max.setText(Math.round(Double.parseDouble(list.get(position).max)) + " "+units);
         Picasso.get().load(list.get(position).icon).fit().into(holder.imageView);
     }
+
+
 
     @Override
     public int getItemCount() {
