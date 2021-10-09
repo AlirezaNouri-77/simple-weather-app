@@ -22,17 +22,6 @@ public class local_json_city {
         this.context = context;
     }
 
-    public List<searchview_model> list () throws JSONException {
-        List<searchview_model> list = new ArrayList<>();
-
-        JSONArray jsonArray = new JSONArray(loadJSONFromAsset());
-        for (int i = 0 ; i < jsonArray.length() ; i++){
-            JSONObject jsonObject = jsonArray.getJSONObject(i);
-            list.add(new searchview_model(jsonObject.getString("name")));
-        }
-        return list;
-
-    }
     public String loadJSONFromAsset() {
 
         String json;

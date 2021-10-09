@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
 import androidx.cardview.widget.CardView;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -19,11 +20,14 @@ import android.widget.TextView;
 import com.example.weathertest.model.current_model;
 import com.example.weathertest.model.minute_forcast;
 import com.example.weathertest.model.recyclerview_item;
+import com.example.weathertest.model.searchview_model;
 import com.example.weathertest.recyckerview.ForcastRecyclerview;
 import com.example.weathertest.recyckerview.Minute_forcastRecyclerview;
 import com.example.weathertest.recyckerview.searchview_rv;
 import com.example.weathertest.util.local_json_city;
 import com.example.weathertest.util.sharepreferenced_setting;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.squareup.picasso.Picasso;
 
 import org.jetbrains.annotations.NotNull;
@@ -41,20 +45,25 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
-public class MainActivity extends AppCompatActivity implements ForcastRecyclerview.Onitemclick {
+public class MainActivity extends AppCompatActivity implements ForcastRecyclerview.forcastclicklistner, searchview_rv.searchview_onclick {
 
 
-    List<recyclerview_item> list;
+    List<recyclerview_item> sixtyday_forcastlist;
     List<minute_forcast> minute_model_list;
     List<current_model> current_list;
+    List<searchview_model> searchview_recyclerviewlist;
 
-    RecyclerView forcast_rv, minute_rv, searcheview_rv;
+    RecyclerView forcast_recyclerview, minute_recyclerview, searcheview_rv;
     CardView cardView;
     TextView cityname, currenttemp, condition, fail;
-    String iconcode;
+    ConstraintLayout constraintLayout;
 
     local_json_city local_json_city;
     sharepreferenced_setting sharepreferenced_setting;
+
+    searchview_rv searchview_rv;
+
+    androidx.appcompat.widget.SearchView searchView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,28 +73,34 @@ public class MainActivity extends AppCompatActivity implements ForcastRecyclervi
         sharepreferenced_setting = new sharepreferenced_setting(this);
         local_json_city = new local_json_city(this);
 
-        searcheview_rv = findViewById(R.id.searchview_rv);
-        searchview_rv searchview_rv = null;
-        try {
-            searchview_rv = new searchview_rv(local_json_city.list());
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        searcheview_rv.setLayoutManager(new LinearLayoutManager(MainActivity.this));
-
-        searcheview_rv.setAdapter(searchview_rv);
-        list = new ArrayList<>();
+        sixtyday_forcastlist = new ArrayList<>();
         minute_model_list = new ArrayList<>();
         current_list = new ArrayList<>();
 
+        constraintLayout = findViewById(R.id.constraint);
+        searcheview_rv = findViewById(R.id.searchview_rv);
+        forcast_recyclerview = findViewById(R.id.forcast_recyclerview);
+
+        Gson gson = new Gson();
+
+        searchview_recyclerviewlist = gson.fromJson(local_json_city.loadJSONFromAsset(), new TypeToken<List<searchview_model>>() {}.getType());
+
+
+        searchview_rv = new searchview_rv(searchview_recyclerviewlist, this);
+        searcheview_rv.setLayoutManager(new LinearLayoutManager(MainActivity.this));
+        searcheview_rv.setAdapter(searchview_rv);
+
         curent_weather();
         forcast_weather();
+
+        Log.d("TAG", "onCreate: " + urlmaker());
+        Log.d("TAG", "onCreate: " + urlmaker2());
 
     }
 
     @Override
     protected void onStart() {
-        list.clear();
+        sixtyday_forcastlist.clear();
         curent_weather();
         forcast_weather();
         super.onStart();
@@ -93,7 +108,7 @@ public class MainActivity extends AppCompatActivity implements ForcastRecyclervi
 
     @Override
     protected void onResume() {
-        list.clear();
+        sixtyday_forcastlist.clear();
         curent_weather();
         forcast_weather();
         super.onResume();
@@ -104,17 +119,18 @@ public class MainActivity extends AppCompatActivity implements ForcastRecyclervi
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.option_menu, menu);
         MenuItem menuItem = menu.findItem(R.id.search_view);
-        androidx.appcompat.widget.SearchView searchView = (androidx.appcompat.widget.SearchView) menuItem.getActionView();
+        searchView = (androidx.appcompat.widget.SearchView) menuItem.getActionView();
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
+
                 return false;
             }
 
             @Override
             public boolean onQueryTextChange(String newText) {
-
-                return false;
+                searchview_rv.getFilter().filter(newText);
+                return true;
             }
         });
         searchView.setOnQueryTextFocusChangeListener(new View.OnFocusChangeListener() {
@@ -122,10 +138,11 @@ public class MainActivity extends AppCompatActivity implements ForcastRecyclervi
             public void onFocusChange(View v, boolean hasFocus) {
                 if (hasFocus) {
                     searcheview_rv.setVisibility(View.VISIBLE);
+                    constraintLayout.setVisibility(View.INVISIBLE);
                 } else {
                     searcheview_rv.setVisibility(View.GONE);
+                    constraintLayout.setVisibility(View.VISIBLE);
                 }
-
             }
         });
         return super.onCreateOptionsMenu(menu);
@@ -141,27 +158,16 @@ public class MainActivity extends AppCompatActivity implements ForcastRecyclervi
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
-    public void onclick(int p) {
-
-        Intent intent = new Intent(MainActivity.this, DetailActiviy.class);
-        intent.putExtra("Temp", list.get(p).temp);
-        intent.putExtra("time", list.get(p).time);
-        intent.putExtra("min", list.get(p).min);
-        intent.putExtra("max", list.get(p).max);
-        intent.putExtra("iconurl", list.get(p).icon);
-        startActivity(intent);
-
-    }
 
     public String urlmaker() {
-        return "https://api.weatherbit.io/v2.0/current?city=" + sharepreferenced_setting.getlocation() + "&key=8a8ec0d5af5f4806ada672017c6d44b5&" + "units=" + sharepreferenced_setting.temp_symbol() + "&include=minutely";
+        return "https://api.weatherbit.io/v2.0/current?city=" + sharepreferenced_setting.getdefault() + "&key=8a8ec0d5af5f4806ada672017c6d44b5&" + "units=" + sharepreferenced_setting.temp_symbol() + "&include=minutely";
     }
 
 
     public String urlmaker2() {
-        return "https://api.weatherbit.io/v2.0/forecast/daily?city=" + sharepreferenced_setting.getlocation() + "&key=8a8ec0d5af5f4806ada672017c6d44b5&" + "units=" + sharepreferenced_setting.temp_symbol();
+        return "https://api.weatherbit.io/v2.0/forecast/daily?city=" + sharepreferenced_setting.getdefault() + "&key=8a8ec0d5af5f4806ada672017c6d44b5&" + "units=" + sharepreferenced_setting.temp_symbol();
     }
+
 
 
     public void curent_weather() {
@@ -186,6 +192,8 @@ public class MainActivity extends AppCompatActivity implements ForcastRecyclervi
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
                 if (response.isSuccessful()) {
+                    current_list.clear();
+                    minute_model_list.clear();
                     try {
                         JSONObject jsonObject = new JSONObject(response.body().string());
                         JSONArray jsonArray = jsonObject.getJSONArray("data");
@@ -220,31 +228,27 @@ public class MainActivity extends AppCompatActivity implements ForcastRecyclervi
                             }
                             currenttemp.setText(current_list.get(0).getTemp() + units);
                             Picasso.get().load(current_list.get(0).getIcon_url()).into(imageView);
-                            minute_rv.setLayoutManager(new LinearLayoutManager(MainActivity.this, LinearLayoutManager.HORIZONTAL, false));
-                            minute_rv.setHasFixedSize(true);
+                            minute_recyclerview.setLayoutManager(new LinearLayoutManager(MainActivity.this, LinearLayoutManager.HORIZONTAL, false));
+                            minute_recyclerview.setHasFixedSize(true);
                             Minute_forcastRecyclerview minute_forcastRecyclerview = new Minute_forcastRecyclerview(minute_model_list);
-                            minute_rv.setAdapter(minute_forcastRecyclerview);
-                            RecyclerView recyclerView = findViewById(R.id.RV);
-                            ForcastRecyclerview adapter = new ForcastRecyclerview(list, MainActivity.this, MainActivity.this);
-                            recyclerView.setLayoutManager(new LinearLayoutManager(MainActivity.this));
-                            recyclerView.setAdapter(adapter);
+                            minute_recyclerview.setAdapter(minute_forcastRecyclerview);
+
 
                         }
                     });
                 }
             }
-
         });
     }
 
     public void forcast_weather() {
 
-        minute_rv = findViewById(R.id.minute_recyclerview);
+        minute_recyclerview = findViewById(R.id.minute_recyclerview);
         cardView = findViewById(R.id.cardView2);
-        forcast_rv = findViewById(R.id.RV);
+        forcast_recyclerview = findViewById(R.id.forcast_recyclerview);
         fail = findViewById(R.id.fail);
         fail.setVisibility(View.GONE);
-        forcast_rv.setVisibility(View.VISIBLE);
+        forcast_recyclerview.setVisibility(View.VISIBLE);
         cardView.setVisibility(View.VISIBLE);
 
         OkHttpClient okHttpClient1 = new OkHttpClient();
@@ -255,51 +259,75 @@ public class MainActivity extends AppCompatActivity implements ForcastRecyclervi
         okHttpClient1.newCall(request1).enqueue(new Callback() {
             @Override
             public void onFailure(@NotNull Call call, @NotNull IOException e) {
-
             }
 
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
-
                 JSONObject jsonObject;
 
                 if (response.isSuccessful()) {
-
+                    sixtyday_forcastlist.clear();
                     try {
-
                         jsonObject = new JSONObject(response.body().string());
                         JSONArray jsonArray = jsonObject.getJSONArray("data");
                         for (int i = 1; i < jsonArray.length(); i++) {
                             JSONObject j = jsonArray.getJSONObject(i);
                             String url = "https://www.weatherbit.io/static/img/icons/" + j.getJSONObject("weather").getString("icon") + ".png";
-                            list.add(new recyclerview_item(j.getString("temp"),
+                            sixtyday_forcastlist.add(new recyclerview_item(j.getString("temp"),
                                     j.getString("valid_date"),
                                     j.getString("max_temp"),
                                     j.getString("low_temp"),
                                     url)
                             );
                         }
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+
+                                ForcastRecyclerview adapter = new ForcastRecyclerview( sixtyday_forcastlist , MainActivity.this, MainActivity.this);
+                                forcast_recyclerview.setLayoutManager(new LinearLayoutManager(MainActivity.this));
+                                forcast_recyclerview.setAdapter(adapter);
+
+                            }
+                        });
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
-
-
                 } else {
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
+                    runOnUiThread(() -> {
 
-                            fail = findViewById(R.id.fail);
-                            fail.setVisibility(View.VISIBLE);
-                            fail.setText("Your entred City " + sharepreferenced_setting.getlocation() + " not found please enter other city");
-                            forcast_rv.setVisibility(View.GONE);
-                            cardView.setVisibility(View.GONE);
+                        fail = findViewById(R.id.fail);
+                        fail.setVisibility(View.VISIBLE);
+                        fail.setText("Your entred City " + sharepreferenced_setting.getdefault() + " not found please enter other city");
+                        forcast_recyclerview.setVisibility(View.GONE);
+                        cardView.setVisibility(View.GONE);
 
-                        }
                     });
                 }
-                call.cancel();
             }
         });
+    }
+
+    @Override
+    public void onclick(int p) {
+
+        Intent intent = new Intent(MainActivity.this, DetailActiviy.class);
+        intent.putExtra("Temp", sixtyday_forcastlist.get(p).temp);
+        intent.putExtra("time", sixtyday_forcastlist.get(p).time);
+        intent.putExtra("min", sixtyday_forcastlist.get(p).min);
+        intent.putExtra("max", sixtyday_forcastlist.get(p).max);
+        intent.putExtra("iconurl", sixtyday_forcastlist.get(p).icon);
+        startActivity(intent);
+
+    }
+
+    @Override
+    public void searchview_onitemclick(int i) {
+        sharepreferenced_setting.setdefualt(searchview_recyclerviewlist.get(i).getCity().trim());
+        searchView.clearFocus();
+        searchView.onActionViewCollapsed();
+        curent_weather();
+        forcast_weather();
+
     }
 }

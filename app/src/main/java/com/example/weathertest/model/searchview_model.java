@@ -1,10 +1,13 @@
 package com.example.weathertest.model;
 
+import com.google.gson.annotations.SerializedName;
+
 public class searchview_model {
 
+    @SerializedName("name")
     String city;
 
-    public searchview_model(String city) {
+    public searchview_model() {
         this.city = city;
     }
 
