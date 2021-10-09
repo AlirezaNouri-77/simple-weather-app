@@ -7,29 +7,22 @@
     android:layout_height="match_parent">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/constraint"
+
+        android:id="@+id/linerlayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="#f2f2f6"
         android:orientation="vertical"
         tools:context=".MainActivity">
 
-        <TextView
-            android:id="@+id/fail"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_margin="30dp"
-            android:textColor="@color/white"
-            android:textSize="32sp"
-            android:visibility="gone"
-            tools:visibility="gone" />
-
         <androidx.cardview.widget.CardView
-            android:id="@+id/cardView2"
+            android:id="@+id/current_cardview"
             android:layout_width="match_parent"
             android:layout_height="240dp"
             android:layout_gravity="center"
             android:layout_margin="5dp"
+            android:layout_weight="5"
+            android:elevation="10dp"
             app:cardBackgroundColor="#ffffff"
             app:cardCornerRadius="10dp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -42,13 +35,15 @@
 
                 <TextView
                     android:id="@+id/cityname"
-                    android:layout_width="121dp"
-                    android:layout_height="42dp"
+                    android:layout_width="150dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="28dp"
                     android:gravity="center"
                     android:text="TextView"
                     android:textColor="@color/black"
                     android:textSize="26sp"
                     app:layout_constraintEnd_toEndOf="@+id/textView3"
+                    app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintStart_toStartOf="@+id/textView3"
                     app:layout_constraintTop_toBottomOf="@+id/textView3" />
 
@@ -108,37 +103,97 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.cardview.widget.CardView>
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/forcast_recyclerview"
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/minute_cardview"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="8"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="10dp"
+            android:elevation="10dp"
+            android:maxHeight="100dp"
+            app:cardBackgroundColor="#ffffff"
+            app:cardCornerRadius="10dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/current_cardview">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+
+                <TextView
+                    android:id="@+id/textView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="4"
+                    android:padding="5dp"
+                    android:paddingLeft="5dp"
+                    android:text="1 hour forcast"
+                    tools:layout_editor_absoluteY="240dp" />
+
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/minute_recyclerview"
+                    android:layout_width="match_parent"
+                    android:layout_height="80dp"
+                    android:layout_weight="6"
+                    android:padding="2dp"
+                    tools:layout_editor_absoluteX="1dp"
+                    tools:layout_editor_absoluteY="259dp" />
+
+            </LinearLayout>
+
+
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/forcast_cardview"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_weight="2"
+            android:elevation="10dp"
+            app:cardBackgroundColor="#ffffff"
+            app:cardCornerRadius="10dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/minute_recyclerview" />
+            app:layout_constraintTop_toBottomOf="@+id/minute_cardview">
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/minute_recyclerview"
-            android:layout_width="match_parent"
-            android:layout_height="100dp"
-            android:layout_marginTop="1dp"
-            android:layout_marginBottom="1dp"
-            android:paddingLeft="5dp"
-            android:paddingRight="5dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/cardView2" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/city_recyclerview"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+                <TextView
+                    android:id="@+id/textView2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="5dp"
+                    android:text="16 day forcast"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/minute_recyclerview" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/forcast_recyclerview"
+                    android:layout_width="match_parent"
+                    android:layout_height="385dp"
+                    android:layout_weight="8"
+                    tools:layout_editor_absoluteX="0dp"
+                    tools:layout_editor_absoluteY="404dp" />
+
+
+            </LinearLayout>
+
+
+        </androidx.cardview.widget.CardView>
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -146,8 +201,8 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/searchview_rv"
         android:layout_width="match_parent"
-        android:visibility="gone"
         android:layout_height="match_parent"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

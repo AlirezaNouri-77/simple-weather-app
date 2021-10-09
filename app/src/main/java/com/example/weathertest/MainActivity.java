@@ -3,14 +3,12 @@ package com.example.weathertest;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
-import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -54,8 +52,8 @@ public class MainActivity extends AppCompatActivity implements ForcastRecyclervi
     List<searchview_model> searchview_recyclerviewlist;
 
     RecyclerView forcast_recyclerview, minute_recyclerview, searcheview_rv;
-    CardView cardView;
-    TextView cityname, currenttemp, condition, fail;
+
+    TextView cityname, currenttemp, condition;
     ConstraintLayout constraintLayout;
 
     local_json_city local_json_city;
@@ -77,24 +75,18 @@ public class MainActivity extends AppCompatActivity implements ForcastRecyclervi
         minute_model_list = new ArrayList<>();
         current_list = new ArrayList<>();
 
-        constraintLayout = findViewById(R.id.constraint);
+        constraintLayout = findViewById(R.id.linerlayout);
         searcheview_rv = findViewById(R.id.searchview_rv);
         forcast_recyclerview = findViewById(R.id.forcast_recyclerview);
 
         Gson gson = new Gson();
-
         searchview_recyclerviewlist = gson.fromJson(local_json_city.loadJSONFromAsset(), new TypeToken<List<searchview_model>>() {}.getType());
-
-
         searchview_rv = new searchview_rv(searchview_recyclerviewlist, this);
         searcheview_rv.setLayoutManager(new LinearLayoutManager(MainActivity.this));
         searcheview_rv.setAdapter(searchview_rv);
 
         curent_weather();
         forcast_weather();
-
-        Log.d("TAG", "onCreate: " + urlmaker());
-        Log.d("TAG", "onCreate: " + urlmaker2());
 
     }
 
@@ -159,15 +151,14 @@ public class MainActivity extends AppCompatActivity implements ForcastRecyclervi
     }
 
 
-    public String urlmaker() {
+    public String current_url_maker() {
         return "https://api.weatherbit.io/v2.0/current?city=" + sharepreferenced_setting.getdefault() + "&key=8a8ec0d5af5f4806ada672017c6d44b5&" + "units=" + sharepreferenced_setting.temp_symbol() + "&include=minutely";
     }
 
 
-    public String urlmaker2() {
+    public String forcast_url_maker() {
         return "https://api.weatherbit.io/v2.0/forecast/daily?city=" + sharepreferenced_setting.getdefault() + "&key=8a8ec0d5af5f4806ada672017c6d44b5&" + "units=" + sharepreferenced_setting.temp_symbol();
     }
-
 
 
     public void curent_weather() {
@@ -180,14 +171,13 @@ public class MainActivity extends AppCompatActivity implements ForcastRecyclervi
 
         OkHttpClient okHttpClient = new OkHttpClient();
         Request request = new Request.Builder()
-                .url(urlmaker())
+                .url(current_url_maker())
                 .build();
 
         okHttpClient.newCall(request).enqueue(new Callback() {
 
             @Override
-            public void onFailure(@NotNull Call call, @NotNull IOException e) {
-            }
+            public void onFailure(@NotNull Call call, @NotNull IOException e) {}
 
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
@@ -244,16 +234,13 @@ public class MainActivity extends AppCompatActivity implements ForcastRecyclervi
     public void forcast_weather() {
 
         minute_recyclerview = findViewById(R.id.minute_recyclerview);
-        cardView = findViewById(R.id.cardView2);
         forcast_recyclerview = findViewById(R.id.forcast_recyclerview);
-        fail = findViewById(R.id.fail);
-        fail.setVisibility(View.GONE);
+
         forcast_recyclerview.setVisibility(View.VISIBLE);
-        cardView.setVisibility(View.VISIBLE);
 
         OkHttpClient okHttpClient1 = new OkHttpClient();
         Request request1 = new Request.Builder()
-                .url(urlmaker2())
+                .url(forcast_url_maker())
                 .build();
 
         okHttpClient1.newCall(request1).enqueue(new Callback() {
@@ -293,16 +280,6 @@ public class MainActivity extends AppCompatActivity implements ForcastRecyclervi
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
-                } else {
-                    runOnUiThread(() -> {
-
-                        fail = findViewById(R.id.fail);
-                        fail.setVisibility(View.VISIBLE);
-                        fail.setText("Your entred City " + sharepreferenced_setting.getdefault() + " not found please enter other city");
-                        forcast_recyclerview.setVisibility(View.GONE);
-                        cardView.setVisibility(View.GONE);
-
-                    });
                 }
             }
         });
