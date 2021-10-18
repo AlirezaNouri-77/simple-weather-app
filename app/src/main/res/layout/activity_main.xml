@@ -131,6 +131,9 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="4"
                     android:padding="5dp"
+                    android:textStyle="bold"
+                    android:textSize="14sp"
+                    android:textColor="@color/black"
                     android:paddingLeft="5dp"
                     android:text="1 hour forcast"
                     tools:layout_editor_absoluteY="240dp" />
@@ -154,6 +157,7 @@
             android:id="@+id/forcast_cardview"
             android:layout_width="match_parent"
             android:layout_height="0dp"
+            android:layout_marginBottom="10dp"
             android:layout_marginLeft="10dp"
             android:layout_marginTop="10dp"
             android:layout_marginRight="10dp"
@@ -177,6 +181,9 @@
                     android:layout_height="wrap_content"
                     android:paddingLeft="5dp"
                     android:text="16 day forcast"
+                    android:textStyle="bold"
+                    android:textSize="14sp"
+                    android:textColor="@color/black"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/minute_recyclerview" />
@@ -184,7 +191,8 @@
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/forcast_recyclerview"
                     android:layout_width="match_parent"
-                    android:layout_height="385dp"
+                    android:background="@android:color/transparent"
+                    android:layout_height="0dp"
                     android:layout_weight="8"
                     tools:layout_editor_absoluteX="0dp"
                     tools:layout_editor_absoluteY="404dp" />

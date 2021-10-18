@@ -9,15 +9,15 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.weathertest.R;
-import com.example.weathertest.model.minute_forcast;
+import com.example.weathertest.model.minute_model;
 
 import java.util.List;
 
 public class Minute_forcastRecyclerview extends RecyclerView.Adapter<Minute_forcastRecyclerview.Viewholder> {
 
-    List<minute_forcast> list;
+    List<minute_model> list;
 
-    public Minute_forcastRecyclerview(List<minute_forcast> list) {
+    public Minute_forcastRecyclerview(List<minute_model> list) {
         this.list = list;
     }
 

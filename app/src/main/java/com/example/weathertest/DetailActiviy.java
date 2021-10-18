@@ -26,7 +26,6 @@ public class DetailActiviy extends AppCompatActivity {
         TextView humidity = findViewById(R.id.humidity);
         ImageView imageView = findViewById(R.id.imageView2);
 
-
         temp.setText(Math.round(Double.parseDouble(intent.getStringExtra("Temp"))) + "\u2103");
         min.setText("Min" + "\n" + Math.round(Double.parseDouble(intent.getStringExtra("min"))) + "\u2103");
         max.setText("Max" + "\n" + Math.round(Double.parseDouble(intent.getStringExtra("max"))) + "\u2103");

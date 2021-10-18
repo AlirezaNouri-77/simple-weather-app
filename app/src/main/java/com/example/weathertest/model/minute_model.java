@@ -1,9 +1,9 @@
 package com.example.weathertest.model;
 
-public class minute_forcast {
+public class minute_model {
     String time;
     String temp;
-    public minute_forcast(String time, String temp) {
+    public minute_model(String time, String temp) {
         this.time = time;
         this.temp = temp;
     }

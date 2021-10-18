@@ -1,6 +1,6 @@
 package com.example.weathertest.model;
 
-public class recyclerview_item {
+public class forcast_model {
 
     public String temp;
     public String icon;
@@ -8,7 +8,7 @@ public class recyclerview_item {
     public String max;
     public String time;
 
-    public recyclerview_item(String temp, String time, String max, String min ,String icon) {
+    public forcast_model(String temp, String time, String max, String min , String icon) {
         this.temp = temp;
         this.time = time;
         this.max = max;
