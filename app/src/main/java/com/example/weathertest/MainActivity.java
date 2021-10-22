@@ -4,7 +4,8 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
 import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.core.app.NotificationCompat;
+import androidx.fragment.app.FragmentManager;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -17,13 +18,14 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.weathertest.fragment.detail_fragment;
 import com.example.weathertest.model.current_model;
 import com.example.weathertest.model.minute_model;
 import com.example.weathertest.model.forcast_model;
 import com.example.weathertest.model.searchview_model;
 import com.example.weathertest.recyckerview.ForcastRecyclerview;
 import com.example.weathertest.recyckerview.Minute_forcastRecyclerview;
-import com.example.weathertest.recyckerview.searchview_rv;
+import com.example.weathertest.recyckerview.searchview_recyclerview;
 import com.example.weathertest.util.local_json_city;
 import com.example.weathertest.util.sharepreferenced_setting;
 import com.google.gson.Gson;
@@ -45,7 +47,7 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
-public class MainActivity extends AppCompatActivity implements ForcastRecyclerview.forcastclicklistner, searchview_rv.searchview_onclick {
+public class MainActivity extends AppCompatActivity implements ForcastRecyclerview.forcastclicklistner, searchview_recyclerview.searchview_onclick {
 
 
     private List<forcast_model> sixtyday_forcastlist;
@@ -55,14 +57,17 @@ public class MainActivity extends AppCompatActivity implements ForcastRecyclervi
 
     private RecyclerView forcast_recyclerview, minute_recyclerview, searcheview_rv;
 
-    private TextView cityname, currenttemp, condition;
+    private TextView cityname, currenttemp, condition, clouds, pressure;
     private ConstraintLayout constraintLayout;
 
     private sharepreferenced_setting sharepreferenced_setting;
 
-    private searchview_rv searchview_rv;
+    private searchview_recyclerview searchview_rv;
 
     private androidx.appcompat.widget.SearchView searchView;
+
+    detail_fragment detail_fragment;
+    FragmentManager fragmentManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,26 +77,30 @@ public class MainActivity extends AppCompatActivity implements ForcastRecyclervi
         sharepreferenced_setting = new sharepreferenced_setting(this);
         local_json_city local_json_city = new local_json_city(this);
 
+        detail_fragment = new detail_fragment();
+
         sixtyday_forcastlist = new ArrayList<>();
         minute_model_list = new ArrayList<>();
         current_list = new ArrayList<>();
 
         constraintLayout = findViewById(R.id.linerlayout);
         searcheview_rv = findViewById(R.id.searchview_rv);
-        forcast_recyclerview = findViewById(R.id.forcast_recyclerview);
+
+        fragmentManager = getSupportFragmentManager();
+
 
         Gson gson = new Gson();
         searchview_recyclerviewlist = gson.fromJson(local_json_city.loadJSONFromAsset(), new TypeToken<List<searchview_model>>() {
         }.getType());
-        searchview_rv = new searchview_rv(searchview_recyclerviewlist, this);
+        searchview_rv = new searchview_recyclerview(searchview_recyclerviewlist, this);
         searcheview_rv.setLayoutManager(new LinearLayoutManager(MainActivity.this));
         searcheview_rv.setAdapter(searchview_rv);
 
-        curent_weather("");
+        Current_Weather("");
         forcast_weather("");
-        
-    }
 
+
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -101,8 +110,8 @@ public class MainActivity extends AppCompatActivity implements ForcastRecyclervi
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                if (query.length() != 0 ){
-                    curent_weather(query);
+                if (query.length() != 0) {
+                    Current_Weather(query);
                     forcast_weather(query);
                     searchView.clearFocus();
                     searchView.onActionViewCollapsed();
@@ -142,11 +151,14 @@ public class MainActivity extends AppCompatActivity implements ForcastRecyclervi
     }
 
 
-    public void curent_weather(String name) {
+    public void Current_Weather(String name) {
 
         cityname = findViewById(R.id.cityname);
         currenttemp = findViewById(R.id.currenttemp);
         condition = findViewById(R.id.condition);
+        pressure = findViewById(R.id.pressure);
+        clouds = findViewById(R.id.clouds);
+
         ImageView imageView = findViewById(R.id.imageView);
 
         OkHttpClient okHttpClient = new OkHttpClient();
@@ -160,22 +172,37 @@ public class MainActivity extends AppCompatActivity implements ForcastRecyclervi
         okHttpClient.newCall(request).enqueue(new Callback() {
 
             @Override
-            public void onFailure(@NotNull Call call, @NotNull IOException e) {}
+            public void onFailure(@NotNull Call call, @NotNull IOException e) {
+            }
 
             @Override
-            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+            public void onResponse(@NotNull Call call, @NotNull Response response) {
+
                 if (response.isSuccessful()) {
-                    if (name.length() != 0){sharepreferenced_setting.setdefualt(name);}
+
                     current_list.clear();
                     minute_model_list.clear();
+
+                    if (name.length() != 0) {
+                        sharepreferenced_setting.setdefualt(name);
+                    }
                     try {
+
                         JSONObject jsonObject = new JSONObject(response.body().string());
                         JSONArray jsonArray = jsonObject.getJSONArray("data");
-                        JSONObject s = jsonArray.getJSONObject(0);
-                        current_list.add(new current_model(s.getJSONObject("weather").getString("description"),
-                                Math.round(Float.parseFloat(s.getString("temp"))) + "",
-                                s.getString("city_name").toUpperCase(),
-                                "https://www.weatherbit.io/static/img/icons/" + s.getJSONObject("weather").getString("icon") + ".png"));
+
+                        for (int i = 0; i < jsonArray.length(); i++) {
+
+
+                            JSONObject jsonobj = jsonArray.getJSONObject(i);
+                            current_list.add(new current_model(jsonobj.getJSONObject("weather").getString("description"),
+                                    String.valueOf(Math.round(Float.parseFloat(jsonobj.getString("temp")))),
+                                    jsonobj.getString("city_name").toUpperCase(),
+                                    "https://www.weatherbit.io/static/img/icons/" + jsonobj.getJSONObject("weather").getString("icon") + ".png",
+                                    jsonobj.getString("clouds"),
+                                    jsonobj.getString("pres")
+                            ));
+                        }
 
                         JSONArray jsonArray2 = jsonObject.getJSONArray("minutely");
                         for (int i = 0; i < jsonArray2.length(); i++) {
@@ -189,23 +216,19 @@ public class MainActivity extends AppCompatActivity implements ForcastRecyclervi
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            String units;
+
+                            Log.d("TAG", "run: " + current_list);
                             condition.setText(current_list.get(0).getDescription());
                             cityname.setText(current_list.get(0).getCityname());
+                            clouds.setText("Cloud coverage "+current_list.get(0).getCloud() + "%");
+                            pressure.setText("Air pressure " + current_list.get(0).getPressure());
+                            currenttemp.setText(current_list.get(0).getTemp() + sharepreferenced_setting.getsymbol());
+                            Picasso.get().load(current_list.get(0).getIcon_url()).fit().into(imageView);
 
-                            if (sharepreferenced_setting.temp_symbol().equals("M")) {
-                                units = " \u2103";
-                            } else {
-                                units = "\u2109";
-                            }
-
-                            currenttemp.setText(current_list.get(0).getTemp() + units);
-                            Picasso.get().load(current_list.get(0).getIcon_url()).into(imageView);
                             minute_recyclerview.setLayoutManager(new LinearLayoutManager(MainActivity.this, LinearLayoutManager.HORIZONTAL, false));
                             minute_recyclerview.setHasFixedSize(true);
-                            Minute_forcastRecyclerview minute_forcastRecyclerview = new Minute_forcastRecyclerview(minute_model_list);
+                            Minute_forcastRecyclerview minute_forcastRecyclerview = new Minute_forcastRecyclerview(minute_model_list , MainActivity.this);
                             minute_recyclerview.setAdapter(minute_forcastRecyclerview);
-
 
                         }
                     });
@@ -226,6 +249,7 @@ public class MainActivity extends AppCompatActivity implements ForcastRecyclervi
                 .build();
 
         Log.d("TAG", "forcast_weather: " + forcast_url_maker(name));
+
         okHttpClient1.newCall(request1).enqueue(new Callback() {
             @Override
             public void onFailure(@NotNull Call call, @NotNull IOException e) {
@@ -236,7 +260,9 @@ public class MainActivity extends AppCompatActivity implements ForcastRecyclervi
                 JSONObject jsonObject;
 
                 if (response.isSuccessful()) {
-                    if (name.length() != 0){sharepreferenced_setting.setdefualt(name);}
+                    if (name.length() != 0) {
+                        sharepreferenced_setting.setdefualt(name);
+                    }
                     sixtyday_forcastlist.clear();
                     try {
                         jsonObject = new JSONObject(response.body().string());
@@ -258,6 +284,7 @@ public class MainActivity extends AppCompatActivity implements ForcastRecyclervi
                                 ForcastRecyclerview adapter = new ForcastRecyclerview(sixtyday_forcastlist, MainActivity.this, MainActivity.this);
                                 forcast_recyclerview.setLayoutManager(new LinearLayoutManager(MainActivity.this));
                                 forcast_recyclerview.setHasFixedSize(true);
+                                forcast_recyclerview.addItemDecoration(new DividerItemDecoration(MainActivity.this , DividerItemDecoration.VERTICAL));
                                 forcast_recyclerview.setAdapter(adapter);
 
                             }
@@ -272,14 +299,21 @@ public class MainActivity extends AppCompatActivity implements ForcastRecyclervi
 
     @Override
     public void onclick(int p) {
+        
+        fragmentManager.beginTransaction().add(R.id.fragmentlayout, detail_fragment).addToBackStack("test").commit();
 
-        Intent intent = new Intent(MainActivity.this, DetailActiviy.class);
-        intent.putExtra("Temp", sixtyday_forcastlist.get(p).temp);
-        intent.putExtra("time", sixtyday_forcastlist.get(p).time);
-        intent.putExtra("min", sixtyday_forcastlist.get(p).min);
-        intent.putExtra("max", sixtyday_forcastlist.get(p).max);
-        intent.putExtra("iconurl", sixtyday_forcastlist.get(p).icon);
-        startActivity(intent);
+        Bundle bundle = new Bundle();
+        bundle.putString("Temp", sixtyday_forcastlist.get(p).temp);
+        bundle.putString("time", sixtyday_forcastlist.get(p).time);
+        bundle.putString("min", sixtyday_forcastlist.get(p).min);
+        bundle.putString("max", sixtyday_forcastlist.get(p).max);
+        bundle.putString("iconurl", sixtyday_forcastlist.get(p).icon);
+        detail_fragment.setArguments(bundle);
+
+        fragmentManager.beginTransaction().show(detail_fragment).commit();
+
+        searchView.setVisibility(View.GONE);
+        constraintLayout.setVisibility(View.GONE);
 
     }
 
@@ -289,7 +323,7 @@ public class MainActivity extends AppCompatActivity implements ForcastRecyclervi
         sharepreferenced_setting.setdefualt(searchview_recyclerviewlist.get(i).getCity().trim());
         searchView.clearFocus();
         searchView.onActionViewCollapsed();
-        curent_weather("");
+        Current_Weather("");
         forcast_weather("");
 
     }
@@ -300,14 +334,13 @@ public class MainActivity extends AppCompatActivity implements ForcastRecyclervi
         sixtyday_forcastlist.clear();
         minute_model_list.clear();
         current_list.clear();
-
-        curent_weather("");
+        Current_Weather("");
         forcast_weather("");
         super.onRestart();
     }
 
     public String current_url_maker(String name) {
-        if (name.length() != 0){
+        if (name.length() != 0) {
             return "https://api.weatherbit.io/v2.0/current?city=" + name + "&key=8a8ec0d5af5f4806ada672017c6d44b5&" + "units=" + sharepreferenced_setting.temp_symbol() + "&include=minutely";
         }
         return "https://api.weatherbit.io/v2.0/current?city=" + sharepreferenced_setting.getdefault() + "&key=8a8ec0d5af5f4806ada672017c6d44b5&" + "units=" + sharepreferenced_setting.temp_symbol() + "&include=minutely";
@@ -315,10 +348,16 @@ public class MainActivity extends AppCompatActivity implements ForcastRecyclervi
 
 
     public String forcast_url_maker(String name) {
-        if (name.length() != 0){
+        if (name.length() != 0) {
             return "https://api.weatherbit.io/v2.0/forecast/daily?city=" + name + "&key=8a8ec0d5af5f4806ada672017c6d44b5&" + "units=" + sharepreferenced_setting.temp_symbol();
         }
         return "https://api.weatherbit.io/v2.0/forecast/daily?city=" + sharepreferenced_setting.getdefault() + "&key=8a8ec0d5af5f4806ada672017c6d44b5&" + "units=" + sharepreferenced_setting.temp_symbol();
     }
 
+    @Override
+    public void onBackPressed() {
+        constraintLayout.setVisibility(View.VISIBLE);
+        searchView.setVisibility(View.VISIBLE);
+        fragmentManager.beginTransaction().remove(detail_fragment).commit();
+    }
 }

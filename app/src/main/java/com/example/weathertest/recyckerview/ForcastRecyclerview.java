@@ -21,7 +21,7 @@ public class ForcastRecyclerview extends RecyclerView.Adapter<ForcastRecyclervie
 
     List<forcast_model> list;
     sharepreferenced_setting sharepreferenced_setting;
-    private forcastclicklistner monitemclick;
+    private final forcastclicklistner monitemclick;
     
 
     public ForcastRecyclerview(List<forcast_model> list, forcastclicklistner forcastclicklistner, Context context) {
@@ -41,31 +41,25 @@ public class ForcastRecyclerview extends RecyclerView.Adapter<ForcastRecyclervie
     @Override
     public void onBindViewHolder(@NonNull viewholder holder, int position) {
 
-        holder.imageView.setOnClickListener(new View.OnClickListener() {
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 monitemclick.onclick(holder.getAdapterPosition());
             }
         });
 
-        String units;
         if(position==0){
             holder.test.setText("Tomorrow");
         } else {
             holder.test.setText(list.get(position).time);
         }
-        if (sharepreferenced_setting.temp_symbol().equals("M")){
-            units="\u2103";
-        } else {
-            units="\u2109";
-        }
-        holder.temp.setText(Math.round(Double.parseDouble(list.get(position).temp)) + " "+units);
-        holder.min.setText(Math.round(Double.parseDouble(list.get(position).min)) + " "+units);
-        holder.max.setText(Math.round(Double.parseDouble(list.get(position).max)) + " "+units);
+
+        holder.temp.setText(Math.round(Double.parseDouble(list.get(position).temp)) + " "+sharepreferenced_setting.getsymbol());
+        holder.min.setText(Math.round(Double.parseDouble(list.get(position).min)) + " "+sharepreferenced_setting.getsymbol());
+        holder.max.setText(Math.round(Double.parseDouble(list.get(position).max)) + " "+sharepreferenced_setting.getsymbol());
         Picasso.get().load(list.get(position).icon).fit().into(holder.imageView);
 
     }
-
 
 
     @Override

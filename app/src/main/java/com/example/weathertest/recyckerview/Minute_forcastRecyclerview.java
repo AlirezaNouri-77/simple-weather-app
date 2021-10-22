@@ -1,5 +1,6 @@
 package com.example.weathertest.recyckerview;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,15 +11,20 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.weathertest.R;
 import com.example.weathertest.model.minute_model;
+import com.example.weathertest.util.sharepreferenced_setting;
 
 import java.util.List;
 
 public class Minute_forcastRecyclerview extends RecyclerView.Adapter<Minute_forcastRecyclerview.Viewholder> {
 
     List<minute_model> list;
+    Context context;
+    sharepreferenced_setting sharepreferencedSetting;
 
-    public Minute_forcastRecyclerview(List<minute_model> list) {
+    public Minute_forcastRecyclerview(List<minute_model> list , Context context) {
         this.list = list;
+        this.context = context;
+        sharepreferencedSetting = new sharepreferenced_setting(context);
     }
 
     @NonNull
@@ -30,7 +36,7 @@ public class Minute_forcastRecyclerview extends RecyclerView.Adapter<Minute_forc
 
     @Override
     public void onBindViewHolder(@NonNull Viewholder holder, int position) {
-        holder.temp.setText(list.get(position).getTemp());
+        holder.temp.setText(list.get(position).getTemp() + " "+sharepreferencedSetting.getsymbol());
         holder.time.setText(list.get(position).getTime());
     }
 
@@ -40,6 +46,7 @@ public class Minute_forcastRecyclerview extends RecyclerView.Adapter<Minute_forc
     }
 
     public static class Viewholder extends RecyclerView.ViewHolder {
+
         TextView temp;
         TextView time;
 
