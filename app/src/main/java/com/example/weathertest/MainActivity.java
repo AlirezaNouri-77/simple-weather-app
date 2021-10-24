@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.animation.ValueAnimator;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -18,6 +19,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.example.weathertest.fragment.detail_fragment;
 import com.example.weathertest.model.current_model;
 import com.example.weathertest.model.minute_model;
@@ -69,6 +71,8 @@ public class MainActivity extends AppCompatActivity implements ForcastRecyclervi
     detail_fragment detail_fragment;
     FragmentManager fragmentManager;
 
+    LottieAnimationView lottieAnimationView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -77,24 +81,27 @@ public class MainActivity extends AppCompatActivity implements ForcastRecyclervi
         sharepreferenced_setting = new sharepreferenced_setting(this);
         local_json_city local_json_city = new local_json_city(this);
 
+        lottieAnimationView = findViewById(R.id.lottie_view);
+
+
+
         detail_fragment = new detail_fragment();
 
         sixtyday_forcastlist = new ArrayList<>();
         minute_model_list = new ArrayList<>();
         current_list = new ArrayList<>();
+        searchview_recyclerviewlist = new ArrayList<>(local_json_city.get_searchview_list());
 
         constraintLayout = findViewById(R.id.linerlayout);
         searcheview_rv = findViewById(R.id.searchview_rv);
 
         fragmentManager = getSupportFragmentManager();
 
-
-        Gson gson = new Gson();
-        searchview_recyclerviewlist = gson.fromJson(local_json_city.loadJSONFromAsset(), new TypeToken<List<searchview_model>>() {
-        }.getType());
-        searchview_rv = new searchview_recyclerview(searchview_recyclerviewlist, this);
+        searchview_rv = new searchview_recyclerview(searchview_recyclerviewlist , this);
         searcheview_rv.setLayoutManager(new LinearLayoutManager(MainActivity.this));
+        searcheview_rv.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
         searcheview_rv.setAdapter(searchview_rv);
+
 
         Current_Weather("");
         forcast_weather("");
@@ -166,9 +173,6 @@ public class MainActivity extends AppCompatActivity implements ForcastRecyclervi
                 .url(current_url_maker(name))
                 .build();
 
-        Log.d("TAG", "onCreate: " + current_url_maker(""));
-
-
         okHttpClient.newCall(request).enqueue(new Callback() {
 
             @Override
@@ -220,14 +224,14 @@ public class MainActivity extends AppCompatActivity implements ForcastRecyclervi
                             Log.d("TAG", "run: " + current_list);
                             condition.setText(current_list.get(0).getDescription());
                             cityname.setText(current_list.get(0).getCityname());
-                            clouds.setText("Cloud coverage "+current_list.get(0).getCloud() + "%");
+                            clouds.setText("Cloud coverage " + current_list.get(0).getCloud() + "%");
                             pressure.setText("Air pressure " + current_list.get(0).getPressure());
                             currenttemp.setText(current_list.get(0).getTemp() + sharepreferenced_setting.getsymbol());
                             Picasso.get().load(current_list.get(0).getIcon_url()).fit().into(imageView);
 
                             minute_recyclerview.setLayoutManager(new LinearLayoutManager(MainActivity.this, LinearLayoutManager.HORIZONTAL, false));
                             minute_recyclerview.setHasFixedSize(true);
-                            Minute_forcastRecyclerview minute_forcastRecyclerview = new Minute_forcastRecyclerview(minute_model_list , MainActivity.this);
+                            Minute_forcastRecyclerview minute_forcastRecyclerview = new Minute_forcastRecyclerview(minute_model_list, MainActivity.this);
                             minute_recyclerview.setAdapter(minute_forcastRecyclerview);
 
                         }
@@ -238,6 +242,10 @@ public class MainActivity extends AppCompatActivity implements ForcastRecyclervi
     }
 
     public void forcast_weather(String name) {
+
+        constraintLayout.setVisibility(View.INVISIBLE);
+       // lottieAnimationView.setAnimation("test.json");
+        lottieAnimationView.playAnimation();
 
         minute_recyclerview = findViewById(R.id.minute_recyclerview);
         forcast_recyclerview = findViewById(R.id.forcast_recyclerview);
@@ -281,11 +289,15 @@ public class MainActivity extends AppCompatActivity implements ForcastRecyclervi
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
+
                                 ForcastRecyclerview adapter = new ForcastRecyclerview(sixtyday_forcastlist, MainActivity.this, MainActivity.this);
                                 forcast_recyclerview.setLayoutManager(new LinearLayoutManager(MainActivity.this));
                                 forcast_recyclerview.setHasFixedSize(true);
-                                forcast_recyclerview.addItemDecoration(new DividerItemDecoration(MainActivity.this , DividerItemDecoration.VERTICAL));
+                                forcast_recyclerview.addItemDecoration(new DividerItemDecoration(MainActivity.this, DividerItemDecoration.VERTICAL));
                                 forcast_recyclerview.setAdapter(adapter);
+
+                                constraintLayout.setVisibility(View.VISIBLE);
+                                lottieAnimationView.pauseAnimation();
 
                             }
                         });
@@ -299,7 +311,7 @@ public class MainActivity extends AppCompatActivity implements ForcastRecyclervi
 
     @Override
     public void onclick(int p) {
-        
+
         fragmentManager.beginTransaction().add(R.id.fragmentlayout, detail_fragment).addToBackStack("test").commit();
 
         Bundle bundle = new Bundle();

@@ -37,7 +37,7 @@ public class searchview_recyclerview extends RecyclerView.Adapter<searchview_rec
 
     @Override
     public void onBindViewHolder(@NonNull searchview_viewholder holder, int position) {
-        holder.textView.setText(list.get(position).getCity());
+        holder.textView.setText(list.get(position).getCity() + " / " + list.get(position).getCountry() );
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -76,7 +76,7 @@ public class searchview_recyclerview extends RecyclerView.Adapter<searchview_rec
                 } else {
                     String text = constraint.toString().toLowerCase().trim();
                     for (searchview_model searchview_model : fulllist) {
-                        if (searchview_model.getCity().toLowerCase().contains(text)) {
+                        if (searchview_model.getCity().toLowerCase().contains(text)||searchview_model.getCountry().toLowerCase().contains(text)) {
                             filterlist.add(searchview_model);
                         }
                     }

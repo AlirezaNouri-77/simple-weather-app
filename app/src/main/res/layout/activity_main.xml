@@ -7,12 +7,23 @@
     android:layout_height="match_parent"
     android:animateLayoutChanges="true">
 
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/lottie_view"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        app:lottie_fileName="waiting.json"
+        app:lottie_loop="true"
+        app:lottie_autoPlay="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/fragmentlayout" />
+
     <FrameLayout
         android:id="@+id/fragmentlayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:animateLayoutChanges="true"
-        android:background="@drawable/gradeint"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -22,7 +33,9 @@
         android:id="@+id/searchview_rv"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@android:color/white"
         android:visibility="invisible"
+        tools:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -32,34 +45,30 @@
     <androidx.constraintlayout.widget.ConstraintLayout
 
         android:id="@+id/linerlayout"
+        tools:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#f2f2f6"
+        android:background="@drawable/gradeint"
         android:orientation="vertical"
         tools:context=".MainActivity">
 
-        <androidx.cardview.widget.CardView
+        <LinearLayout
             android:id="@+id/current_cardview"
             android:layout_width="match_parent"
-            android:layout_height="240dp"
+            android:layout_height="250dp"
             android:layout_gravity="center"
-            android:layout_margin="5dp"
-            android:layout_weight="5"
-            android:elevation="10dp"
             app:cardBackgroundColor="@android:color/transparent"
-            app:cardCornerRadius="10dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@drawable/gradeint">
+                android:layout_height="match_parent">
 
                 <TextView
                     android:id="@+id/cityname"
-                    android:layout_width="165dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="33dp"
                     android:layout_marginTop="60dp"
                     android:gravity="left"
@@ -89,9 +98,9 @@
                     android:id="@+id/currenttemp"
                     android:layout_width="118dp"
                     android:layout_height="87dp"
+                    android:layout_marginTop="10dp"
                     android:layout_marginEnd="28dp"
                     android:layout_marginBottom="28dp"
-                    android:layout_marginTop="10dp"
                     android:gravity="center"
                     android:text="30"
                     android:textColor="@color/white"
@@ -152,18 +161,16 @@
                     app:layout_constraintTop_toBottomOf="@+id/pressure" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
-        </androidx.cardview.widget.CardView>
+        </LinearLayout>
 
 
-        <androidx.cardview.widget.CardView
+        <LinearLayout
             android:id="@+id/minute_cardview"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_margin="5dp"
-            android:elevation="10dp"
+            android:layout_height="100dp"
+            android:background="@android:color/transparent"
             android:maxHeight="100dp"
-            app:cardBackgroundColor="#ffffff"
-            app:cardCornerRadius="10dp"
+            app:cardBackgroundColor="@android:color/transparent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/current_cardview">
@@ -171,7 +178,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@drawable/gradeint"
+                android:background="@android:color/transparent"
                 android:orientation="vertical">
 
 
@@ -179,8 +186,8 @@
                     android:id="@+id/textView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="4"
-                    android:paddingLeft="8dp"
+                    android:background="@android:color/transparent"
+                    android:paddingLeft="10dp"
                     android:paddingTop="8dp"
                     android:paddingBottom="2dp"
                     android:text="1 hour forcast"
@@ -193,8 +200,9 @@
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/minute_recyclerview"
                     android:layout_width="match_parent"
-                    android:layout_height="80dp"
-                    android:layout_weight="6"
+                    android:layout_height="match_parent"
+                    android:layout_weight="8"
+                    android:background="@android:color/transparent"
                     android:padding="2dp"
                     tools:layout_editor_absoluteX="1dp"
                     tools:layout_editor_absoluteY="259dp" />
@@ -202,17 +210,13 @@
             </LinearLayout>
 
 
-        </androidx.cardview.widget.CardView>
+        </LinearLayout>
 
-        <androidx.cardview.widget.CardView
+        <LinearLayout
             android:id="@+id/forcast_cardview"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_margin="5dp"
-            android:layout_weight="2"
-            android:elevation="10dp"
-            app:cardBackgroundColor="#ffffff"
-            app:cardCornerRadius="10dp"
+            app:cardBackgroundColor="@android:color/transparent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -221,14 +225,15 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@drawable/gradeint"
+                android:background="@android:color/transparent"
                 android:orientation="vertical">
 
                 <TextView
                     android:id="@+id/textView2"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:paddingLeft="8dp"
+                    android:background="@android:color/transparent"
+                    android:paddingLeft="10dp"
                     android:paddingTop="8dp"
                     android:paddingBottom="2dp"
                     android:text="16 day forcast"
@@ -244,6 +249,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight="8"
+                    android:background="@android:color/transparent"
                     tools:layout_editor_absoluteX="0dp"
                     tools:layout_editor_absoluteY="404dp" />
 
@@ -251,7 +257,7 @@
             </LinearLayout>
 
 
-        </androidx.cardview.widget.CardView>
+        </LinearLayout>
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
