@@ -78,6 +78,8 @@ public class searchview_recyclerview extends RecyclerView.Adapter<searchview_rec
                     for (searchview_model searchview_model : fulllist) {
                         if (searchview_model.getCity().toLowerCase().contains(text)||searchview_model.getCountry().toLowerCase().contains(text)) {
                             filterlist.add(searchview_model);
+                        } else {
+
                         }
                     }
                 }

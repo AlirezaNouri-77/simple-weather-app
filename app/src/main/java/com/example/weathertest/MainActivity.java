@@ -8,15 +8,18 @@ import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.transition.Fade;
+import androidx.transition.Transition;
 
-import android.animation.ValueAnimator;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Filter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.airbnb.lottie.LottieAnimationView;
@@ -30,8 +33,6 @@ import com.example.weathertest.recyckerview.Minute_forcastRecyclerview;
 import com.example.weathertest.recyckerview.searchview_recyclerview;
 import com.example.weathertest.util.local_json_city;
 import com.example.weathertest.util.sharepreferenced_setting;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.squareup.picasso.Picasso;
 
 import org.jetbrains.annotations.NotNull;
@@ -59,8 +60,9 @@ public class MainActivity extends AppCompatActivity implements ForcastRecyclervi
 
     private RecyclerView forcast_recyclerview, minute_recyclerview, searcheview_rv;
 
-    private TextView cityname, currenttemp, condition, clouds, pressure;
-    private ConstraintLayout constraintLayout;
+    private TextView cityname, currenttemp, condition, clouds, pressure, empty_city;
+
+    private ConstraintLayout main_consrtaintlayout, current_consrtaintlayout;
 
     private sharepreferenced_setting sharepreferenced_setting;
 
@@ -68,21 +70,32 @@ public class MainActivity extends AppCompatActivity implements ForcastRecyclervi
 
     private androidx.appcompat.widget.SearchView searchView;
 
-    detail_fragment detail_fragment;
-    FragmentManager fragmentManager;
+    private detail_fragment detail_fragment;
+    private FragmentManager fragmentManager;
 
-    LottieAnimationView lottieAnimationView;
+    private LottieAnimationView lottieAnimationView1, lottieAnimationView2, lottieAnimationView3;
+
+    LinearLayout minute_layout, forcast_layout;
+
+    private local_json_city local_json_city;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        empty_city = findViewById(R.id.empty_recyclerview);
+
         sharepreferenced_setting = new sharepreferenced_setting(this);
-        local_json_city local_json_city = new local_json_city(this);
+        local_json_city = new local_json_city(this);
 
-        lottieAnimationView = findViewById(R.id.lottie_view);
+        lottieAnimationView1 = findViewById(R.id.lottie_one);
+        lottieAnimationView2 = findViewById(R.id.lottie_two);
+        lottieAnimationView3 = findViewById(R.id.lottie_three);
 
+        current_consrtaintlayout = findViewById(R.id.constraint_one);
+        minute_layout = findViewById(R.id.minute_layout);
+        forcast_layout = findViewById(R.id.forcast_layout);
 
 
         detail_fragment = new detail_fragment();
@@ -92,19 +105,19 @@ public class MainActivity extends AppCompatActivity implements ForcastRecyclervi
         current_list = new ArrayList<>();
         searchview_recyclerviewlist = new ArrayList<>(local_json_city.get_searchview_list());
 
-        constraintLayout = findViewById(R.id.linerlayout);
+        main_consrtaintlayout = findViewById(R.id.main_constraint);
         searcheview_rv = findViewById(R.id.searchview_rv);
 
         fragmentManager = getSupportFragmentManager();
 
-        searchview_rv = new searchview_recyclerview(searchview_recyclerviewlist , this);
+        searchview_rv = new searchview_recyclerview(searchview_recyclerviewlist, this);
         searcheview_rv.setLayoutManager(new LinearLayoutManager(MainActivity.this));
         searcheview_rv.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
         searcheview_rv.setAdapter(searchview_rv);
 
-
         Current_Weather("");
         forcast_weather("");
+
 
 
     }
@@ -129,19 +142,27 @@ public class MainActivity extends AppCompatActivity implements ForcastRecyclervi
             @Override
             public boolean onQueryTextChange(String newText) {
                 searchview_rv.getFilter().filter(newText);
+                if (searchview_rv.getItemCount() == 0) {
+                    empty_city.setVisibility(View.VISIBLE);
+                    searcheview_rv.setVisibility(View.GONE);
+                    Log.d("TAG", "onQueryTextChange: " + searchview_rv.getItemCount() + "if");
+                } else {
+                    empty_city.setVisibility(View.GONE);
+                    searcheview_rv.setVisibility(View.VISIBLE);
+                    Log.d("TAG", "onQueryTextChange: " + searchview_rv.getItemCount());
+                }
                 return true;
             }
         });
-        searchView.setOnQueryTextFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (hasFocus) {
-                    searcheview_rv.setVisibility(View.VISIBLE);
-                    constraintLayout.setVisibility(View.INVISIBLE);
-                } else {
-                    searcheview_rv.setVisibility(View.GONE);
-                    constraintLayout.setVisibility(View.VISIBLE);
-                }
+
+        searchView.setOnQueryTextFocusChangeListener((v, hasFocus) -> {
+            if (hasFocus) {
+                searcheview_rv.setVisibility(View.VISIBLE);
+                main_consrtaintlayout.setVisibility(View.INVISIBLE);
+            } else {
+
+                searcheview_rv.setVisibility(View.GONE);
+                main_consrtaintlayout.setVisibility(View.VISIBLE);
             }
         });
         return super.onCreateOptionsMenu(menu);
@@ -157,7 +178,6 @@ public class MainActivity extends AppCompatActivity implements ForcastRecyclervi
         return super.onOptionsItemSelected(item);
     }
 
-
     public void Current_Weather(String name) {
 
         cityname = findViewById(R.id.cityname);
@@ -170,7 +190,7 @@ public class MainActivity extends AppCompatActivity implements ForcastRecyclervi
 
         OkHttpClient okHttpClient = new OkHttpClient();
         Request request = new Request.Builder()
-                .url(current_url_maker(name))
+                .url(local_json_city.current_url_maker(name))
                 .build();
 
         okHttpClient.newCall(request).enqueue(new Callback() {
@@ -196,8 +216,6 @@ public class MainActivity extends AppCompatActivity implements ForcastRecyclervi
                         JSONArray jsonArray = jsonObject.getJSONArray("data");
 
                         for (int i = 0; i < jsonArray.length(); i++) {
-
-
                             JSONObject jsonobj = jsonArray.getJSONObject(i);
                             current_list.add(new current_model(jsonobj.getJSONObject("weather").getString("description"),
                                     String.valueOf(Math.round(Float.parseFloat(jsonobj.getString("temp")))),
@@ -222,18 +240,22 @@ public class MainActivity extends AppCompatActivity implements ForcastRecyclervi
                         public void run() {
 
                             Log.d("TAG", "run: " + current_list);
-                            condition.setText(current_list.get(0).getDescription());
-                            cityname.setText(current_list.get(0).getCityname());
-                            clouds.setText("Cloud coverage " + current_list.get(0).getCloud() + "%");
-                            pressure.setText("Air pressure " + current_list.get(0).getPressure());
-                            currenttemp.setText(current_list.get(0).getTemp() + sharepreferenced_setting.getsymbol());
-                            Picasso.get().load(current_list.get(0).getIcon_url()).fit().into(imageView);
+                            if (current_list.size() != 0) {
+                                condition.setText(current_list.get(0).getDescription());
+                                cityname.setText(current_list.get(0).getCityname());
+                                clouds.setText("Cloud coverage " + current_list.get(0).getCloud() + "%");
+                                pressure.setText("Air pressure " + current_list.get(0).getPressure());
+                                currenttemp.setText(current_list.get(0).getTemp() + sharepreferenced_setting.getsymbol());
+                                Picasso.get().load(current_list.get(0).getIcon_url()).fit().into(imageView);
 
-                            minute_recyclerview.setLayoutManager(new LinearLayoutManager(MainActivity.this, LinearLayoutManager.HORIZONTAL, false));
-                            minute_recyclerview.setHasFixedSize(true);
-                            Minute_forcastRecyclerview minute_forcastRecyclerview = new Minute_forcastRecyclerview(minute_model_list, MainActivity.this);
-                            minute_recyclerview.setAdapter(minute_forcastRecyclerview);
-
+                                minute_recyclerview.setLayoutManager(new LinearLayoutManager(MainActivity.this, LinearLayoutManager.HORIZONTAL, false));
+                                minute_recyclerview.setHasFixedSize(true);
+                                Minute_forcastRecyclerview minute_forcastRecyclerview = new Minute_forcastRecyclerview(minute_model_list, MainActivity.this);
+                                minute_recyclerview.setAdapter(minute_forcastRecyclerview);
+                            } else {
+//                                lottieAnimationView.setAnimation("test.json");
+//                                lottieAnimationView.playAnimation();
+                            }
                         }
                     });
                 }
@@ -243,24 +265,20 @@ public class MainActivity extends AppCompatActivity implements ForcastRecyclervi
 
     public void forcast_weather(String name) {
 
-        constraintLayout.setVisibility(View.INVISIBLE);
-       // lottieAnimationView.setAnimation("test.json");
-        lottieAnimationView.playAnimation();
+        start_lottie_animation();
 
         minute_recyclerview = findViewById(R.id.minute_recyclerview);
         forcast_recyclerview = findViewById(R.id.forcast_recyclerview);
-        forcast_recyclerview.setVisibility(View.VISIBLE);
 
         OkHttpClient okHttpClient1 = new OkHttpClient();
         Request request1 = new Request.Builder()
-                .url(forcast_url_maker(name))
+                .url(local_json_city.forcast_url_maker(name))
                 .build();
-
-        Log.d("TAG", "forcast_weather: " + forcast_url_maker(name));
 
         okHttpClient1.newCall(request1).enqueue(new Callback() {
             @Override
             public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                
             }
 
             @Override
@@ -296,8 +314,7 @@ public class MainActivity extends AppCompatActivity implements ForcastRecyclervi
                                 forcast_recyclerview.addItemDecoration(new DividerItemDecoration(MainActivity.this, DividerItemDecoration.VERTICAL));
                                 forcast_recyclerview.setAdapter(adapter);
 
-                                constraintLayout.setVisibility(View.VISIBLE);
-                                lottieAnimationView.pauseAnimation();
+                                stop_lottie_animation();
 
                             }
                         });
@@ -322,10 +339,10 @@ public class MainActivity extends AppCompatActivity implements ForcastRecyclervi
         bundle.putString("iconurl", sixtyday_forcastlist.get(p).icon);
         detail_fragment.setArguments(bundle);
 
-        fragmentManager.beginTransaction().show(detail_fragment).commit();
-
         searchView.setVisibility(View.GONE);
-        constraintLayout.setVisibility(View.GONE);
+        main_consrtaintlayout.setVisibility(View.GONE);
+
+        fragmentManager.beginTransaction().show(detail_fragment).commit();
 
     }
 
@@ -340,7 +357,6 @@ public class MainActivity extends AppCompatActivity implements ForcastRecyclervi
 
     }
 
-
     @Override
     protected void onRestart() {
         sixtyday_forcastlist.clear();
@@ -351,25 +367,35 @@ public class MainActivity extends AppCompatActivity implements ForcastRecyclervi
         super.onRestart();
     }
 
-    public String current_url_maker(String name) {
-        if (name.length() != 0) {
-            return "https://api.weatherbit.io/v2.0/current?city=" + name + "&key=8a8ec0d5af5f4806ada672017c6d44b5&" + "units=" + sharepreferenced_setting.temp_symbol() + "&include=minutely";
-        }
-        return "https://api.weatherbit.io/v2.0/current?city=" + sharepreferenced_setting.getdefault() + "&key=8a8ec0d5af5f4806ada672017c6d44b5&" + "units=" + sharepreferenced_setting.temp_symbol() + "&include=minutely";
-    }
-
-
-    public String forcast_url_maker(String name) {
-        if (name.length() != 0) {
-            return "https://api.weatherbit.io/v2.0/forecast/daily?city=" + name + "&key=8a8ec0d5af5f4806ada672017c6d44b5&" + "units=" + sharepreferenced_setting.temp_symbol();
-        }
-        return "https://api.weatherbit.io/v2.0/forecast/daily?city=" + sharepreferenced_setting.getdefault() + "&key=8a8ec0d5af5f4806ada672017c6d44b5&" + "units=" + sharepreferenced_setting.temp_symbol();
-    }
 
     @Override
     public void onBackPressed() {
-        constraintLayout.setVisibility(View.VISIBLE);
+        main_consrtaintlayout.setVisibility(View.VISIBLE);
         searchView.setVisibility(View.VISIBLE);
         fragmentManager.beginTransaction().remove(detail_fragment).commit();
+    }
+
+    public void start_lottie_animation() {
+        lottieAnimationView1.setVisibility(View.VISIBLE);
+        lottieAnimationView2.setVisibility(View.VISIBLE);
+        lottieAnimationView3.setVisibility(View.VISIBLE);
+        current_consrtaintlayout.setVisibility(View.GONE);
+        minute_layout.setVisibility(View.GONE);
+        forcast_layout.setVisibility(View.GONE);
+        lottieAnimationView1.playAnimation();
+        lottieAnimationView2.playAnimation();
+        lottieAnimationView3.playAnimation();
+    }
+
+    public void stop_lottie_animation() {
+        lottieAnimationView1.setVisibility(View.GONE);
+        lottieAnimationView2.setVisibility(View.GONE);
+        lottieAnimationView3.setVisibility(View.GONE);
+        current_consrtaintlayout.setVisibility(View.VISIBLE);
+        minute_layout.setVisibility(View.VISIBLE);
+        forcast_layout.setVisibility(View.VISIBLE);
+        lottieAnimationView1.pauseAnimation();
+        lottieAnimationView2.pauseAnimation();
+        lottieAnimationView3.pauseAnimation();
     }
 }
