@@ -22,7 +22,7 @@ public class ForcastRecyclerview extends RecyclerView.Adapter<ForcastRecyclervie
     List<forcast_model> list;
     sharepreferenced_setting sharepreferenced_setting;
     private final forcastclicklistner monitemclick;
-    
+
 
     public ForcastRecyclerview(List<forcast_model> list, forcastclicklistner forcastclicklistner, Context context) {
         this.list = list;
@@ -48,15 +48,15 @@ public class ForcastRecyclerview extends RecyclerView.Adapter<ForcastRecyclervie
             }
         });
 
-        if(position==0){
+        if (position == 0) {
             holder.test.setText("Tomorrow");
         } else {
             holder.test.setText(list.get(position).time);
         }
 
-        holder.temp.setText(Math.round(Double.parseDouble(list.get(position).temp)) +sharepreferenced_setting.getsymbol());
-        holder.min.setText(Math.round(Double.parseDouble(list.get(position).min)) +sharepreferenced_setting.getsymbol());
-        holder.max.setText(Math.round(Double.parseDouble(list.get(position).max)) +sharepreferenced_setting.getsymbol());
+        holder.temp.setText(Math.round(Double.parseDouble(list.get(position).temp)) + sharepreferenced_setting.getsymbol());
+        holder.min.setText("L : " + Math.round(Double.parseDouble(list.get(position).min)) + sharepreferenced_setting.getsymbol());
+        holder.max.setText("H : " + Math.round(Double.parseDouble(list.get(position).max)) + sharepreferenced_setting.getsymbol());
         Picasso.get().load(list.get(position).icon).fit().into(holder.imageView);
 
     }

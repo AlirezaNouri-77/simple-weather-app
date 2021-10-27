@@ -20,6 +20,7 @@ public class searchview_recyclerview extends RecyclerView.Adapter<searchview_rec
 
     List<searchview_model> list;
     List<searchview_model> fulllist;
+    List<searchview_model> filterlist;
     searchview_onclick searchview_onclick;
 
     public searchview_recyclerview(List<searchview_model> list , searchview_onclick searchview_onclick) {
@@ -51,7 +52,6 @@ public class searchview_recyclerview extends RecyclerView.Adapter<searchview_rec
         return list.size();
     }
 
-
     public static class searchview_viewholder extends RecyclerView.ViewHolder{
 
         TextView textView;
@@ -69,7 +69,7 @@ public class searchview_recyclerview extends RecyclerView.Adapter<searchview_rec
         Filter filter = new Filter() {
             @Override
             protected FilterResults performFiltering(CharSequence constraint) {
-                List<searchview_model> filterlist = new ArrayList<>();
+                filterlist = new ArrayList<>();
 
                 if (constraint == null || constraint.length() == 0) {
                     filterlist.addAll(fulllist);

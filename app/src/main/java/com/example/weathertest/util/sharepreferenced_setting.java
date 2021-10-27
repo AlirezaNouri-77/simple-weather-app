@@ -37,7 +37,7 @@ public class sharepreferenced_setting {
 
     public String getsymbol (){
         if (temp_symbol().equals("M")){
-            return " \u2103";
+            return "\u2103";
         }
         return "\u2109";
     }

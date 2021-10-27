@@ -8,16 +8,15 @@ import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.transition.Fade;
-import androidx.transition.Transition;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Filter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -52,7 +51,6 @@ import okhttp3.Response;
 
 public class MainActivity extends AppCompatActivity implements ForcastRecyclerview.forcastclicklistner, searchview_recyclerview.searchview_onclick {
 
-
     private List<forcast_model> sixtyday_forcastlist;
     private List<minute_model> minute_model_list;
     private List<current_model> current_list;
@@ -73,9 +71,10 @@ public class MainActivity extends AppCompatActivity implements ForcastRecyclervi
     private detail_fragment detail_fragment;
     private FragmentManager fragmentManager;
 
-    private LottieAnimationView lottieAnimationView1, lottieAnimationView2, lottieAnimationView3;
+    private LottieAnimationView lottieAnimationView1, lottieAnimationView2, lottieAnimationView3, lottieAnimationView_noconnection;
 
-    LinearLayout minute_layout, forcast_layout;
+
+    private LinearLayout minute_layout, forcast_layout;
 
     private local_json_city local_json_city;
 
@@ -92,11 +91,11 @@ public class MainActivity extends AppCompatActivity implements ForcastRecyclervi
         lottieAnimationView1 = findViewById(R.id.lottie_one);
         lottieAnimationView2 = findViewById(R.id.lottie_two);
         lottieAnimationView3 = findViewById(R.id.lottie_three);
+        lottieAnimationView_noconnection = findViewById(R.id.no_connection);
 
         current_consrtaintlayout = findViewById(R.id.constraint_one);
         minute_layout = findViewById(R.id.minute_layout);
         forcast_layout = findViewById(R.id.forcast_layout);
-
 
         detail_fragment = new detail_fragment();
 
@@ -118,8 +117,6 @@ public class MainActivity extends AppCompatActivity implements ForcastRecyclervi
         Current_Weather("");
         forcast_weather("");
 
-
-
     }
 
     @Override
@@ -133,8 +130,6 @@ public class MainActivity extends AppCompatActivity implements ForcastRecyclervi
                 if (query.length() != 0) {
                     Current_Weather(query);
                     forcast_weather(query);
-                    searchView.clearFocus();
-                    searchView.onActionViewCollapsed();
                 }
                 return true;
             }
@@ -142,7 +137,7 @@ public class MainActivity extends AppCompatActivity implements ForcastRecyclervi
             @Override
             public boolean onQueryTextChange(String newText) {
                 searchview_rv.getFilter().filter(newText);
-                if (searchview_rv.getItemCount() == 0) {
+                if (searchview_rv.getItemCount() == 0 && !newText.isEmpty()) {
                     empty_city.setVisibility(View.VISIBLE);
                     searcheview_rv.setVisibility(View.GONE);
                     Log.d("TAG", "onQueryTextChange: " + searchview_rv.getItemCount() + "if");
@@ -174,6 +169,9 @@ public class MainActivity extends AppCompatActivity implements ForcastRecyclervi
         if (id == R.id.setting) {
             Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
             startActivity(intent);
+        } else if (id == R.id.refresh) {
+            Current_Weather("");
+            forcast_weather("");
         }
         return super.onOptionsItemSelected(item);
     }
@@ -197,6 +195,7 @@ public class MainActivity extends AppCompatActivity implements ForcastRecyclervi
 
             @Override
             public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                play_noconnection();
             }
 
             @Override
@@ -252,9 +251,6 @@ public class MainActivity extends AppCompatActivity implements ForcastRecyclervi
                                 minute_recyclerview.setHasFixedSize(true);
                                 Minute_forcastRecyclerview minute_forcastRecyclerview = new Minute_forcastRecyclerview(minute_model_list, MainActivity.this);
                                 minute_recyclerview.setAdapter(minute_forcastRecyclerview);
-                            } else {
-//                                lottieAnimationView.setAnimation("test.json");
-//                                lottieAnimationView.playAnimation();
                             }
                         }
                     });
@@ -266,6 +262,9 @@ public class MainActivity extends AppCompatActivity implements ForcastRecyclervi
     public void forcast_weather(String name) {
 
         start_lottie_animation();
+        if (!lottieAnimationView_noconnection.isAnimating()) {
+            stop_noconnection();
+        }
 
         minute_recyclerview = findViewById(R.id.minute_recyclerview);
         forcast_recyclerview = findViewById(R.id.forcast_recyclerview);
@@ -278,7 +277,7 @@ public class MainActivity extends AppCompatActivity implements ForcastRecyclervi
         okHttpClient1.newCall(request1).enqueue(new Callback() {
             @Override
             public void onFailure(@NotNull Call call, @NotNull IOException e) {
-                
+
             }
 
             @Override
@@ -352,6 +351,7 @@ public class MainActivity extends AppCompatActivity implements ForcastRecyclervi
         sharepreferenced_setting.setdefualt(searchview_recyclerviewlist.get(i).getCity().trim());
         searchView.clearFocus();
         searchView.onActionViewCollapsed();
+        searcheview_rv.setVisibility(View.GONE);
         Current_Weather("");
         forcast_weather("");
 
@@ -397,5 +397,31 @@ public class MainActivity extends AppCompatActivity implements ForcastRecyclervi
         lottieAnimationView1.pauseAnimation();
         lottieAnimationView2.pauseAnimation();
         lottieAnimationView3.pauseAnimation();
+    }
+
+    public void stop_noconnection() {
+        new Handler(Looper.getMainLooper()).post(new Runnable() {
+            @Override
+            public void run() {
+                main_consrtaintlayout.setVisibility(View.VISIBLE);
+                lottieAnimationView_noconnection.setAnimation("noconnection.json");
+                lottieAnimationView_noconnection.pauseAnimation();
+                lottieAnimationView_noconnection.setVisibility(View.GONE);
+            }
+        });
+    }
+
+
+    public void play_noconnection() {
+        new Handler(Looper.getMainLooper()).post(new Runnable() {
+            @Override
+            public void run() {
+                main_consrtaintlayout.setVisibility(View.GONE);
+                lottieAnimationView_noconnection.setAnimation("noconnection.json");
+                lottieAnimationView_noconnection.playAnimation();
+                lottieAnimationView_noconnection.setVisibility(View.VISIBLE);
+            }
+        });
+
     }
 }
