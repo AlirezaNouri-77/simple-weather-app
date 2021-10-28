@@ -25,7 +25,8 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:lottie_loop="true" />
 
     <FrameLayout
         android:id="@+id/fragmentlayout"
@@ -58,7 +59,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:visibility="gone">
+        tools:visibility="visible">
 
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -96,7 +97,7 @@
                     android:id="@+id/cityname"
                     android:layout_width="wrap_content"
                     android:layout_height="33dp"
-                    android:layout_marginTop="68dp"
+                    android:layout_marginTop="28dp"
                     android:gravity="left"
                     android:text="TextView"
                     android:textColor="@color/white"
@@ -159,7 +160,7 @@
                     android:id="@+id/pressure"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="28dp"
+                    android:layout_marginTop="68dp"
                     android:text="TextView"
                     android:textColor="@color/white"
                     app:layout_constraintEnd_toEndOf="@+id/cityname"
@@ -179,6 +180,17 @@
                     app:layout_constraintStart_toStartOf="@+id/pressure"
                     app:layout_constraintTop_toBottomOf="@+id/pressure" />
 
+                <TextView
+                    android:id="@+id/country"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="TextView"
+                    android:textColor="@color/white"
+                    app:layout_constraintEnd_toEndOf="@+id/cityname"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="@+id/cityname"
+                    app:layout_constraintTop_toBottomOf="@+id/cityname" />
+
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -188,7 +200,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/constraintLayout2"
             android:layout_width="match_parent"
-            android:layout_height="120dp"
+            android:layout_height="100dp"
             android:layout_margin="5dp"
             android:background="@drawable/gradeint"
             android:elevation="10dp"
@@ -223,7 +235,7 @@
                     android:paddingLeft="10dp"
                     android:paddingTop="8dp"
                     android:paddingBottom="2dp"
-                    android:text="1 hour forcast"
+                    android:text="1 Hour Forcast"
                     android:textColor="@color/white"
                     android:textSize="14sp"
                     android:textStyle="bold"
@@ -233,11 +245,15 @@
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/minute_recyclerview"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_margin="5dp"
                     android:layout_marginTop="5dp"
                     android:layout_weight="8"
                     android:background="@android:color/transparent"
+                    android:orientation="horizontal"
                     android:padding="2dp"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                     tools:layout_editor_absoluteX="1dp"
                     tools:layout_editor_absoluteY="259dp" />
 

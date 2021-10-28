@@ -29,7 +29,7 @@ public class local_json_city {
         sharepreferencedSetting = new sharepreferenced_setting(context);
     }
 
-    public List<searchview_model> get_searchview_list(){
+    public List<searchview_model> get_searchview_list() {
 
         List<searchview_model> mlist = new ArrayList<>();
 
@@ -76,19 +76,19 @@ public class local_json_city {
 
     }
 
-    public String current_url_maker(String name) {
+    public String current_url_maker(String name , String country) {
         if (name.length() != 0) {
             return "https://api.weatherbit.io/v2.0/current?city=" + name.toLowerCase() + "&key=8a8ec0d5af5f4806ada672017c6d44b5&" + "units=" + sharepreferencedSetting.temp_symbol() + "&include=minutely";
         }
-        return "https://api.weatherbit.io/v2.0/current?city=" + sharepreferencedSetting.getdefault() + "&key=8a8ec0d5af5f4806ada672017c6d44b5&" + "units=" + sharepreferencedSetting.temp_symbol() + "&include=minutely";
+        return "https://api.weatherbit.io/v2.0/current?city=" + sharepreferencedSetting.getdefault() + "&country=" + country + "&key=8a8ec0d5af5f4806ada672017c6d44b5&" + "units=" + sharepreferencedSetting.temp_symbol() + "&include=minutely";
     }
 
 
-    public String forcast_url_maker(String name) {
+    public String forcast_url_maker(String name, String country) {
         if (name.length() != 0) {
-            return "https://api.weatherbit.io/v2.0/forecast/daily?city=" + name.toLowerCase() + "&key=8a8ec0d5af5f4806ada672017c6d44b5&" + "units=" + sharepreferencedSetting.temp_symbol();
+            return "https://api.weatherbit.io/v2.0/forecast/daily?city=" + name.toLowerCase()  + "&key=8a8ec0d5af5f4806ada672017c6d44b5&" + "units=" + sharepreferencedSetting.temp_symbol();
         }
-        return "https://api.weatherbit.io/v2.0/forecast/daily?city=" + sharepreferencedSetting.getdefault() + "&key=8a8ec0d5af5f4806ada672017c6d44b5&" + "units=" + sharepreferencedSetting.temp_symbol();
+        return "https://api.weatherbit.io/v2.0/forecast/daily?city=" + sharepreferencedSetting.getdefault() + "&country=" + country + "&key=8a8ec0d5af5f4806ada672017c6d44b5&" + "units=" + sharepreferencedSetting.temp_symbol();
     }
 
 }

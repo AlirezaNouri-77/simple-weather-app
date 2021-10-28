@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -15,10 +16,15 @@ import com.example.weathertest.model.forcast_model;
 import com.example.weathertest.util.sharepreferenced_setting;
 import com.squareup.picasso.Picasso;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 public class ForcastRecyclerview extends RecyclerView.Adapter<ForcastRecyclerview.viewholder> {
 
+    Context context;
     List<forcast_model> list;
     sharepreferenced_setting sharepreferenced_setting;
     private final forcastclicklistner monitemclick;
@@ -50,6 +56,17 @@ public class ForcastRecyclerview extends RecyclerView.Adapter<ForcastRecyclervie
 
         if (position == 0) {
             holder.test.setText("Tomorrow");
+        } else if (position <= 7) {
+
+            try {
+                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd" , Locale.getDefault());
+                Date date = simpleDateFormat.parse(list.get(position).time);
+                SimpleDateFormat simpleDateFormat1 = new SimpleDateFormat("EEEE" , Locale.getDefault());
+                holder.test.setText(simpleDateFormat1.format(date));
+
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
         } else {
             holder.test.setText(list.get(position).time);
         }

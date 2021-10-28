@@ -7,9 +7,10 @@ public class current_model {
     String cityname;
     String icon_url;
     String cloud;
+    String country;
     String pressure;
 
-    public current_model(String description, String temp, String cityname, String icon_url, String cloud, String pressure) {
+    public current_model(String description, String temp, String cityname, String icon_url, String cloud, String pressure, String country) {
 
         this.description = description;
         this.temp = temp;
@@ -17,6 +18,7 @@ public class current_model {
         this.icon_url = icon_url;
         this.cloud = cloud;
         this.pressure = pressure;
+        this.country = country;
     }
 
     public String getDescription() {
@@ -41,5 +43,9 @@ public class current_model {
 
     public String getPressure() {
         return pressure;
+    }
+
+    public String getCountry() {
+        return country;
     }
 }

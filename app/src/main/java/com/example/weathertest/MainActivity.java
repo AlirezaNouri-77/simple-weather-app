@@ -10,6 +10,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
+import android.location.Address;
+import android.location.Geocoder;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -20,7 +22,9 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.airbnb.lottie.L;
 import com.airbnb.lottie.LottieAnimationView;
 import com.example.weathertest.fragment.detail_fragment;
 import com.example.weathertest.model.current_model;
@@ -40,8 +44,12 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -58,7 +66,7 @@ public class MainActivity extends AppCompatActivity implements ForcastRecyclervi
 
     private RecyclerView forcast_recyclerview, minute_recyclerview, searcheview_rv;
 
-    private TextView cityname, currenttemp, condition, clouds, pressure, empty_city;
+    private TextView cityname, currenttemp, condition, clouds, pressure, empty_city, country;
 
     private ConstraintLayout main_consrtaintlayout, current_consrtaintlayout;
 
@@ -117,6 +125,19 @@ public class MainActivity extends AppCompatActivity implements ForcastRecyclervi
         Current_Weather("");
         forcast_weather("");
 
+        Log.d("TAG", "onCreate: " + local_json_city.current_url_maker("", "afganistan"));
+
+
+        try {
+
+            Geocoder geocoder = new Geocoder(this);
+            List<Address> test = geocoder.getFromLocationName("kabul" , 1 );
+
+            Log.d("TAG", "onCreate: " + test);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -183,12 +204,13 @@ public class MainActivity extends AppCompatActivity implements ForcastRecyclervi
         condition = findViewById(R.id.condition);
         pressure = findViewById(R.id.pressure);
         clouds = findViewById(R.id.clouds);
+        country = findViewById(R.id.country);
 
         ImageView imageView = findViewById(R.id.imageView);
 
         OkHttpClient okHttpClient = new OkHttpClient();
         Request request = new Request.Builder()
-                .url(local_json_city.current_url_maker(name))
+                .url(local_json_city.current_url_maker(name, "Afghanistan"))
                 .build();
 
         okHttpClient.newCall(request).enqueue(new Callback() {
@@ -221,7 +243,8 @@ public class MainActivity extends AppCompatActivity implements ForcastRecyclervi
                                     jsonobj.getString("city_name").toUpperCase(),
                                     "https://www.weatherbit.io/static/img/icons/" + jsonobj.getJSONObject("weather").getString("icon") + ".png",
                                     jsonobj.getString("clouds"),
-                                    jsonobj.getString("pres")
+                                    jsonobj.getString("pres"),
+                                    jsonobj.getString("country_code")
                             ));
                         }
 
@@ -246,6 +269,8 @@ public class MainActivity extends AppCompatActivity implements ForcastRecyclervi
                                 pressure.setText("Air pressure " + current_list.get(0).getPressure());
                                 currenttemp.setText(current_list.get(0).getTemp() + sharepreferenced_setting.getsymbol());
                                 Picasso.get().load(current_list.get(0).getIcon_url()).fit().into(imageView);
+                                Locale locale = new Locale("", current_list.get(0).getCountry());
+                                country.setText(locale.getDisplayCountry());
 
                                 minute_recyclerview.setLayoutManager(new LinearLayoutManager(MainActivity.this, LinearLayoutManager.HORIZONTAL, false));
                                 minute_recyclerview.setHasFixedSize(true);
@@ -262,7 +287,7 @@ public class MainActivity extends AppCompatActivity implements ForcastRecyclervi
     public void forcast_weather(String name) {
 
         start_lottie_animation();
-        if (!lottieAnimationView_noconnection.isAnimating()) {
+        if (lottieAnimationView_noconnection.isAnimating()) {
             stop_noconnection();
         }
 
@@ -271,13 +296,12 @@ public class MainActivity extends AppCompatActivity implements ForcastRecyclervi
 
         OkHttpClient okHttpClient1 = new OkHttpClient();
         Request request1 = new Request.Builder()
-                .url(local_json_city.forcast_url_maker(name))
+                .url(local_json_city.forcast_url_maker(name, "Afghanistan"))
                 .build();
 
         okHttpClient1.newCall(request1).enqueue(new Callback() {
             @Override
             public void onFailure(@NotNull Call call, @NotNull IOException e) {
-
             }
 
             @Override
