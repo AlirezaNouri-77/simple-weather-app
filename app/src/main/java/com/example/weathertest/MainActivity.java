@@ -66,7 +66,7 @@ public class MainActivity extends AppCompatActivity implements ForcastRecyclervi
 
     private RecyclerView forcast_recyclerview, minute_recyclerview, searcheview_rv;
 
-    private TextView cityname, currenttemp, condition, clouds, pressure, empty_city, country;
+    private TextView cityname, currenttemp, condition, clouds, pressure, empty_city, country, error_textview;
 
     private ConstraintLayout main_consrtaintlayout, current_consrtaintlayout;
 
@@ -104,6 +104,7 @@ public class MainActivity extends AppCompatActivity implements ForcastRecyclervi
         current_consrtaintlayout = findViewById(R.id.constraint_one);
         minute_layout = findViewById(R.id.minute_layout);
         forcast_layout = findViewById(R.id.forcast_layout);
+        error_textview = findViewById(R.id.errortextview);
 
         detail_fragment = new detail_fragment();
 
@@ -125,19 +126,16 @@ public class MainActivity extends AppCompatActivity implements ForcastRecyclervi
         Current_Weather("");
         forcast_weather("");
 
-        Log.d("TAG", "onCreate: " + local_json_city.current_url_maker("", "afganistan"));
+        Log.d("TAG", "onCreate: " + local_json_city.current_url_maker(""));
 
+        error_textview.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Current_Weather("");
+                forcast_weather("");
+            }
+        });
 
-        try {
-
-            Geocoder geocoder = new Geocoder(this);
-            List<Address> test = geocoder.getFromLocationName("kabul" , 1 );
-
-            Log.d("TAG", "onCreate: " + test);
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
     @Override
@@ -210,7 +208,7 @@ public class MainActivity extends AppCompatActivity implements ForcastRecyclervi
 
         OkHttpClient okHttpClient = new OkHttpClient();
         Request request = new Request.Builder()
-                .url(local_json_city.current_url_maker(name, "Afghanistan"))
+                .url(local_json_city.current_url_maker(name))
                 .build();
 
         okHttpClient.newCall(request).enqueue(new Callback() {
@@ -296,7 +294,7 @@ public class MainActivity extends AppCompatActivity implements ForcastRecyclervi
 
         OkHttpClient okHttpClient1 = new OkHttpClient();
         Request request1 = new Request.Builder()
-                .url(local_json_city.forcast_url_maker(name, "Afghanistan"))
+                .url(local_json_city.forcast_url_maker(name))
                 .build();
 
         okHttpClient1.newCall(request1).enqueue(new Callback() {
@@ -320,13 +318,19 @@ public class MainActivity extends AppCompatActivity implements ForcastRecyclervi
                             JSONObject j = jsonArray.getJSONObject(i);
                             String url = "https://www.weatherbit.io/static/img/icons/" + j.getJSONObject("weather").getString("icon") + ".png";
                             sixtyday_forcastlist.add(new forcast_model(j.getString("temp"),
-                                    j.getString("valid_date"),
-                                    j.getString("max_temp"),
+                                    url,
                                     j.getString("low_temp"),
-                                    url)
-                            );
-                        }
+                                    j.getString("max_temp"),
+                                    j.getString("datetime"),
+                                    j.getJSONObject("weather").getString("description"),
+                                    j.getString("wind_spd"),
+                                    j.getString("pres"),
+                                    j.getString("uv"),
+                                    j.getString("vis"),
+                                    j.getString("clouds")));
 
+                        }
+                        Log.d("TAG", "onResponse: " + sixtyday_forcastlist.size());
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
@@ -355,11 +359,18 @@ public class MainActivity extends AppCompatActivity implements ForcastRecyclervi
         fragmentManager.beginTransaction().add(R.id.fragmentlayout, detail_fragment).addToBackStack("test").commit();
 
         Bundle bundle = new Bundle();
-        bundle.putString("Temp", sixtyday_forcastlist.get(p).temp);
-        bundle.putString("time", sixtyday_forcastlist.get(p).time);
-        bundle.putString("min", sixtyday_forcastlist.get(p).min);
-        bundle.putString("max", sixtyday_forcastlist.get(p).max);
-        bundle.putString("iconurl", sixtyday_forcastlist.get(p).icon);
+        bundle.putString("Temp", sixtyday_forcastlist.get(p).getTemp());
+        bundle.putString("time", sixtyday_forcastlist.get(p).getDescription());
+        bundle.putString("min", sixtyday_forcastlist.get(p).getMin());
+        bundle.putString("max", sixtyday_forcastlist.get(p).getMax());
+        bundle.putString("iconurl", sixtyday_forcastlist.get(p).getIcon());
+        bundle.putString("description", sixtyday_forcastlist.get(p).getDescription());
+        bundle.putString("windspeed", sixtyday_forcastlist.get(p).getWindspeed());
+        bundle.putString("uv", sixtyday_forcastlist.get(p).getUv());
+        bundle.putString("clouds", sixtyday_forcastlist.get(p).getClouds());
+        bundle.putString("visibility", sixtyday_forcastlist.get(p).getVisibility());
+        bundle.putString("pressure", sixtyday_forcastlist.get(p).getPressure());
+
         detail_fragment.setArguments(bundle);
 
         searchView.setVisibility(View.GONE);
@@ -431,6 +442,7 @@ public class MainActivity extends AppCompatActivity implements ForcastRecyclervi
                 lottieAnimationView_noconnection.setAnimation("noconnection.json");
                 lottieAnimationView_noconnection.pauseAnimation();
                 lottieAnimationView_noconnection.setVisibility(View.GONE);
+                error_textview.setVisibility(View.GONE);
             }
         });
     }
@@ -444,6 +456,7 @@ public class MainActivity extends AppCompatActivity implements ForcastRecyclervi
                 lottieAnimationView_noconnection.setAnimation("noconnection.json");
                 lottieAnimationView_noconnection.playAnimation();
                 lottieAnimationView_noconnection.setVisibility(View.VISIBLE);
+                error_textview.setVisibility(View.VISIBLE);
             }
         });
 

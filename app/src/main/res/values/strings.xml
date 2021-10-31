@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">weathertest</string>
+    <string name="app_name">Simple Weather App</string>
     <string name="title_activity_settings">SettingsActivity</string>
 
     <!-- Preference Titles -->

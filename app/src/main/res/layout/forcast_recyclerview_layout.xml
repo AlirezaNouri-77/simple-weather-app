@@ -14,10 +14,9 @@
         android:id="@+id/temp"
         android:layout_width="0dp"
         android:layout_height="30dp"
-        android:text="10"
-        android:textAlignment="center"
         android:gravity="center"
-        android:textColor="@color/white"
+        android:text="10"
+        android:textColor="@color/textcolor"
         android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/guideline3"
@@ -30,7 +29,7 @@
         android:layout_height="18dp"
         android:gravity="center"
         android:text="2021-04-15"
-        android:textColor="@color/white"
+        android:textColor="@color/textcolor"
         android:textSize="11sp"
         app:layout_constraintBottom_toTopOf="@+id/temp"
         app:layout_constraintEnd_toStartOf="@+id/guideline3"
@@ -41,11 +40,10 @@
         android:id="@+id/max_temp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="36dp"
+        android:layout_marginStart="44dp"
         android:textAlignment="center"
-        android:textColor="@color/white"
+        android:textColor="@color/textcolor"
         android:textSize="12sp"
-        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="@+id/guideline3"
         app:layout_constraintTop_toTopOf="parent" />
@@ -55,12 +53,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAlignment="center"
-        android:textColor="@color/white"
+        android:textColor="@color/textcolor"
         android:textSize="12sp"
-        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.607"
+        app:layout_constraintHorizontal_bias="0.537"
         app:layout_constraintStart_toEndOf="@+id/max_temp"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -70,8 +67,10 @@
         android:layout_height="35dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/guideline4"
+        app:layout_constraintHorizontal_bias="0.313"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.533"
         tools:srcCompat="@tools:sample/avatars" />
 
     <androidx.constraintlayout.widget.Guideline
@@ -80,7 +79,7 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintGuide_percent="0.6"
+        app:layout_constraintGuide_percent="0.57"
         app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.constraintlayout.widget.Guideline
@@ -88,7 +87,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.25" />
+        app:layout_constraintGuide_percent="0.23" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

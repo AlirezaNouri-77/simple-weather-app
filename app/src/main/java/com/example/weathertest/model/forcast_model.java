@@ -10,15 +10,65 @@ public class forcast_model {
     public String description;
     public String windspeed;
     public String pressure;
-    public String humidty;
+    public String uv;
+    public String visibility;
+    public String clouds;
 
-
-    public forcast_model(String temp, String time, String max, String min , String icon) {
+    public forcast_model(String temp, String icon, String min, String max, String time, String description, String windspeed, String pressure, String uv, String visibility, String clouds) {
         this.temp = temp;
-        this.time = time;
-        this.max = max;
-        this.icon=icon;
+        this.icon = icon;
         this.min = min;
+        this.max = max;
+        this.time = time;
+        this.description = description;
+        this.windspeed = windspeed;
+        this.pressure = pressure;
+        this.uv = uv;
+        this.visibility = visibility;
+        this.clouds = clouds;
     }
 
+    public String getTemp() {
+        return temp;
+    }
+
+    public String getIcon() {
+        return icon;
+    }
+
+    public String getMin() {
+        return min;
+    }
+
+    public String getMax() {
+        return max;
+    }
+
+    public String getTime() {
+        return time;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public String getWindspeed() {
+        return windspeed;
+    }
+
+    public String getPressure() {
+        return pressure;
+    }
+
+    public String getUv() {
+        return uv;
+    }
+
+    public String getVisibility() {
+        return visibility;
+    }
+
+    public String getClouds() {
+        return clouds;
+    }
 }
