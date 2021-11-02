@@ -1,9 +1,11 @@
 package com.example.weathertest.model;
 
 public class detail_model {
+    String subject;
     String detail;
 
-    public detail_model(String detail) {
+    public detail_model(String subject, String detail) {
+        this.subject = subject;
         this.detail = detail;
     }
 
@@ -11,7 +13,7 @@ public class detail_model {
         return detail;
     }
 
-    public void setDetail(String detail) {
-        this.detail = detail;
+    public String getSubject() {
+        return subject;
     }
 }

@@ -1,18 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
+    android:layout_width="150dp"
     android:layout_height="wrap_content"
-    android:orientation="horizontal">
+    android:layout_gravity="center"
+    android:layout_margin="10dp"
+    android:background="@drawable/backgourd_main"
+    android:orientation="vertical">
 
     <TextView
-        android:id="@+id/textview"
+        android:id="@+id/subject"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_gravity="center"
+        android:layout_weight="2"
+        android:gravity="center"
+        android:padding="10dp"
+        android:text="Up"
+        android:textColor="@color/textcolor"
+        android:textSize="14sp" />
+
+    <TextView
+        android:id="@+id/detail"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="2"
-        android:gravity="left"
+        android:layout_gravity="center"
+        android:gravity="center"
         android:padding="10dp"
-        android:text="right"
+        android:text="Dowm"
         android:textColor="@color/textcolor"
-        android:textSize="24sp" />
+        android:textSize="14sp" />
+
 
 </LinearLayout>

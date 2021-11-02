@@ -13,8 +13,9 @@ public class forcast_model {
     public String uv;
     public String visibility;
     public String clouds;
+    public String rainpossibilty;
 
-    public forcast_model(String temp, String icon, String min, String max, String time, String description, String windspeed, String pressure, String uv, String visibility, String clouds) {
+    public forcast_model(String temp, String icon, String min, String max, String time, String description, String windspeed, String pressure, String uv, String visibility, String clouds, String rainpossibilty) {
         this.temp = temp;
         this.icon = icon;
         this.min = min;
@@ -26,6 +27,11 @@ public class forcast_model {
         this.uv = uv;
         this.visibility = visibility;
         this.clouds = clouds;
+        this.rainpossibilty = rainpossibilty;
+    }
+
+    public String getRainpossibilty() {
+        return rainpossibilty;
     }
 
     public String getTemp() {

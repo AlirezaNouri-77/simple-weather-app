@@ -6,21 +6,18 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.weathertest.R;
 import com.example.weathertest.model.forcast_model;
+import com.example.weathertest.util.get_weekname;
 import com.example.weathertest.util.sharepreferenced_setting;
 import com.squareup.picasso.Picasso;
 
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 public class ForcastRecyclerview extends RecyclerView.Adapter<ForcastRecyclerview.viewholder> {
 
@@ -30,8 +27,9 @@ public class ForcastRecyclerview extends RecyclerView.Adapter<ForcastRecyclervie
     private final forcastclicklistner monitemclick;
 
 
-    public ForcastRecyclerview(List<forcast_model> list, forcastclicklistner forcastclicklistner, Context context) {
+    public ForcastRecyclerview(List<forcast_model> list, forcastclicklistner forcastclicklistner , Context context) {
         this.list = list;
+        this.context = context;
         this.monitemclick = forcastclicklistner;
         sharepreferenced_setting = new sharepreferenced_setting(context);
     }
@@ -55,20 +53,20 @@ public class ForcastRecyclerview extends RecyclerView.Adapter<ForcastRecyclervie
         });
 
         if (position == 0) {
-            holder.test.setText("Tomorrow");
+            holder.time.setText("Tomorrow");
         } else if (position <= 7) {
-
             try {
-                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd" , Locale.getDefault());
-                Date date = simpleDateFormat.parse(list.get(position).time);
-                SimpleDateFormat simpleDateFormat1 = new SimpleDateFormat("EEEE" , Locale.getDefault());
-                holder.test.setText(simpleDateFormat1.format(date));
+
+                get_weekname get_weekname = new get_weekname();
+                String weekname = get_weekname.get_week_name(list.get(position).time);
+                holder.time.setText(weekname);
 
             } catch (ParseException e) {
                 e.printStackTrace();
             }
+
         } else {
-            holder.test.setText(list.get(position).time);
+            holder.time.setText(list.get(position).time);
         }
 
         holder.temp.setText(Math.round(Double.parseDouble(list.get(position).temp)) + sharepreferenced_setting.getsymbol());
@@ -78,7 +76,6 @@ public class ForcastRecyclerview extends RecyclerView.Adapter<ForcastRecyclervie
 
     }
 
-
     @Override
     public int getItemCount() {
         return list.size();
@@ -86,14 +83,14 @@ public class ForcastRecyclerview extends RecyclerView.Adapter<ForcastRecyclervie
 
     class viewholder extends RecyclerView.ViewHolder {
 
-        TextView temp, test, min, max;
+        TextView temp, time, min, max;
         ImageView imageView;
 
         public viewholder(@NonNull View itemView) {
             super(itemView);
 
             temp = itemView.findViewById(R.id.temp);
-            test = itemView.findViewById(R.id.test);
+            time = itemView.findViewById(R.id.test);
             min = itemView.findViewById(R.id.min_temp);
             max = itemView.findViewById(R.id.max_temp);
             imageView = itemView.findViewById(R.id.weathericon);

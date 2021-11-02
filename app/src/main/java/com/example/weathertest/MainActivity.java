@@ -264,7 +264,7 @@ public class MainActivity extends AppCompatActivity implements ForcastRecyclervi
                                 condition.setText(current_list.get(0).getDescription());
                                 cityname.setText(current_list.get(0).getCityname());
                                 clouds.setText("Cloud coverage " + current_list.get(0).getCloud() + "%");
-                                pressure.setText("Air pressure " + current_list.get(0).getPressure());
+                                pressure.setText("Average Pressure " + current_list.get(0).getPressure());
                                 currenttemp.setText(current_list.get(0).getTemp() + sharepreferenced_setting.getsymbol());
                                 Picasso.get().load(current_list.get(0).getIcon_url()).fit().into(imageView);
                                 Locale locale = new Locale("", current_list.get(0).getCountry());
@@ -327,7 +327,8 @@ public class MainActivity extends AppCompatActivity implements ForcastRecyclervi
                                     j.getString("pres"),
                                     j.getString("uv"),
                                     j.getString("vis"),
-                                    j.getString("clouds")));
+                                    j.getString("clouds"),
+                                    j.getString("pop")));
 
                         }
                         Log.d("TAG", "onResponse: " + sixtyday_forcastlist.size());
@@ -370,6 +371,7 @@ public class MainActivity extends AppCompatActivity implements ForcastRecyclervi
         bundle.putString("clouds", sixtyday_forcastlist.get(p).getClouds());
         bundle.putString("visibility", sixtyday_forcastlist.get(p).getVisibility());
         bundle.putString("pressure", sixtyday_forcastlist.get(p).getPressure());
+        bundle.putString("Probability", sixtyday_forcastlist.get(p).getRainpossibilty());
 
         detail_fragment.setArguments(bundle);
 

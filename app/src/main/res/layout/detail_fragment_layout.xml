@@ -24,10 +24,10 @@
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:layout_marginTop="10dp"
+            android:background="@android:color/transparent"
             app:layout_constraintEnd_toEndOf="@+id/constraintLayout3"
             app:layout_constraintStart_toStartOf="@+id/constraintLayout3"
-            app:layout_constraintTop_toTopOf="@+id/constraintLayout3"
-            tools:srcCompat="@tools:sample/avatars" />
+            app:layout_constraintTop_toTopOf="@+id/constraintLayout3" />
 
         <TextView
             android:id="@+id/temp_detail"
@@ -63,7 +63,9 @@
         android:id="@+id/linearLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="10dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="20dp"
         android:background="@drawable/backgourd_main"
         android:gravity="center"
         android:minHeight="60dp"
@@ -75,10 +77,10 @@
             android:id="@+id/min_detail"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_margin="20dp"
             android:layout_weight="2"
             android:gravity="center"
             android:text="TextView"
-            android:layout_margin="20dp"
             android:textColor="@color/textcolor"
             android:textSize="18sp"
             tools:layout_editor_absoluteX="55dp"
@@ -88,12 +90,12 @@
             android:id="@+id/max_detail"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_margin="20dp"
             android:layout_weight="2"
             android:gravity="center"
             android:text="TextView"
             android:textColor="@color/textcolor"
             android:textSize="18sp"
-            android:layout_margin="20dp"
             tools:layout_editor_absoluteX="257dp"
             tools:layout_editor_absoluteY="97dp" />
 
@@ -104,7 +106,6 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_margin="10dp"
-        android:background="@drawable/backgourd_main"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -117,6 +118,7 @@
             android:id="@+id/detail_rv"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_gravity="center_horizontal|center_vertical"
             android:layout_margin="5dp"
             tools:listitem="@layout/detail_recyclerview_layout" />
     </LinearLayout>

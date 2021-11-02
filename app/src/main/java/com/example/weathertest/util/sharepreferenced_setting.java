@@ -7,19 +7,21 @@ import androidx.preference.PreferenceManager;
 
 public class sharepreferenced_setting {
 
-    Context mc;
+    Context mcontext;
 
+    public sharepreferenced_setting(){}
     public sharepreferenced_setting(Context context) {
-        this.mc = context;
+        this.mcontext = context;
     }
 
+
     public String getdefault() {
-        SharedPreferences sharedPreferences = mc.getSharedPreferences("city", Context.MODE_PRIVATE);
+        SharedPreferences sharedPreferences = mcontext.getSharedPreferences("city", Context.MODE_PRIVATE);
         return sharedPreferences.getString("cityname", "").toLowerCase();
     }
 
     public void setdefualt(String newcity) {
-        SharedPreferences sharedPreferences = mc.getSharedPreferences("city", Context.MODE_PRIVATE);
+        SharedPreferences sharedPreferences = mcontext.getSharedPreferences("city", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         if (newcity != null || newcity.length() != 0) {
             editor.putString("cityname", newcity);
@@ -29,7 +31,7 @@ public class sharepreferenced_setting {
 
 
     public String temp_symbol() {
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(mc);
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(mcontext);
         if (sharedPreferences.getBoolean("temp", false)) {
             return "I";
         }

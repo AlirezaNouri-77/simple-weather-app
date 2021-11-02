@@ -10,11 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.weathertest.R;
 import com.example.weathertest.model.detail_model;
-import com.example.weathertest.model.forcast_model;
 
-import org.w3c.dom.Text;
-
-import java.util.ArrayList;
 import java.util.List;
 
 public class detail_recyclerview extends RecyclerView.Adapter<detail_recyclerview.viewholder> {
@@ -34,7 +30,8 @@ public class detail_recyclerview extends RecyclerView.Adapter<detail_recyclervie
 
     @Override
     public void onBindViewHolder(@NonNull viewholder holder, int position) {
-        holder.textView.setText(mlist.get(position).getDetail());
+        holder.subject.setText(mlist.get(position).getSubject());
+        holder.detail.setText(mlist.get(position).getDetail());
     }
 
     @Override
@@ -45,11 +42,12 @@ public class detail_recyclerview extends RecyclerView.Adapter<detail_recyclervie
 
     public static class viewholder extends RecyclerView.ViewHolder {
 
-        TextView textView;
+        TextView subject , detail;
 
         public viewholder(@NonNull View itemView) {
             super(itemView);
-            textView = itemView.findViewById(R.id.textview);
+            subject = itemView.findViewById(R.id.subject);
+            detail = itemView.findViewById(R.id.detail);
         }
     }
 }
