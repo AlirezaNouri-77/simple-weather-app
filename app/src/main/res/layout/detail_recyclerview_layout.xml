@@ -4,6 +4,7 @@
     android:layout_height="wrap_content"
     android:layout_gravity="center"
     android:layout_margin="10dp"
+    android:elevation="10dp"
     android:background="@drawable/backgourd_main"
     android:orientation="vertical">
 
@@ -13,7 +14,7 @@
         android:layout_height="0dp"
         android:layout_gravity="center"
         android:layout_weight="2"
-        android:gravity="center"
+        android:gravity="left"
         android:padding="10dp"
         android:text="Up"
         android:textColor="@color/textcolor"

@@ -361,7 +361,7 @@ public class MainActivity extends AppCompatActivity implements ForcastRecyclervi
 
         Bundle bundle = new Bundle();
         bundle.putString("Temp", sixtyday_forcastlist.get(p).getTemp());
-        bundle.putString("time", sixtyday_forcastlist.get(p).getDescription());
+        bundle.putString("time", sixtyday_forcastlist.get(p).getTime());
         bundle.putString("min", sixtyday_forcastlist.get(p).getMin());
         bundle.putString("max", sixtyday_forcastlist.get(p).getMax());
         bundle.putString("iconurl", sixtyday_forcastlist.get(p).getIcon());
@@ -372,6 +372,9 @@ public class MainActivity extends AppCompatActivity implements ForcastRecyclervi
         bundle.putString("visibility", sixtyday_forcastlist.get(p).getVisibility());
         bundle.putString("pressure", sixtyday_forcastlist.get(p).getPressure());
         bundle.putString("Probability", sixtyday_forcastlist.get(p).getRainpossibilty());
+        bundle.putString("tomarrow_temp", sixtyday_forcastlist.get(p + 1).getTemp());
+        bundle.putString("tomarrow_max_temp", sixtyday_forcastlist.get(p + 1).getMax());
+        bundle.putString("tomarrow_min_temp", sixtyday_forcastlist.get(p + 1).getMin());
 
         detail_fragment.setArguments(bundle);
 

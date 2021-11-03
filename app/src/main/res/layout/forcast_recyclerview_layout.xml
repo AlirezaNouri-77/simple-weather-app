@@ -40,26 +40,40 @@
         android:id="@+id/max_temp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="44dp"
+        android:layout_marginStart="8dp"
+        android:text="20"
         android:textAlignment="center"
         android:textColor="@color/textcolor"
         android:textSize="12sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/guideline3"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintBottom_toBottomOf="@+id/hot_temp_imageview"
+        app:layout_constraintStart_toEndOf="@+id/hot_temp_imageview"
+        app:layout_constraintTop_toTopOf="@+id/hot_temp_imageview" />
 
     <TextView
         android:id="@+id/min_temp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:text="20"
         android:textAlignment="center"
         android:textColor="@color/textcolor"
         android:textSize="12sp"
+        app:layout_constraintBottom_toBottomOf="@+id/cool_temp_imageview"
+        app:layout_constraintEnd_toStartOf="@+id/cool_temp_imageview"
+        app:layout_constraintTop_toTopOf="@+id/cool_temp_imageview"
+        app:layout_constraintVertical_bias="0.75" />
+
+    <ImageView
+        android:id="@+id/cool_temp_imageview"
+        android:layout_width="10dp"
+        android:layout_height="20dp"
+        android:layout_marginEnd="28dp"
+        android:scaleType="fitXY"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.537"
-        app:layout_constraintStart_toEndOf="@+id/max_temp"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.533"
+        app:srcCompat="@drawable/test" />
 
     <ImageView
         android:id="@+id/weathericon"
@@ -88,6 +102,18 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         app:layout_constraintGuide_percent="0.23" />
+
+    <ImageView
+        android:id="@+id/hot_temp_imageview"
+        android:layout_width="10dp"
+        android:layout_height="20dp"
+        android:layout_marginStart="32dp"
+        android:scaleType="fitXY"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/guideline3"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.533"
+        app:srcCompat="@drawable/hot" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

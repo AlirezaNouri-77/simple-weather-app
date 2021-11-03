@@ -70,8 +70,8 @@ public class ForcastRecyclerview extends RecyclerView.Adapter<ForcastRecyclervie
         }
 
         holder.temp.setText(Math.round(Double.parseDouble(list.get(position).temp)) + sharepreferenced_setting.getsymbol());
-        holder.min.setText("L : " + Math.round(Double.parseDouble(list.get(position).min)) + sharepreferenced_setting.getsymbol());
-        holder.max.setText("H : " + Math.round(Double.parseDouble(list.get(position).max)) + sharepreferenced_setting.getsymbol());
+        holder.min.setText( Math.round(Double.parseDouble(list.get(position).min)) + sharepreferenced_setting.getsymbol());
+        holder.max.setText( Math.round(Double.parseDouble(list.get(position).max)) + sharepreferenced_setting.getsymbol());
         Picasso.get().load(list.get(position).icon).fit().into(holder.imageView);
 
     }
@@ -81,7 +81,7 @@ public class ForcastRecyclerview extends RecyclerView.Adapter<ForcastRecyclervie
         return list.size();
     }
 
-    class viewholder extends RecyclerView.ViewHolder {
+    static class viewholder extends RecyclerView.ViewHolder {
 
         TextView temp, time, min, max;
         ImageView imageView;
