@@ -1,7 +1,6 @@
 package com.example.weathertest.fragment;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,13 +13,12 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.weathertest.R;
 import com.example.weathertest.model.detail_model;
 import com.example.weathertest.recyckerview.detail_recyclerview;
 import com.example.weathertest.util.get_weekname;
 import com.example.weathertest.util.sharepreferenced_setting;
-import com.squareup.picasso.Picasso;
-
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
@@ -37,7 +35,7 @@ public class detail_fragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.detail_fragment_layout, container, false);
+        View view = inflater.inflate(R.layout.fragment_detail_layout, container, false);
 
         current_temp = view.findViewById(R.id.temp_detail);
         current_weather = view.findViewById(R.id.descreption);
@@ -72,7 +70,7 @@ public class detail_fragment extends Fragment {
 
             List<detail_model> list = new ArrayList<>();
 
-            Picasso.get().load(String.valueOf(getArguments().get("iconurl"))).into(imageView);
+            Glide.with(getContext()).load(getArguments().get("iconurl").toString()).into(imageView);
             current_temp.setText(Math.round(Double.parseDouble(String.valueOf(getArguments().get("Temp")))) + sharepreferenced_setting.getsymbol());
             low_temp.setText(Math.round(Double.parseDouble(String.valueOf(getArguments().get("min")))) + sharepreferenced_setting.getsymbol());
             high_temp.setText(Math.round(Double.parseDouble(String.valueOf(getArguments().get("max")))) + sharepreferenced_setting.getsymbol());

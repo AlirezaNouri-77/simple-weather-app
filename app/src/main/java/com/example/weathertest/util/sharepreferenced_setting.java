@@ -8,12 +8,9 @@ import androidx.preference.PreferenceManager;
 public class sharepreferenced_setting {
 
     Context mcontext;
-
-    public sharepreferenced_setting(){}
     public sharepreferenced_setting(Context context) {
         this.mcontext = context;
     }
-
 
     public String getdefault() {
         SharedPreferences sharedPreferences = mcontext.getSharedPreferences("city", Context.MODE_PRIVATE);
@@ -28,7 +25,6 @@ public class sharepreferenced_setting {
             editor.apply();
         }
     }
-
 
     public String temp_symbol() {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(mcontext);

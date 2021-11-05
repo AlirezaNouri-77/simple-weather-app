@@ -1,7 +1,5 @@
 package com.example.weathertest.model;
 
-import com.google.gson.annotations.SerializedName;
-
 public class searchview_model {
 
 

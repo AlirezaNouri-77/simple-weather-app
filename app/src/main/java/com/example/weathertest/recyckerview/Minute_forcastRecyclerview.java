@@ -30,7 +30,7 @@ public class Minute_forcastRecyclerview extends RecyclerView.Adapter<Minute_forc
     @NonNull
     @Override
     public Viewholder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.minute_forcastrecyclerview, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recyclerview_minutely_forcast, parent, false);
         return new Viewholder(view);
     }
 

@@ -5,6 +5,7 @@
     <gradient
         android:angle="45"
         android:endColor="#29ABE2"
+        android:gradientRadius="0dp"
         android:startColor="#4F00BC"
         android:type="linear" />
 

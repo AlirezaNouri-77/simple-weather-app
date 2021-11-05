@@ -10,16 +10,16 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.weathertest.R;
 import com.example.weathertest.model.forcast_model;
 import com.example.weathertest.util.get_weekname;
 import com.example.weathertest.util.sharepreferenced_setting;
-import com.squareup.picasso.Picasso;
 
 import java.text.ParseException;
 import java.util.List;
 
-public class ForcastRecyclerview extends RecyclerView.Adapter<ForcastRecyclerview.viewholder> {
+public class forcast_recyclerview extends RecyclerView.Adapter<forcast_recyclerview.viewholder> {
 
     Context context;
     List<forcast_model> list;
@@ -27,7 +27,7 @@ public class ForcastRecyclerview extends RecyclerView.Adapter<ForcastRecyclervie
     private final forcastclicklistner monitemclick;
 
 
-    public ForcastRecyclerview(List<forcast_model> list, forcastclicklistner forcastclicklistner , Context context) {
+    public forcast_recyclerview(List<forcast_model> list, forcastclicklistner forcastclicklistner, Context context) {
         this.list = list;
         this.context = context;
         this.monitemclick = forcastclicklistner;
@@ -37,7 +37,7 @@ public class ForcastRecyclerview extends RecyclerView.Adapter<ForcastRecyclervie
     @NonNull
     @Override
     public viewholder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.forcast_recyclerview_layout, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recyclerview_forcast_layout, parent, false);
         return new viewholder(view);
 
     }
@@ -56,10 +56,8 @@ public class ForcastRecyclerview extends RecyclerView.Adapter<ForcastRecyclervie
             holder.time.setText("Tomorrow");
         } else if (position <= 7) {
             try {
-
                 get_weekname get_weekname = new get_weekname();
-                String weekname = get_weekname.get_week_name(list.get(position).time);
-                holder.time.setText(weekname);
+                holder.time.setText(get_weekname.get_week_name(list.get(position).time));
 
             } catch (ParseException e) {
                 e.printStackTrace();
@@ -70,9 +68,10 @@ public class ForcastRecyclerview extends RecyclerView.Adapter<ForcastRecyclervie
         }
 
         holder.temp.setText(Math.round(Double.parseDouble(list.get(position).temp)) + sharepreferenced_setting.getsymbol());
-        holder.min.setText( Math.round(Double.parseDouble(list.get(position).min)) + sharepreferenced_setting.getsymbol());
-        holder.max.setText( Math.round(Double.parseDouble(list.get(position).max)) + sharepreferenced_setting.getsymbol());
-        Picasso.get().load(list.get(position).icon).fit().into(holder.imageView);
+        holder.min.setText(Math.round(Double.parseDouble(list.get(position).min)) + sharepreferenced_setting.getsymbol());
+        holder.max.setText(Math.round(Double.parseDouble(list.get(position).max)) + sharepreferenced_setting.getsymbol());
+        holder.rain.setText(list.get(position).rainpossibilty + "%");
+        Glide.with(context).load(list.get(position).icon).into(holder.imageView);
 
     }
 
@@ -83,7 +82,7 @@ public class ForcastRecyclerview extends RecyclerView.Adapter<ForcastRecyclervie
 
     static class viewholder extends RecyclerView.ViewHolder {
 
-        TextView temp, time, min, max;
+        TextView temp, time, min, max, rain;
         ImageView imageView;
 
         public viewholder(@NonNull View itemView) {
@@ -93,6 +92,7 @@ public class ForcastRecyclerview extends RecyclerView.Adapter<ForcastRecyclervie
             time = itemView.findViewById(R.id.test);
             min = itemView.findViewById(R.id.min_temp);
             max = itemView.findViewById(R.id.max_temp);
+            rain = itemView.findViewById(R.id.rain);
             imageView = itemView.findViewById(R.id.weathericon);
 
         }

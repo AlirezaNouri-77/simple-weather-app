@@ -24,7 +24,7 @@ public class detail_recyclerview extends RecyclerView.Adapter<detail_recyclervie
     @NonNull
     @Override
     public viewholder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.detail_recyclerview_layout, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recyclerview_detail_layout, parent, false);
         return new viewholder(view);
     }
 

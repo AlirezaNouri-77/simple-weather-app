@@ -10,8 +10,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
-import android.location.Address;
-import android.location.Geocoder;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -22,21 +20,20 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.airbnb.lottie.L;
 import com.airbnb.lottie.LottieAnimationView;
+import com.bumptech.glide.Glide;
 import com.example.weathertest.fragment.detail_fragment;
 import com.example.weathertest.model.current_model;
 import com.example.weathertest.model.minute_model;
 import com.example.weathertest.model.forcast_model;
 import com.example.weathertest.model.searchview_model;
-import com.example.weathertest.recyckerview.ForcastRecyclerview;
+import com.example.weathertest.recyckerview.forcast_recyclerview;
 import com.example.weathertest.recyckerview.Minute_forcastRecyclerview;
 import com.example.weathertest.recyckerview.searchview_recyclerview;
 import com.example.weathertest.util.local_json_city;
 import com.example.weathertest.util.sharepreferenced_setting;
-import com.squareup.picasso.Picasso;
+
 
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
@@ -44,10 +41,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -57,7 +51,7 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
-public class MainActivity extends AppCompatActivity implements ForcastRecyclerview.forcastclicklistner, searchview_recyclerview.searchview_onclick {
+public class MainActivity extends AppCompatActivity implements com.example.weathertest.recyckerview.forcast_recyclerview.forcastclicklistner, searchview_recyclerview.searchview_onclick {
 
     private List<forcast_model> sixtyday_forcastlist;
     private List<minute_model> minute_model_list;
@@ -80,7 +74,6 @@ public class MainActivity extends AppCompatActivity implements ForcastRecyclervi
     private FragmentManager fragmentManager;
 
     private LottieAnimationView lottieAnimationView1, lottieAnimationView2, lottieAnimationView3, lottieAnimationView_noconnection;
-
 
     private LinearLayout minute_layout, forcast_layout;
 
@@ -266,7 +259,8 @@ public class MainActivity extends AppCompatActivity implements ForcastRecyclervi
                                 clouds.setText("Cloud coverage " + current_list.get(0).getCloud() + "%");
                                 pressure.setText("Average Pressure " + current_list.get(0).getPressure());
                                 currenttemp.setText(current_list.get(0).getTemp() + sharepreferenced_setting.getsymbol());
-                                Picasso.get().load(current_list.get(0).getIcon_url()).fit().into(imageView);
+                                //Picasso.get().load(current_list.get(0).getIcon_url()).fit().into(imageView);
+                                Glide.with(MainActivity.this).load(current_list.get(0).getIcon_url()).into(imageView);
                                 Locale locale = new Locale("", current_list.get(0).getCountry());
                                 country.setText(locale.getDisplayCountry());
 
@@ -336,7 +330,7 @@ public class MainActivity extends AppCompatActivity implements ForcastRecyclervi
                             @Override
                             public void run() {
 
-                                ForcastRecyclerview adapter = new ForcastRecyclerview(sixtyday_forcastlist, MainActivity.this, MainActivity.this);
+                                com.example.weathertest.recyckerview.forcast_recyclerview adapter = new forcast_recyclerview(sixtyday_forcastlist, MainActivity.this, MainActivity.this);
                                 forcast_recyclerview.setLayoutManager(new LinearLayoutManager(MainActivity.this));
                                 forcast_recyclerview.setHasFixedSize(true);
                                 forcast_recyclerview.addItemDecoration(new DividerItemDecoration(MainActivity.this, DividerItemDecoration.VERTICAL));
@@ -358,7 +352,6 @@ public class MainActivity extends AppCompatActivity implements ForcastRecyclervi
     public void onclick(int p) {
 
         fragmentManager.beginTransaction().add(R.id.fragmentlayout, detail_fragment).addToBackStack("test").commit();
-
         Bundle bundle = new Bundle();
         bundle.putString("Temp", sixtyday_forcastlist.get(p).getTemp());
         bundle.putString("time", sixtyday_forcastlist.get(p).getTime());
@@ -377,10 +370,8 @@ public class MainActivity extends AppCompatActivity implements ForcastRecyclervi
         bundle.putString("tomarrow_min_temp", sixtyday_forcastlist.get(p + 1).getMin());
 
         detail_fragment.setArguments(bundle);
-
         searchView.setVisibility(View.GONE);
         main_consrtaintlayout.setVisibility(View.GONE);
-
         fragmentManager.beginTransaction().show(detail_fragment).commit();
 
     }

@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/gradeint">
+    android:background="@drawable/background_grediend">
 
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -13,7 +13,7 @@
         android:layout_height="150dp"
         android:layout_margin="10dp"
         android:layout_marginTop="44dp"
-        android:background="@drawable/backgourd_main"
+        android:background="@drawable/background_transparent"
         android:elevation="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -80,7 +80,7 @@
         android:layout_marginLeft="10dp"
         android:layout_marginTop="10dp"
         android:layout_marginRight="10dp"
-        android:background="@drawable/backgourd_main"
+        android:background="@drawable/background_transparent"
         android:elevation="10dp"
         android:gravity="center"
         android:minHeight="60dp"
@@ -124,7 +124,7 @@
             android:layout_marginBottom="16dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:srcCompat="@drawable/hot" />
+            app:srcCompat="@drawable/icon_hot_temp" />
 
         <ImageView
             android:id="@+id/imageView4"
@@ -134,7 +134,7 @@
             android:layout_marginTop="16dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/test" />
+            app:srcCompat="@drawable/icon_cold_temp" />
 
         <TextView
             android:id="@+id/tomarrow_weather"
@@ -170,7 +170,7 @@
             android:layout_margin="10dp"
             app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
             app:spanCount="2"
-            tools:listitem="@layout/detail_recyclerview_layout" />
+            tools:listitem="@layout/recyclerview_detail_layout" />
     </LinearLayout>
 
 

@@ -5,18 +5,26 @@
       <map>
         <entry key="..\:/Users/Alireza/Desktop/weathertest/app/src/main/res/drawable/abow_textview.xml" value="0.2671875" />
         <entry key="..\:/Users/Alireza/Desktop/weathertest/app/src/main/res/drawable/backgourd_main.xml" value="0.2671875" />
+        <entry key="..\:/Users/Alireza/Desktop/weathertest/app/src/main/res/drawable/background_gredeind.xml" value="0.2671875" />
+        <entry key="..\:/Users/Alireza/Desktop/weathertest/app/src/main/res/drawable/background_grediend.xml" value="0.2671875" />
         <entry key="..\:/Users/Alireza/Desktop/weathertest/app/src/main/res/drawable/gradeint.xml" value="0.2671875" />
         <entry key="..\:/Users/Alireza/Desktop/weathertest/app/src/main/res/drawable/ic_baseline_refresh_24.xml" value="0.2671875" />
         <entry key="..\:/Users/Alireza/Desktop/weathertest/app/src/main/res/drawable/ic_hot_temp.xml" value="0.2671875" />
         <entry key="..\:/Users/Alireza/Desktop/weathertest/app/src/main/res/drawable/test.xml" value="0.2671875" />
+        <entry key="..\:/Users/Alireza/Desktop/weathertest/app/src/main/res/layout/Fragment_detail_layout.xml" value="0.25104166666666666" />
         <entry key="..\:/Users/Alireza/Desktop/weathertest/app/src/main/res/layout/activity_detail_activiy.xml" value="0.25416666666666665" />
         <entry key="..\:/Users/Alireza/Desktop/weathertest/app/src/main/res/layout/activity_main.xml" value="0.152" />
+        <entry key="..\:/Users/Alireza/Desktop/weathertest/app/src/main/res/layout/activity_setting.xml" value="0.25104166666666666" />
         <entry key="..\:/Users/Alireza/Desktop/weathertest/app/src/main/res/layout/detail_fragment_layout.xml" value="0.4" />
         <entry key="..\:/Users/Alireza/Desktop/weathertest/app/src/main/res/layout/detail_recyclerview_layout.xml" value="0.2" />
         <entry key="..\:/Users/Alireza/Desktop/weathertest/app/src/main/res/layout/dialog.xml" value="0.19655797101449277" />
         <entry key="..\:/Users/Alireza/Desktop/weathertest/app/src/main/res/layout/forcast_recyclerview_layout.xml" value="0.8800000000000001" />
+        <entry key="..\:/Users/Alireza/Desktop/weathertest/app/src/main/res/layout/fragment_detail_layout.xml" value="0.2" />
         <entry key="..\:/Users/Alireza/Desktop/weathertest/app/src/main/res/layout/minute_forcastrecyclerview.xml" value="0.176" />
         <entry key="..\:/Users/Alireza/Desktop/weathertest/app/src/main/res/layout/recycler.xml" value="0.6" />
+        <entry key="..\:/Users/Alireza/Desktop/weathertest/app/src/main/res/layout/recyclerview_detail_layout.xml" value="0.176" />
+        <entry key="..\:/Users/Alireza/Desktop/weathertest/app/src/main/res/layout/recyclerview_forcast_layout.xml" value="0.536" />
+        <entry key="..\:/Users/Alireza/Desktop/weathertest/app/src/main/res/layout/recycleveiw.xml" value="0.25104166666666666" />
         <entry key="..\:/Users/Alireza/Desktop/weathertest/app/src/main/res/layout/searchview_recyclerview.xml" value="0.176" />
         <entry key="..\:/Users/Alireza/Desktop/weathertest/app/src/main/res/layout/settings_activity.xml" value="0.25416666666666665" />
         <entry key="..\:/Users/Alireza/Desktop/weathertest/app/src/main/res/menu/option_menu.xml" value="0.25416666666666665" />
