@@ -3,31 +3,36 @@ package com.example.weathertest.recyckerview;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Filter;
-import android.widget.Filterable;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.DiffUtil;
+import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.weathertest.R;
 import com.example.weathertest.model.searchview_model;
 
-import java.util.ArrayList;
-import java.util.List;
+public class searchview_recyclerview extends ListAdapter<searchview_model, searchview_recyclerview.searchview_viewholder> {
 
-public class searchview_recyclerview extends RecyclerView.Adapter<searchview_recyclerview.searchview_viewholder> implements Filterable {
-
-    List<searchview_model> list;
-    List<searchview_model> fulllist;
-    List<searchview_model> filterlist;
     searchview_onclick searchview_onclick;
 
-    public searchview_recyclerview(List<searchview_model> list , searchview_onclick searchview_onclick) {
-        this.list = list;
+    public searchview_recyclerview(searchview_onclick searchview_onclick) {
+        super(diffCallback);
         this.searchview_onclick = searchview_onclick;
-        this.fulllist = new ArrayList<>(list);
     }
+
+    private static final DiffUtil.ItemCallback<searchview_model> diffCallback = new DiffUtil.ItemCallback<searchview_model>() {
+        @Override
+        public boolean areItemsTheSame(@NonNull searchview_model oldItem, @NonNull searchview_model newItem) {
+            return oldItem.getCountry().equals(newItem.getCountry());
+        }
+
+        @Override
+        public boolean areContentsTheSame(@NonNull searchview_model oldItem, @NonNull searchview_model newItem) {
+            return oldItem.getCountry().equals(newItem.getCountry());
+        }
+    };
 
     @NonNull
     @Override
@@ -38,7 +43,8 @@ public class searchview_recyclerview extends RecyclerView.Adapter<searchview_rec
 
     @Override
     public void onBindViewHolder(@NonNull searchview_viewholder holder, int position) {
-        holder.textView.setText(list.get(position).getCity() + " / " + list.get(position).getCountry() );
+        holder.city_textview.setText(getItem(position).getCity());
+        holder.country_textview.setText(getItem(position).getCountry());
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -47,57 +53,16 @@ public class searchview_recyclerview extends RecyclerView.Adapter<searchview_rec
         });
     }
 
-    @Override
-    public int getItemCount() {
-        return list.size();
-    }
+    public static class searchview_viewholder extends RecyclerView.ViewHolder {
 
-    public static class searchview_viewholder extends RecyclerView.ViewHolder{
-
-        TextView textView;
+        TextView city_textview, country_textview;
 
         public searchview_viewholder(@NonNull View itemView) {
             super(itemView);
-            textView = itemView.findViewById(R.id.city);
+            city_textview = itemView.findViewById(R.id.city);
+            country_textview = itemView.findViewById(R.id.country);
         }
 
-    }
-
-    @Override
-    public Filter getFilter() {
-
-        Filter filter = new Filter() {
-            @Override
-            protected FilterResults performFiltering(CharSequence constraint) {
-                filterlist = new ArrayList<>();
-
-                if (constraint == null || constraint.length() == 0) {
-                    filterlist.addAll(fulllist);
-                } else {
-                    String text = constraint.toString().toLowerCase().trim();
-                    for (searchview_model searchview_model : fulllist) {
-                        if (searchview_model.getCity().toLowerCase().contains(text)||searchview_model.getCountry().toLowerCase().contains(text)) {
-                            filterlist.add(searchview_model);
-                        } else {
-
-                        }
-                    }
-                }
-                FilterResults results = new FilterResults();
-                results.values = filterlist;
-                return results;
-            }
-
-            @Override
-            protected void publishResults(CharSequence constraint, FilterResults results) {
-                list.clear();
-                list.addAll((List) results.values);
-                notifyDataSetChanged();
-                ;
-            }
-        };
-
-        return filter;
     }
 
     public interface searchview_onclick {

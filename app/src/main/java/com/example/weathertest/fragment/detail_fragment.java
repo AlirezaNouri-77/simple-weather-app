@@ -19,18 +19,18 @@ import com.example.weathertest.model.detail_model;
 import com.example.weathertest.recyckerview.detail_recyclerview;
 import com.example.weathertest.util.get_weekname;
 import com.example.weathertest.util.sharepreferenced_setting;
+
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class detail_fragment extends Fragment {
 
-    TextView current_temp, current_weather, low_temp, high_temp, date, tomarrow;
-    ImageView imageView;
-    com.example.weathertest.recyckerview.detail_recyclerview detail_recyclerview;
-    RecyclerView recyclerView;
-    com.example.weathertest.util.get_weekname get_weekname;
-    com.example.weathertest.util.sharepreferenced_setting sharepreferenced_setting;
+    private TextView current_temp, current_weather, low_temp, high_temp, date, tomarrow;
+    private ImageView imageView;
+    private RecyclerView recyclerView;
+    private com.example.weathertest.util.get_weekname get_weekname;
+    private com.example.weathertest.util.sharepreferenced_setting sharepreferenced_setting;
 
     @Nullable
     @Override
@@ -90,7 +90,7 @@ public class detail_fragment extends Fragment {
             list.add(new detail_model("Clouds Coverage", getArguments().get("clouds").toString() + "%"));
             list.add(new detail_model("Probability of Precipitation", getArguments().get("Probability").toString() + "%"));
 
-            detail_recyclerview = new detail_recyclerview(list);
+            com.example.weathertest.recyckerview.detail_recyclerview detail_recyclerview = new detail_recyclerview(list);
             recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
             recyclerView.setAdapter(detail_recyclerview);
 

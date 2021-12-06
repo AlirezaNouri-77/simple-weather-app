@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.FragmentManager;
+import androidx.lifecycle.Observer;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -31,6 +32,7 @@ import com.example.weathertest.model.searchview_model;
 import com.example.weathertest.recyckerview.forcast_recyclerview;
 import com.example.weathertest.recyckerview.Minute_forcastRecyclerview;
 import com.example.weathertest.recyckerview.searchview_recyclerview;
+import com.example.weathertest.util.city_finder;
 import com.example.weathertest.util.local_json_city;
 import com.example.weathertest.util.sharepreferenced_setting;
 
@@ -44,6 +46,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.concurrent.CountDownLatch;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -56,7 +59,6 @@ public class MainActivity extends AppCompatActivity implements com.example.weath
     private List<forcast_model> sixtyday_forcastlist;
     private List<minute_model> minute_model_list;
     private List<current_model> current_list;
-    private List<searchview_model> searchview_recyclerviewlist;
 
     private RecyclerView forcast_recyclerview, minute_recyclerview, searcheview_rv;
 
@@ -79,6 +81,8 @@ public class MainActivity extends AppCompatActivity implements com.example.weath
 
     private local_json_city local_json_city;
 
+    private com.example.weathertest.util.city_finder city_finder;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -100,26 +104,24 @@ public class MainActivity extends AppCompatActivity implements com.example.weath
         error_textview = findViewById(R.id.errortextview);
 
         detail_fragment = new detail_fragment();
+        city_finder = new city_finder();
 
         sixtyday_forcastlist = new ArrayList<>();
         minute_model_list = new ArrayList<>();
         current_list = new ArrayList<>();
-        searchview_recyclerviewlist = new ArrayList<>(local_json_city.get_searchview_list());
 
         main_consrtaintlayout = findViewById(R.id.main_constraint);
         searcheview_rv = findViewById(R.id.searchview_rv);
 
         fragmentManager = getSupportFragmentManager();
 
-        searchview_rv = new searchview_recyclerview(searchview_recyclerviewlist, this);
+        searchview_rv = new searchview_recyclerview(this);
         searcheview_rv.setLayoutManager(new LinearLayoutManager(MainActivity.this));
         searcheview_rv.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
         searcheview_rv.setAdapter(searchview_rv);
 
         Current_Weather("");
         forcast_weather("");
-
-        Log.d("TAG", "onCreate: " + local_json_city.current_url_maker(""));
 
         error_textview.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -148,15 +150,13 @@ public class MainActivity extends AppCompatActivity implements com.example.weath
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                searchview_rv.getFilter().filter(newText);
-                if (searchview_rv.getItemCount() == 0 && !newText.isEmpty()) {
-                    empty_city.setVisibility(View.VISIBLE);
-                    searcheview_rv.setVisibility(View.GONE);
-                    Log.d("TAG", "onQueryTextChange: " + searchview_rv.getItemCount() + "if");
-                } else {
-                    empty_city.setVisibility(View.GONE);
-                    searcheview_rv.setVisibility(View.VISIBLE);
-                    Log.d("TAG", "onQueryTextChange: " + searchview_rv.getItemCount());
+                if (newText.length() > 2) {
+                    city_finder.call_request(newText).observe(MainActivity.this, new Observer<List<searchview_model>>() {
+                        @Override
+                        public void onChanged(List<searchview_model> searchview_models) {
+                            searchview_rv.submitList(searchview_models);
+                        }
+                    });
                 }
                 return true;
             }
@@ -164,15 +164,24 @@ public class MainActivity extends AppCompatActivity implements com.example.weath
 
         searchView.setOnQueryTextFocusChangeListener((v, hasFocus) -> {
             if (hasFocus) {
+                test(menu, menuItem, false);
                 searcheview_rv.setVisibility(View.VISIBLE);
                 main_consrtaintlayout.setVisibility(View.INVISIBLE);
             } else {
-
+                test(menu, menuItem, true);
                 searcheview_rv.setVisibility(View.GONE);
                 main_consrtaintlayout.setVisibility(View.VISIBLE);
             }
         });
         return super.onCreateOptionsMenu(menu);
+
+    }
+
+    private void test(Menu menu, MenuItem menuItem, boolean visibile) {
+        for (int i = 0; i < menu.size(); i++) {
+            MenuItem item = menu.getItem(i);
+            if (item != menuItem) item.setVisible(visibile);
+        }
     }
 
     @Override
@@ -213,8 +222,9 @@ public class MainActivity extends AppCompatActivity implements com.example.weath
 
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) {
-
                 if (response.isSuccessful()) {
+
+                    Log.d("TAG", "onResponse: " + "calling");
 
                     current_list.clear();
                     minute_model_list.clear();
@@ -252,14 +262,13 @@ public class MainActivity extends AppCompatActivity implements com.example.weath
                         @Override
                         public void run() {
 
-                            Log.d("TAG", "run: " + current_list);
                             if (current_list.size() != 0) {
                                 condition.setText(current_list.get(0).getDescription());
                                 cityname.setText(current_list.get(0).getCityname());
                                 clouds.setText("Cloud coverage " + current_list.get(0).getCloud() + "%");
                                 pressure.setText("Average Pressure " + current_list.get(0).getPressure());
                                 currenttemp.setText(current_list.get(0).getTemp() + sharepreferenced_setting.getsymbol());
-                                //Picasso.get().load(current_list.get(0).getIcon_url()).fit().into(imageView);
+
                                 Glide.with(MainActivity.this).load(current_list.get(0).getIcon_url()).into(imageView);
                                 Locale locale = new Locale("", current_list.get(0).getCountry());
                                 country.setText(locale.getDisplayCountry());
@@ -268,6 +277,7 @@ public class MainActivity extends AppCompatActivity implements com.example.weath
                                 minute_recyclerview.setHasFixedSize(true);
                                 Minute_forcastRecyclerview minute_forcastRecyclerview = new Minute_forcastRecyclerview(minute_model_list, MainActivity.this);
                                 minute_recyclerview.setAdapter(minute_forcastRecyclerview);
+
                             }
                         }
                     });
@@ -277,6 +287,8 @@ public class MainActivity extends AppCompatActivity implements com.example.weath
     }
 
     public void forcast_weather(String name) {
+
+        Log.d("TAG", "Current_Weather: " + "secend");
 
         start_lottie_animation();
         if (lottieAnimationView_noconnection.isAnimating()) {
@@ -323,7 +335,6 @@ public class MainActivity extends AppCompatActivity implements com.example.weath
                                     j.getString("vis"),
                                     j.getString("clouds"),
                                     j.getString("pop")));
-
                         }
                         Log.d("TAG", "onResponse: " + sixtyday_forcastlist.size());
                         runOnUiThread(new Runnable() {
@@ -379,7 +390,7 @@ public class MainActivity extends AppCompatActivity implements com.example.weath
     @Override
     public void searchview_onitemclick(int i) {
 
-        sharepreferenced_setting.setdefualt(searchview_recyclerviewlist.get(i).getCity().trim());
+        sharepreferenced_setting.setdefualt(searchview_rv.getCurrentList().get(i).getCity().trim());
         searchView.clearFocus();
         searchView.onActionViewCollapsed();
         searcheview_rv.setVisibility(View.GONE);
