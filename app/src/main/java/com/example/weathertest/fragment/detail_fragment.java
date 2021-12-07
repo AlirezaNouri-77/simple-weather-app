@@ -1,6 +1,8 @@
 package com.example.weathertest.fragment;
 
+import android.content.Context;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +14,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import com.bumptech.glide.Glide;
 import com.example.weathertest.R;
@@ -78,9 +81,8 @@ public class detail_fragment extends Fragment {
             date.setText(get_weekname.get_week_name(getArguments().get("time").toString()));
 
 
-            tomarrow.setText("Temp in tomarrow is " + Math.round(Double.parseDouble(getArguments().get("tomarrow_temp").toString())) +
-                    sharepreferenced_setting.getsymbol() + "\n" + "Max Temp is " +
-                    Math.round(Double.parseDouble(getArguments().get("tomarrow_max_temp").toString())) + sharepreferenced_setting.getsymbol() + "\n" +
+            tomarrow.setText("Tomorrow Forcast" + "\n" + "Average temp is " + Math.round(Double.parseDouble(getArguments().get("tomarrow_temp").toString())) +
+                    sharepreferenced_setting.getsymbol() + "\n" + "Max Temp is " + Math.round(Double.parseDouble(getArguments().get("tomarrow_max_temp").toString())) + sharepreferenced_setting.getsymbol() + "\n" +
                     "Min Temp is " + Math.round(Double.parseDouble(getArguments().get("tomarrow_min_temp").toString())) + sharepreferenced_setting.getsymbol());
 
             list.add(new detail_model("Average Pressure", getArguments().get("pressure").toString() + " mb"));

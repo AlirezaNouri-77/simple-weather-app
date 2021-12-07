@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.ActionBar;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -82,6 +83,7 @@ public class MainActivity extends AppCompatActivity implements com.example.weath
     private local_json_city local_json_city;
 
     private com.example.weathertest.util.city_finder city_finder;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -178,6 +180,7 @@ public class MainActivity extends AppCompatActivity implements com.example.weath
     }
 
     private void test(Menu menu, MenuItem menuItem, boolean visibile) {
+        getSupportActionBar().setDisplayShowTitleEnabled(visibile);
         for (int i = 0; i < menu.size(); i++) {
             MenuItem item = menu.getItem(i);
             if (item != menuItem) item.setVisible(visibile);
@@ -258,27 +261,24 @@ public class MainActivity extends AppCompatActivity implements com.example.weath
                         e.printStackTrace();
                     }
 
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
+                    runOnUiThread(() -> {
 
-                            if (current_list.size() != 0) {
-                                condition.setText(current_list.get(0).getDescription());
-                                cityname.setText(current_list.get(0).getCityname());
-                                clouds.setText("Cloud coverage " + current_list.get(0).getCloud() + "%");
-                                pressure.setText("Average Pressure " + current_list.get(0).getPressure());
-                                currenttemp.setText(current_list.get(0).getTemp() + sharepreferenced_setting.getsymbol());
+                        if (current_list.size() != 0) {
+                            condition.setText(current_list.get(0).getDescription());
+                            cityname.setText(current_list.get(0).getCityname());
+                            clouds.setText("Cloud coverage " + current_list.get(0).getCloud() + "%");
+                            pressure.setText("Average Pressure " + current_list.get(0).getPressure());
+                            currenttemp.setText(current_list.get(0).getTemp() + sharepreferenced_setting.getsymbol());
 
-                                Glide.with(MainActivity.this).load(current_list.get(0).getIcon_url()).into(imageView);
-                                Locale locale = new Locale("", current_list.get(0).getCountry());
-                                country.setText(locale.getDisplayCountry());
+                            Glide.with(MainActivity.this).load(current_list.get(0).getIcon_url()).into(imageView);
+                            Locale locale = new Locale("", current_list.get(0).getCountry());
+                            country.setText(locale.getDisplayCountry());
 
-                                minute_recyclerview.setLayoutManager(new LinearLayoutManager(MainActivity.this, LinearLayoutManager.HORIZONTAL, false));
-                                minute_recyclerview.setHasFixedSize(true);
-                                Minute_forcastRecyclerview minute_forcastRecyclerview = new Minute_forcastRecyclerview(minute_model_list, MainActivity.this);
-                                minute_recyclerview.setAdapter(minute_forcastRecyclerview);
+                            minute_recyclerview.setLayoutManager(new LinearLayoutManager(MainActivity.this, LinearLayoutManager.HORIZONTAL, false));
+                            minute_recyclerview.setHasFixedSize(true);
+                            Minute_forcastRecyclerview minute_forcastRecyclerview = new Minute_forcastRecyclerview(minute_model_list, MainActivity.this);
+                            minute_recyclerview.setAdapter(minute_forcastRecyclerview);
 
-                            }
                         }
                     });
                 }
@@ -299,9 +299,7 @@ public class MainActivity extends AppCompatActivity implements com.example.weath
         forcast_recyclerview = findViewById(R.id.forcast_recyclerview);
 
         OkHttpClient okHttpClient1 = new OkHttpClient();
-        Request request1 = new Request.Builder()
-                .url(local_json_city.forcast_url_maker(name))
-                .build();
+        Request request1 = new Request.Builder().url(local_json_city.forcast_url_maker(name)).build();
 
         okHttpClient1.newCall(request1).enqueue(new Callback() {
             @Override

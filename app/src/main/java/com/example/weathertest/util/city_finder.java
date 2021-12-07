@@ -31,11 +31,12 @@ import okhttp3.Response;
 
 public class city_finder {
 
+    MutableLiveData<List<searchview_model>> liveData = new MutableLiveData<>();
     public city_finder() {}
 
     public LiveData<List<searchview_model>> call_request(String text) {
 
-        MutableLiveData<List<searchview_model>> liveData = new MutableLiveData<>();
+
         List<searchview_model> list = new ArrayList<>();
 
         String url = "https://api.openweathermap.org/geo/1.0/direct?q=" + text + "&limit=20&appid="+ API_KEY_OPENMAPWEARGER;
@@ -72,4 +73,5 @@ public class city_finder {
         Locale locale = new Locale("", code);
         return locale.getDisplayCountry();
     }
+
 }
