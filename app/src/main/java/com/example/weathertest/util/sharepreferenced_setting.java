@@ -8,20 +8,27 @@ import androidx.preference.PreferenceManager;
 public class sharepreferenced_setting {
 
     Context mcontext;
+
     public sharepreferenced_setting(Context context) {
         this.mcontext = context;
     }
 
-    public String getdefault() {
+    public String get_sharepreference_city() {
         SharedPreferences sharedPreferences = mcontext.getSharedPreferences("city", Context.MODE_PRIVATE);
         return sharedPreferences.getString("cityname", "").toLowerCase();
     }
 
-    public void setdefualt(String newcity) {
+    public String get_sharepreference_country() {
+        SharedPreferences sharedPreferences = mcontext.getSharedPreferences("city", Context.MODE_PRIVATE);
+        return sharedPreferences.getString("countryname", "").toLowerCase();
+    }
+
+    public void setdefualt(String newcity, String newcountry) {
         SharedPreferences sharedPreferences = mcontext.getSharedPreferences("city", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         if (newcity != null || newcity.length() != 0) {
             editor.putString("cityname", newcity);
+            editor.putString("countryname", newcountry);
             editor.apply();
         }
     }

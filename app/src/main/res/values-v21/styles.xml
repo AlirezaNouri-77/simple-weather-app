@@ -1,0 +1,12 @@
+<resources>
+
+    <style name="Widget.Weathertest.AppWidget.Container" parent="android:Widget">
+        <item name="android:padding">?attr/appWidgetPadding</item>
+        <item name="android:background">@drawable/background_transparent</item>
+    </style>
+
+    <style name="Widget.Weathertest.AppWidget.InnerView" parent="android:Widget">
+        <item name="android:padding">?attr/appWidgetPadding</item>
+        <item name="android:background">@drawable/app_widget_inner_view_background</item>
+    </style>
+</resources>

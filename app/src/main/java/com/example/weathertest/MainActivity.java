@@ -10,7 +10,8 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.app.ActionBar;
+import android.appwidget.AppWidgetManager;
+import android.content.ComponentName;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -36,6 +37,7 @@ import com.example.weathertest.recyckerview.searchview_recyclerview;
 import com.example.weathertest.util.city_finder;
 import com.example.weathertest.util.local_json_city;
 import com.example.weathertest.util.sharepreferenced_setting;
+import com.example.weathertest.widget.weather_widget;
 
 
 import org.jetbrains.annotations.NotNull;
@@ -47,7 +49,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-import java.util.concurrent.CountDownLatch;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -122,14 +123,14 @@ public class MainActivity extends AppCompatActivity implements com.example.weath
         searcheview_rv.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
         searcheview_rv.setAdapter(searchview_rv);
 
-        Current_Weather("");
-        forcast_weather("");
+        Current_Weather("", "");
+        forcast_weather("", "");
 
         error_textview.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Current_Weather("");
-                forcast_weather("");
+                Current_Weather("", "");
+                forcast_weather("", "");
             }
         });
 
@@ -144,8 +145,8 @@ public class MainActivity extends AppCompatActivity implements com.example.weath
             @Override
             public boolean onQueryTextSubmit(String query) {
                 if (query.length() != 0) {
-                    Current_Weather(query);
-                    forcast_weather(query);
+                    Current_Weather(query, "");
+                    forcast_weather(query, "");
                 }
                 return true;
             }
@@ -166,20 +167,19 @@ public class MainActivity extends AppCompatActivity implements com.example.weath
 
         searchView.setOnQueryTextFocusChangeListener((v, hasFocus) -> {
             if (hasFocus) {
-                test(menu, menuItem, false);
+                hide_actionbar_items(menu, menuItem, false);
                 searcheview_rv.setVisibility(View.VISIBLE);
                 main_consrtaintlayout.setVisibility(View.INVISIBLE);
             } else {
-                test(menu, menuItem, true);
+                hide_actionbar_items(menu, menuItem, true);
                 searcheview_rv.setVisibility(View.GONE);
                 main_consrtaintlayout.setVisibility(View.VISIBLE);
             }
         });
         return super.onCreateOptionsMenu(menu);
-
     }
 
-    private void test(Menu menu, MenuItem menuItem, boolean visibile) {
+    private void hide_actionbar_items(Menu menu, MenuItem menuItem, boolean visibile) {
         getSupportActionBar().setDisplayShowTitleEnabled(visibile);
         for (int i = 0; i < menu.size(); i++) {
             MenuItem item = menu.getItem(i);
@@ -194,13 +194,13 @@ public class MainActivity extends AppCompatActivity implements com.example.weath
             Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
             startActivity(intent);
         } else if (id == R.id.refresh) {
-            Current_Weather("");
-            forcast_weather("");
+            Current_Weather("", "");
+            forcast_weather("", "");
         }
         return super.onOptionsItemSelected(item);
     }
 
-    public void Current_Weather(String name) {
+    public void Current_Weather(String city_name, String counrtry_name) {
 
         cityname = findViewById(R.id.cityname);
         currenttemp = findViewById(R.id.currenttemp);
@@ -213,7 +213,7 @@ public class MainActivity extends AppCompatActivity implements com.example.weath
 
         OkHttpClient okHttpClient = new OkHttpClient();
         Request request = new Request.Builder()
-                .url(local_json_city.current_url_maker(name))
+                .url(local_json_city.current_url_maker(city_name, counrtry_name))
                 .build();
 
         okHttpClient.newCall(request).enqueue(new Callback() {
@@ -224,20 +224,22 @@ public class MainActivity extends AppCompatActivity implements com.example.weath
             }
 
             @Override
-            public void onResponse(@NotNull Call call, @NotNull Response response) {
+            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+
+
                 if (response.isSuccessful()) {
-
                     Log.d("TAG", "onResponse: " + "calling");
-
+                    String res = response.body().string();
+                    Log.d("TAG", "onResponse: " + res);
                     current_list.clear();
                     minute_model_list.clear();
 
-                    if (name.length() != 0) {
-                        sharepreferenced_setting.setdefualt(name);
+                    if (city_name.length() != 0) {
+                        //sharepreferenced_setting.setdefualt(city_name, );
                     }
                     try {
 
-                        JSONObject jsonObject = new JSONObject(response.body().string());
+                        JSONObject jsonObject = new JSONObject(res);
                         JSONArray jsonArray = jsonObject.getJSONArray("data");
 
                         for (int i = 0; i < jsonArray.length(); i++) {
@@ -257,7 +259,7 @@ public class MainActivity extends AppCompatActivity implements com.example.weath
                             JSONObject j = jsonArray2.getJSONObject(i);
                             minute_model_list.add(new minute_model(j.getString("timestamp_local").substring(11, 16), j.getString("temp")));
                         }
-                    } catch (JSONException | IOException e) {
+                    } catch (JSONException e) {
                         e.printStackTrace();
                     }
 
@@ -286,9 +288,7 @@ public class MainActivity extends AppCompatActivity implements com.example.weath
         });
     }
 
-    public void forcast_weather(String name) {
-
-        Log.d("TAG", "Current_Weather: " + "secend");
+    public void forcast_weather(String city_name, String country_name) {
 
         start_lottie_animation();
         if (lottieAnimationView_noconnection.isAnimating()) {
@@ -299,7 +299,7 @@ public class MainActivity extends AppCompatActivity implements com.example.weath
         forcast_recyclerview = findViewById(R.id.forcast_recyclerview);
 
         OkHttpClient okHttpClient1 = new OkHttpClient();
-        Request request1 = new Request.Builder().url(local_json_city.forcast_url_maker(name)).build();
+        Request request1 = new Request.Builder().url(local_json_city.forcast_url_maker(city_name, country_name)).build();
 
         okHttpClient1.newCall(request1).enqueue(new Callback() {
             @Override
@@ -311,18 +311,21 @@ public class MainActivity extends AppCompatActivity implements com.example.weath
                 JSONObject jsonObject;
 
                 if (response.isSuccessful()) {
-                    if (name.length() != 0) {
-                        sharepreferenced_setting.setdefualt(name);
+                    String res = response.body().string();
+                    Log.d("TAG", "onResponse: " + res);
+                    Log.d("TAG", "onResponse: " + local_json_city.current_url_maker(city_name, country_name));
+                    if (city_name.length() != 0) {
+                        //   sharepreferenced_setting.setdefualt(city_name, country_name);
                     }
                     sixtyday_forcastlist.clear();
                     try {
-                        jsonObject = new JSONObject(response.body().string());
+                        jsonObject = new JSONObject(res);
                         JSONArray jsonArray = jsonObject.getJSONArray("data");
                         for (int i = 1; i < jsonArray.length(); i++) {
                             JSONObject j = jsonArray.getJSONObject(i);
-                            String url = "https://www.weatherbit.io/static/img/icons/" + j.getJSONObject("weather").getString("icon") + ".png";
+                            String icon_url = "https://www.weatherbit.io/static/img/icons/" + j.getJSONObject("weather").getString("icon") + ".png";
                             sixtyday_forcastlist.add(new forcast_model(j.getString("temp"),
-                                    url,
+                                    icon_url,
                                     j.getString("low_temp"),
                                     j.getString("max_temp"),
                                     j.getString("datetime"),
@@ -334,7 +337,7 @@ public class MainActivity extends AppCompatActivity implements com.example.weath
                                     j.getString("clouds"),
                                     j.getString("pop")));
                         }
-                        Log.d("TAG", "onResponse: " + sixtyday_forcastlist.size());
+
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
@@ -344,8 +347,9 @@ public class MainActivity extends AppCompatActivity implements com.example.weath
                                 forcast_recyclerview.setHasFixedSize(true);
                                 forcast_recyclerview.addItemDecoration(new DividerItemDecoration(MainActivity.this, DividerItemDecoration.VERTICAL));
                                 forcast_recyclerview.setAdapter(adapter);
-
                                 stop_lottie_animation();
+
+                                widget_update_broadcast();
 
                             }
                         });
@@ -388,12 +392,12 @@ public class MainActivity extends AppCompatActivity implements com.example.weath
     @Override
     public void searchview_onitemclick(int i) {
 
-        sharepreferenced_setting.setdefualt(searchview_rv.getCurrentList().get(i).getCity().trim());
+        sharepreferenced_setting.setdefualt(searchview_rv.getCurrentList().get(i).getCity(), searchview_rv.getCurrentList().get(i).getCountry());
         searchView.clearFocus();
         searchView.onActionViewCollapsed();
         searcheview_rv.setVisibility(View.GONE);
-        Current_Weather("");
-        forcast_weather("");
+        Current_Weather(searchview_rv.getCurrentList().get(i).getCity().trim(), searchview_rv.getCurrentList().get(i).getCountry().trim());
+        forcast_weather(searchview_rv.getCurrentList().get(i).getCity().trim(), searchview_rv.getCurrentList().get(i).getCountry().trim());
 
     }
 
@@ -402,8 +406,8 @@ public class MainActivity extends AppCompatActivity implements com.example.weath
         sixtyday_forcastlist.clear();
         minute_model_list.clear();
         current_list.clear();
-        Current_Weather("");
-        forcast_weather("");
+        Current_Weather("", "");
+        forcast_weather("", "");
         super.onRestart();
     }
 
@@ -465,5 +469,13 @@ public class MainActivity extends AppCompatActivity implements com.example.weath
             }
         });
 
+    }
+
+    public void widget_update_broadcast() {
+        Intent intent = new Intent(MainActivity.this, weather_widget.class);
+        intent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
+        int[] id = AppWidgetManager.getInstance(MainActivity.this).getAppWidgetIds(new ComponentName(getApplication(), weather_widget.class));
+        intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, id);
+        sendBroadcast(intent);
     }
 }
