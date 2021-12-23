@@ -1,4 +1,4 @@
-package com.example.weathertest.util;
+package com.example.simple_weather.util;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;

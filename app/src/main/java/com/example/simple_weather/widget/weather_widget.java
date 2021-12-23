@@ -1,6 +1,4 @@
-package com.example.weathertest.widget;
-
-import static com.example.weathertest.util.Constant.API_KEY_WEATHERBIT;
+package com.example.simple_weather.widget;
 
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
@@ -15,9 +13,9 @@ import android.widget.RemoteViews;
 import androidx.annotation.NonNull;
 
 import com.bumptech.glide.Glide;
-import com.example.weathertest.R;
-import com.example.weathertest.util.local_json_city;
-import com.example.weathertest.util.sharepreferenced_setting;
+import com.example.simple_weather.R;
+import com.example.simple_weather.util.url_maker;
+import com.example.simple_weather.util.sharepreferenced;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -41,16 +39,16 @@ import okhttp3.Response;
  */
 public class weather_widget extends AppWidgetProvider {
 
-    private static local_json_city local_json_city;
-    private static sharepreferenced_setting sharepreferenced_setting;
+    private static url_maker local_json_city;
+    private static sharepreferenced sharepreferenced;
 
     static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
                                 int appWidgetId) {
 
-        local_json_city = new local_json_city(context);
-        sharepreferenced_setting = new sharepreferenced_setting(context);
+        local_json_city = new url_maker(context);
+        sharepreferenced = new sharepreferenced(context);
 
-        RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.weather_widget);
+        RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.widget_layout);
         Intent intent = new Intent(context, weather_widget.class);
         intent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
         int[] ids = new int[]{appWidgetId};
@@ -120,7 +118,7 @@ public class weather_widget extends AppWidgetProvider {
                 @Override
                 public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
 
-                    RemoteViews views = new RemoteViews(mcontext.getPackageName(), R.layout.weather_widget);
+                    RemoteViews views = new RemoteViews(mcontext.getPackageName(), R.layout.widget_layout);
                     AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(mcontext.getApplicationContext());
 
                     Log.d("TAG", "onResponse: " + "call");
@@ -142,7 +140,7 @@ public class weather_widget extends AppWidgetProvider {
                             String imageurl = "https://www.weatherbit.io/static/img/icons/" + jsonObject1.getJSONObject("weather").getString("icon") + ".png";
                             views.setTextViewText(R.id.city_widget, jsonObject1.getString("city_name"));
                             views.setTextViewText(R.id.country_widget, locale.getDisplayCountry());
-                            views.setTextViewText(R.id.current_temp, jsonObject1.getString("temp") + sharepreferenced_setting.getsymbol());
+                            views.setTextViewText(R.id.current_temp, jsonObject1.getString("temp") + sharepreferenced.getsymbol());
                             views.setTextViewText(R.id.last_check_widget, dateFormat.format(date));
                             views.setTextViewText(R.id.condition_widgeta, jsonObject1.getJSONObject("weather").getString("description"));
 

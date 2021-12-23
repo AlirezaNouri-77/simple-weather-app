@@ -15,8 +15,8 @@
 
     <item
         android:id="@+id/refresh"
-        app:showAsAction="always"
-        android:icon="@drawable/ic_baseline_refresh_24"
+        app:showAsAction="ifRoom"
+        android:icon="@drawable/ic_baseline_refresh_actionbar"
         android:title="Refresh"/>
 
 </menu>

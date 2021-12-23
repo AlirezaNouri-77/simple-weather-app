@@ -1,4 +1,4 @@
-package com.example.weathertest;
+package com.example.simple_weather;
 
 import android.os.Bundle;
 

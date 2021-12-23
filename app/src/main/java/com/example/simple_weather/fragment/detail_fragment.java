@@ -1,8 +1,6 @@
-package com.example.weathertest.fragment;
+package com.example.simple_weather.fragment;
 
-import android.content.Context;
 import android.os.Bundle;
-import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,14 +12,13 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import com.bumptech.glide.Glide;
-import com.example.weathertest.R;
-import com.example.weathertest.model.detail_model;
-import com.example.weathertest.recyckerview.detail_recyclerview;
-import com.example.weathertest.util.get_weekname;
-import com.example.weathertest.util.sharepreferenced_setting;
+import com.example.simple_weather.R;
+import com.example.simple_weather.model.detail_model;
+import com.example.simple_weather.recyckerview.detail_recyclerview;
+import com.example.simple_weather.util.get_weekname;
+import com.example.simple_weather.util.sharepreferenced;
 
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -32,8 +29,8 @@ public class detail_fragment extends Fragment {
     private TextView current_temp, current_weather, low_temp, high_temp, date, tomarrow;
     private ImageView imageView;
     private RecyclerView recyclerView;
-    private com.example.weathertest.util.get_weekname get_weekname;
-    private com.example.weathertest.util.sharepreferenced_setting sharepreferenced_setting;
+    private com.example.simple_weather.util.get_weekname get_weekname;
+    private sharepreferenced sharepreferenced;
 
     @Nullable
     @Override
@@ -49,7 +46,7 @@ public class detail_fragment extends Fragment {
         date = view.findViewById(R.id.date_textview);
         tomarrow = view.findViewById(R.id.tomarrow_weather);
 
-        sharepreferenced_setting = new sharepreferenced_setting(getContext());
+        sharepreferenced = new sharepreferenced(getContext());
         get_weekname = new get_weekname();
 
 
@@ -74,16 +71,16 @@ public class detail_fragment extends Fragment {
             List<detail_model> list = new ArrayList<>();
 
             Glide.with(getContext()).load(getArguments().get("iconurl").toString()).into(imageView);
-            current_temp.setText(Math.round(Double.parseDouble(String.valueOf(getArguments().get("Temp")))) + sharepreferenced_setting.getsymbol());
-            low_temp.setText(Math.round(Double.parseDouble(String.valueOf(getArguments().get("min")))) + sharepreferenced_setting.getsymbol());
-            high_temp.setText(Math.round(Double.parseDouble(String.valueOf(getArguments().get("max")))) + sharepreferenced_setting.getsymbol());
+            current_temp.setText(Math.round(Double.parseDouble(String.valueOf(getArguments().get("Temp")))) + sharepreferenced.getsymbol());
+            low_temp.setText(Math.round(Double.parseDouble(String.valueOf(getArguments().get("min")))) + sharepreferenced.getsymbol());
+            high_temp.setText(Math.round(Double.parseDouble(String.valueOf(getArguments().get("max")))) + sharepreferenced.getsymbol());
             current_weather.setText(getArguments().get("description") + "");
             date.setText(get_weekname.get_week_name(getArguments().get("time").toString()));
 
 
             tomarrow.setText("Tomorrow Forcast" + "\n" + "Average temp is " + Math.round(Double.parseDouble(getArguments().get("tomarrow_temp").toString())) +
-                    sharepreferenced_setting.getsymbol() + "\n" + "Max Temp is " + Math.round(Double.parseDouble(getArguments().get("tomarrow_max_temp").toString())) + sharepreferenced_setting.getsymbol() + "\n" +
-                    "Min Temp is " + Math.round(Double.parseDouble(getArguments().get("tomarrow_min_temp").toString())) + sharepreferenced_setting.getsymbol());
+                    sharepreferenced.getsymbol() + "\n" + "Max Temp is " + Math.round(Double.parseDouble(getArguments().get("tomarrow_max_temp").toString())) + sharepreferenced.getsymbol() + "\n" +
+                    "Min Temp is " + Math.round(Double.parseDouble(getArguments().get("tomarrow_min_temp").toString())) + sharepreferenced.getsymbol());
 
             list.add(new detail_model("Average Pressure", getArguments().get("pressure").toString() + " mb"));
             list.add(new detail_model("Range Visibility", getArguments().get("visibility").toString() + " KM"));
@@ -92,7 +89,7 @@ public class detail_fragment extends Fragment {
             list.add(new detail_model("Clouds Coverage", getArguments().get("clouds").toString() + "%"));
             list.add(new detail_model("Probability of Precipitation", getArguments().get("Probability").toString() + "%"));
 
-            com.example.weathertest.recyckerview.detail_recyclerview detail_recyclerview = new detail_recyclerview(list);
+            com.example.simple_weather.recyckerview.detail_recyclerview detail_recyclerview = new detail_recyclerview(list);
             recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
             recyclerView.setAdapter(detail_recyclerview);
 

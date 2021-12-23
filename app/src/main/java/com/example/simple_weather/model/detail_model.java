@@ -1,4 +1,4 @@
-package com.example.weathertest.model;
+package com.example.simple_weather.model;
 
 public class detail_model {
     String subject;

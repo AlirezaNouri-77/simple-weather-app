@@ -1,4 +1,4 @@
-package com.example.weathertest.recyckerview;
+package com.example.simple_weather.recyckerview;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -9,9 +9,9 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.weathertest.R;
-import com.example.weathertest.model.minute_model;
-import com.example.weathertest.util.sharepreferenced_setting;
+import com.example.simple_weather.R;
+import com.example.simple_weather.model.minute_model;
+import com.example.simple_weather.util.sharepreferenced;
 
 import java.util.List;
 
@@ -19,12 +19,12 @@ public class Minute_forcastRecyclerview extends RecyclerView.Adapter<Minute_forc
 
     Context context;
     List<minute_model> list;
-    sharepreferenced_setting sharepreferencedSetting;
+    sharepreferenced sharepreferencedSetting;
 
     public Minute_forcastRecyclerview(List<minute_model> list, Context context) {
         this.list = list;
         this.context = context;
-        sharepreferencedSetting = new sharepreferenced_setting(context);
+        sharepreferencedSetting = new sharepreferenced(context);
     }
 
     @NonNull

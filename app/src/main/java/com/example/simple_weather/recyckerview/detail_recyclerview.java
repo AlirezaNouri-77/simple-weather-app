@@ -1,4 +1,4 @@
-package com.example.weathertest.recyckerview;
+package com.example.simple_weather.recyckerview;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,8 +8,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.weathertest.R;
-import com.example.weathertest.model.detail_model;
+import com.example.simple_weather.R;
+import com.example.simple_weather.model.detail_model;
 
 import java.util.List;
 

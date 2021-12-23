@@ -1,15 +1,15 @@
-package com.example.weathertest.util;
+package com.example.simple_weather.util;
 
 import android.content.Context;
 import android.content.SharedPreferences;
 
 import androidx.preference.PreferenceManager;
 
-public class sharepreferenced_setting {
+public class sharepreferenced {
 
     Context mcontext;
 
-    public sharepreferenced_setting(Context context) {
+    public sharepreferenced(Context context) {
         this.mcontext = context;
     }
 

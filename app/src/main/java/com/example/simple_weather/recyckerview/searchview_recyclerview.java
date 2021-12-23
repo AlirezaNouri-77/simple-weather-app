@@ -1,4 +1,4 @@
-package com.example.weathertest.recyckerview;
+package com.example.simple_weather.recyckerview;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,8 +10,8 @@ import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.weathertest.R;
-import com.example.weathertest.model.searchview_model;
+import com.example.simple_weather.R;
+import com.example.simple_weather.model.searchview_model;
 
 public class searchview_recyclerview extends ListAdapter<searchview_model, searchview_recyclerview.searchview_viewholder> {
 
