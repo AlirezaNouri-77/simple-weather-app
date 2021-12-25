@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.util.Log;
+import android.view.View;
 import android.widget.RemoteViews;
 
 import androidx.annotation.NonNull;
@@ -75,6 +76,10 @@ public class weather_widget extends AppWidgetProvider {
             Log.d("TAG", "onReceive: " + "click");
             int[] id = intent.getIntArrayExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS);
             new request(context, id[0]).execute();
+        } else if (intent.getAction().equals(Intent.ACTION_BOOT_COMPLETED)) {
+            Log.d("TAG", "onReceive: " + "boot");
+            int[] id = intent.getIntArrayExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS);
+            new request(context, id[0]).execute();
         }
     }
 
@@ -113,6 +118,12 @@ public class weather_widget extends AppWidgetProvider {
             okHttpClient.newCall(request).enqueue(new Callback() {
                 @Override
                 public void onFailure(@NonNull Call call, @NonNull IOException e) {
+                    RemoteViews views = new RemoteViews(mcontext.getPackageName(), R.layout.widget_layout);
+                    AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(mcontext.getApplicationContext());
+
+                    views.setTextViewText(R.id.last_check_widget, "No internet connection");
+
+                    appWidgetManager.updateAppWidget(mid, views);
                 }
 
                 @Override

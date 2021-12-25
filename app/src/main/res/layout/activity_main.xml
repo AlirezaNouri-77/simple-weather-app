@@ -16,7 +16,9 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent" >
+
+    </FrameLayout>
 
 
     <TextView
@@ -111,41 +113,49 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
 
+
+                <androidx.constraintlayout.widget.Guideline
+                    android:id="@+id/guideline7"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    app:layout_constraintGuide_percent="0.5" />
+
+
                 <TextView
                     android:id="@+id/date"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginTop="16dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginEnd="104dp"
                     android:gravity="left"
-                    android:textColor="@color/textcolor"
+                    android:textColor="@color/black_30"
                     android:textSize="14sp"
-                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/guideline7"
                     app:layout_constraintTop_toTopOf="parent"
-                    android:text="2021/01/01"/>
+                    tools:text="2021/12/12" />
 
                 <TextView
                     android:id="@+id/cityname"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="12dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginEnd="88dp"
                     android:gravity="left"
-                    android:textColor="@color/textcolor"
+                    android:textColor="@color/black_30"
                     android:textSize="18sp"
-                    app:layout_constraintEnd_toEndOf="@+id/textView3"
-                    app:layout_constraintHorizontal_bias="0.0"
-                    app:layout_constraintStart_toStartOf="@+id/textView3"
+                    app:layout_constraintEnd_toStartOf="@+id/guideline7"
                     app:layout_constraintTop_toBottomOf="@+id/textView3"
-                    tools:text="test" />
+                    tools:text="washington" />
 
                 <TextView
                     android:id="@+id/textView3"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
+                    android:layout_marginTop="1dp"
                     android:gravity="left"
-                    android:text="current weather"
-                    android:textColor="@color/textcolor"
+                    android:text="Current Weather"
+                    android:textColor="@color/black_30"
                     android:textSize="15sp"
                     android:textStyle="bold"
                     app:layout_constraintEnd_toEndOf="@+id/date"
@@ -157,13 +167,14 @@
                     android:id="@+id/currenttemp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="12dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="120dp"
                     android:gravity="center"
                     android:text="30"
-                    android:textColor="@color/textcolor"
+                    android:textColor="@color/black_30"
                     android:textSize="42sp"
                     android:textStyle="bold"
-                    app:layout_constraintEnd_toEndOf="@+id/cityname"
+                    app:layout_constraintEnd_toStartOf="@+id/guideline7"
                     app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintStart_toStartOf="@+id/cityname"
                     app:layout_constraintTop_toBottomOf="@+id/country" />
@@ -181,9 +192,9 @@
 
                 <ImageView
                     android:id="@+id/imageView"
-                    android:layout_width="90dp"
-                    android:layout_height="90dp"
-                    android:layout_marginTop="60dp"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:layout_marginTop="80dp"
                     android:layout_marginEnd="28dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
@@ -193,33 +204,38 @@
                     android:id="@+id/pressure"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
                     android:text="TextView"
-                    android:textColor="@color/textcolor"
-                    app:layout_constraintBottom_toTopOf="@+id/clouds"
-                    app:layout_constraintEnd_toEndOf="@+id/clouds"
-                    app:layout_constraintStart_toStartOf="@+id/clouds" />
+                    android:textColor="@color/black_30"
+                    app:layout_constraintEnd_toStartOf="@+id/guideline7"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="@+id/currenttemp"
+                    app:layout_constraintTop_toBottomOf="@+id/currenttemp" />
 
                 <TextView
                     android:id="@+id/clouds"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginBottom="16dp"
+                    android:layout_marginBottom="20dp"
                     android:text="TextView"
-                    android:textColor="@color/textcolor"
+                    android:textColor="@color/black_30"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent" />
+                    app:layout_constraintEnd_toEndOf="@+id/pressure"
+                    app:layout_constraintHorizontal_bias="1.0"
+                    app:layout_constraintStart_toStartOf="@+id/pressure" />
 
                 <TextView
                     android:id="@+id/country"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="TextView"
-                    android:textColor="@color/textcolor"
+                    android:textSize="11sp"
+                    android:textColor="@color/black_30"
                     app:layout_constraintEnd_toEndOf="@+id/cityname"
                     app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintStart_toStartOf="@+id/cityname"
-                    app:layout_constraintTop_toBottomOf="@+id/cityname" />
+                    app:layout_constraintTop_toBottomOf="@+id/cityname"
+                    tools:text="United States" />
 
 
             </androidx.constraintlayout.widget.ConstraintLayout>

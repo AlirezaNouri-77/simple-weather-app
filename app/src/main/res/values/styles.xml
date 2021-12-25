@@ -1,6 +1,6 @@
 <resources>
 
-    <style name="Widget.Weathertest.AppWidget.Container" parent="android:Widget">
+    <style name="Widget.simple_weather.AppWidget.Container" parent="android:Widget">
         <item name="android:id">@android:id/background</item>
         <item name="android:background">@color/transparent_white</item>
     </style>

@@ -221,11 +221,11 @@ public class MainActivity extends AppCompatActivity implements com.example.simpl
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        int id = item.getItemId();
-        if (id == R.id.setting) {
+
+        if (item.getItemId() == R.id.setting) {
             Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
             startActivity(intent);
-        } else if (id == R.id.refresh) {
+        } else if (item.getItemId() == R.id.refresh) {
             Current_Weather("", "");
             forcast_weather("", "");
         }
@@ -448,7 +448,6 @@ public class MainActivity extends AppCompatActivity implements com.example.simpl
         searchView.setVisibility(View.VISIBLE);
         getSupportFragmentManager().beginTransaction().remove(fragment).commit();
         fragment = null;
-        Log.d("TAG2", "onCreate: " + fragment);
     }
 
     public void start_lottie_animation() {
@@ -462,6 +461,7 @@ public class MainActivity extends AppCompatActivity implements com.example.simpl
 //        current_consrtaintlayout.setVisibility(View.GONE);
 //        minute_layout.setVisibility(View.GONE);
 //        forcast_layout.setVisibility(View.GONE);
+
         lottieAnimationView1.playAnimation();
         lottieAnimationView2.playAnimation();
         lottieAnimationView3.playAnimation();
@@ -485,36 +485,27 @@ public class MainActivity extends AppCompatActivity implements com.example.simpl
     }
 
     public void stop_noconnection() {
-        new Handler(Looper.getMainLooper()).post(new Runnable() {
-            @Override
-            public void run() {
-                main_consrtaintlayout.animate().alpha(1.0f);
-                // main_consrtaintlayout.setVisibility(View.VISIBLE);
-                lottieAnimationView_noconnection.setAnimation("noconnection.json");
-                lottieAnimationView_noconnection.pauseAnimation();
-                lottieAnimationView_noconnection.setVisibility(View.GONE);
-                error_textview.setVisibility(View.GONE);
-            }
+        new Handler(Looper.getMainLooper()).post(() -> {
+            main_consrtaintlayout.animate().alpha(1.0f);
+            lottieAnimationView_noconnection.setAnimation("noconnection.json");
+            lottieAnimationView_noconnection.pauseAnimation();
+            lottieAnimationView_noconnection.setVisibility(View.GONE);
+            error_textview.setVisibility(View.GONE);
         });
     }
 
-
     public void play_noconnection() {
-        new Handler(Looper.getMainLooper()).post(new Runnable() {
-            @Override
-            public void run() {
-                main_consrtaintlayout.setVisibility(View.GONE);
-                lottieAnimationView_noconnection.setAnimation("noconnection.json");
-                lottieAnimationView_noconnection.playAnimation();
-                lottieAnimationView_noconnection.setVisibility(View.VISIBLE);
-                error_textview.setVisibility(View.VISIBLE);
-            }
+        new Handler(Looper.getMainLooper()).post(() -> {
+            main_consrtaintlayout.setVisibility(View.GONE);
+            lottieAnimationView_noconnection.setAnimation("noconnection.json");
+            lottieAnimationView_noconnection.playAnimation();
+            lottieAnimationView_noconnection.setVisibility(View.VISIBLE);
+            error_textview.setVisibility(View.VISIBLE);
         });
 
     }
 
     public void widget_update_broadcast() {
-
         Intent intent = new Intent(MainActivity.this, weather_widget.class);
         intent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
         int[] id = AppWidgetManager.getInstance(MainActivity.this).getAppWidgetIds(new ComponentName(getApplication(), weather_widget.class));

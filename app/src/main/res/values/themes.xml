@@ -20,5 +20,5 @@
         <item name="appWidgetInnerRadius">4dp</item>
     </style>
 
-    <style name="Theme.Weathertest.AppWidgetContainer" parent="Theme.Weathertest.AppWidgetContainerParent" />
+    <style name="Theme.simple_weather.AppWidgetContainer" parent="Theme.Weathertest.AppWidgetContainerParent" />
 </resources>

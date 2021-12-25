@@ -1,9 +1,10 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    style="@style/Widget.Weathertest.AppWidget.Container"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/Widget.simple_weather.AppWidget.Container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:theme="@style/Theme.Weathertest.AppWidgetContainer">
+    android:theme="@style/Theme.simple_weather.AppWidgetContainer">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -14,23 +15,24 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:orientation="horizontal">
 
             <TextView
                 android:id="@+id/city_widget"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="2"
                 android:textColor="@color/black_30"
-                android:textSize="11sp" />
+                android:textSize="12sp"
+                tools:text="London" />
 
             <TextView
                 android:id="@+id/country_widget"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="2"
+                android:layout_marginLeft="5dp"
                 android:textColor="@color/black_30"
-                android:textSize="11sp" />
+                android:textSize="11sp"
+                tools:text="united kingdom" />
 
         </LinearLayout>
 
@@ -39,30 +41,32 @@
             android:id="@+id/current_temp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_margin="6dp"
             android:gravity="center"
-            android:padding="2dp"
             android:textColor="@color/black_30"
-            android:textSize="18sp" />
+            android:textSize="17sp" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
             android:orientation="horizontal">
 
             <ImageView
                 android:id="@+id/imageview_widget"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_marginRight="2dp"
                 android:scaleType="fitCenter" />
 
             <TextView
                 android:id="@+id/condition_widgeta"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:gravity="center"
                 android:textColor="@color/black_30"
-                android:textSize="11sp" />
+                android:textSize="11sp"
+                tools:text="Sunny" />
 
         </LinearLayout>
 
@@ -76,8 +80,8 @@
 
         <ImageButton
             android:id="@+id/refresh_widget"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
             android:background="@android:color/transparent"
             android:src="@drawable/ic_baseline_refresh_24" />
 
