@@ -67,9 +67,9 @@ public class forcast_recyclerview extends RecyclerView.Adapter<forcast_recyclerv
             holder.time.setText(list.get(position).time);
         }
 
-        holder.temp.setText(Math.round(Double.parseDouble(list.get(position).temp)) + sharepreferenced.getsymbol());
-        holder.min.setText(Math.round(Double.parseDouble(list.get(position).min)) + sharepreferenced.getsymbol());
-        holder.max.setText(Math.round(Double.parseDouble(list.get(position).max)) + sharepreferenced.getsymbol());
+        holder.temp.setText(Math.round(Double.parseDouble(list.get(position).temp)) + " " + sharepreferenced.getsymbol());
+        holder.min.setText(Math.round(Double.parseDouble(list.get(position).min)) + " " + sharepreferenced.getsymbol());
+        holder.max.setText(Math.round(Double.parseDouble(list.get(position).max)) + " " + sharepreferenced.getsymbol());
         holder.rain.setText(list.get(position).rainpossibilty + "%");
         Glide.with(context).load(list.get(position).icon).into(holder.imageView);
 

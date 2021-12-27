@@ -36,7 +36,7 @@ public class Minute_forcastRecyclerview extends RecyclerView.Adapter<Minute_forc
 
     @Override
     public void onBindViewHolder(@NonNull Viewholder holder, int position) {
-        holder.temp.setText(list.get(position).getTemp() + sharepreferencedSetting.getsymbol());
+        holder.temp.setText(list.get(position).getTemp() + " "+sharepreferencedSetting.getsymbol());
         holder.time.setText(list.get(position).getTime());
     }
 

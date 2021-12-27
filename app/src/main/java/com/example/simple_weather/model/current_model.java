@@ -1,7 +1,7 @@
 package com.example.simple_weather.model;
 
 public class current_model {
-
+    String date;
     String description;
     String temp;
     String cityname;
@@ -10,8 +10,9 @@ public class current_model {
     String country;
     String pressure;
 
-    public current_model(String description, String temp, String cityname, String icon_url, String cloud, String pressure, String country) {
+    public current_model(String date , String description, String temp, String cityname, String icon_url, String cloud, String pressure, String country) {
 
+        this.date = date;
         this.description = description;
         this.temp = temp;
         this.cityname = cityname;
@@ -47,5 +48,9 @@ public class current_model {
 
     public String getCountry() {
         return country;
+    }
+
+    public String getDate() {
+        return date;
     }
 }

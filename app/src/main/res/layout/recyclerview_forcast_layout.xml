@@ -65,15 +65,15 @@
 
     <ImageView
         android:id="@+id/cool_temp_imageview"
-        android:layout_width="10dp"
-        android:layout_height="20dp"
+        android:layout_width="8dp"
+        android:layout_height="19dp"
         android:layout_marginEnd="24dp"
         android:scaleType="fitXY"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.633"
-        app:srcCompat="@drawable/icon_hot_temp" />
+        app:srcCompat="@drawable/icon_cold_temp" />
 
     <ImageView
         android:id="@+id/weathericon"
@@ -85,7 +85,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.533"
-        tools:srcCompat="@tools:sample/avatars"/>
+        tools:srcCompat="@tools:sample/avatars" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline3"
@@ -113,7 +113,7 @@
         app:layout_constraintStart_toEndOf="@+id/imageView5"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.666"
-        app:srcCompat="@drawable/icon_cold_temp" />
+        app:srcCompat="@drawable/icon_hot_temp" />
 
     <ImageView
         android:id="@+id/imageView5"

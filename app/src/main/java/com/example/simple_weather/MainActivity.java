@@ -67,10 +67,11 @@ public class MainActivity extends AppCompatActivity implements com.example.simpl
     private List<current_model> current_list;
     private ArrayList<chart_model> temp_chart_list;
     private ArrayList<chart_model> twotemp_chart_list;
+    private ArrayList<chart_model> rain_chart_list;
 
     private RecyclerView forecast_recyclerview, minute_recyclerview, searcheview_rv;
 
-    private TextView cityname, currenttemp, condition, clouds, pressure, country, error_textview, chart_textview;
+    private TextView cityname, currenttemp, condition, clouds, pressure, country, error_textview, chart_textview, date_textview, current_textview;
 
     private ConstraintLayout main_consrtaintlayout, current_consrtaintlayout;
 
@@ -124,6 +125,7 @@ public class MainActivity extends AppCompatActivity implements com.example.simpl
         current_list = new ArrayList<>();
         temp_chart_list = new ArrayList<>();
         twotemp_chart_list = new ArrayList<>();
+        rain_chart_list = new ArrayList<>();
 
         main_consrtaintlayout = findViewById(R.id.main_constraint);
         searcheview_rv = findViewById(R.id.searchview_rv);
@@ -151,11 +153,13 @@ public class MainActivity extends AppCompatActivity implements com.example.simpl
                 Bundle bundle = new Bundle();
                 bundle.putParcelableArrayList("temp_data_chart", temp_chart_list);
                 bundle.putParcelableArrayList("two_data_chart", twotemp_chart_list);
+                bundle.putParcelableArrayList("pop_data_chart", rain_chart_list);
                 chart_fragment.setArguments(bundle);
                 fragment = chart_fragment;
                 searchView.setVisibility(View.GONE);
                 main_consrtaintlayout.setVisibility(View.GONE);
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragmentlayout, fragment).commit();
+                getSupportActionBar().hide();
 
             }
         });
@@ -181,7 +185,6 @@ public class MainActivity extends AppCompatActivity implements com.example.simpl
             public boolean onQueryTextChange(String newText) {
                 Handler mh = new Handler();
                 mh.removeCallbacksAndMessages(null);
-
                 mh.postDelayed(new Runnable() {
                     @Override
                     public void run() {
@@ -192,7 +195,7 @@ public class MainActivity extends AppCompatActivity implements com.example.simpl
                             }
                         });
                     }
-                }, 500);
+                }, 1500);
                 return true;
             }
         });
@@ -234,12 +237,16 @@ public class MainActivity extends AppCompatActivity implements com.example.simpl
 
     public void Current_Weather(String city_name, String counrtry_name) {
 
+        start_lottie_animation();
+
         cityname = findViewById(R.id.cityname);
         currenttemp = findViewById(R.id.currenttemp);
         condition = findViewById(R.id.condition);
         pressure = findViewById(R.id.pressure);
         clouds = findViewById(R.id.clouds);
         country = findViewById(R.id.country);
+        date_textview = findViewById(R.id.date);
+        current_textview = findViewById(R.id.textView3);
         ImageView imageView = findViewById(R.id.imageView);
 
         OkHttpClient okHttpClient = new OkHttpClient();
@@ -257,21 +264,21 @@ public class MainActivity extends AppCompatActivity implements com.example.simpl
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
 
-
+                Log.d("TAG", "onResponse: " + local_json_city.current_url_maker(city_name, counrtry_name));
                 if (response.isSuccessful()) {
 
-                    String res = response.body().string();
                     current_list.clear();
                     minute_model_list.clear();
 
                     try {
 
-                        JSONObject jsonObject = new JSONObject(res);
+                        JSONObject jsonObject = new JSONObject(response.body().string());
                         JSONArray jsonArray = jsonObject.getJSONArray("data");
 
                         for (int i = 0; i < jsonArray.length(); i++) {
                             JSONObject jsonobj = jsonArray.getJSONObject(i);
-                            current_list.add(new current_model(jsonobj.getJSONObject("weather").getString("description"),
+                            current_list.add(new current_model(jsonobj.getString("datetime"),
+                                    jsonobj.getJSONObject("weather").getString("description"),
                                     String.valueOf(Math.round(Float.parseFloat(jsonobj.getString("temp")))),
                                     jsonobj.getString("city_name").toUpperCase(),
                                     "https://www.weatherbit.io/static/img/icons/" + jsonobj.getJSONObject("weather").getString("icon") + ".png",
@@ -299,6 +306,8 @@ public class MainActivity extends AppCompatActivity implements com.example.simpl
                             clouds.setText("Cloud coverage " + current_list.get(0).getCloud() + "%");
                             pressure.setText("Average Pressure " + current_list.get(0).getPressure());
                             currenttemp.setText(current_list.get(0).getTemp() + sharepreferenced.getsymbol());
+                            date_textview.setText(current_list.get(0).getDate().substring(0, 10));
+                            current_textview.setText("Current Weather");
 
                             Glide.with(MainActivity.this).load(current_list.get(0).getIcon_url()).into(imageView);
                             Locale locale = new Locale("", current_list.get(0).getCountry());
@@ -318,7 +327,6 @@ public class MainActivity extends AppCompatActivity implements com.example.simpl
 
     public void forcast_weather(String city_name, String country_name) {
 
-        start_lottie_animation();
         if (lottieAnimationView_noconnection.isAnimating()) {
             stop_noconnection();
         }
@@ -343,6 +351,7 @@ public class MainActivity extends AppCompatActivity implements com.example.simpl
 
                     temp_chart_list.clear();
                     twotemp_chart_list.clear();
+                    rain_chart_list.clear();
                     sixteen_weatherforcast_list.clear();
 
                     try {
@@ -366,6 +375,7 @@ public class MainActivity extends AppCompatActivity implements com.example.simpl
 
                             temp_chart_list.add(new chart_model(j.getString("temp"), j.getString("datetime")));
                             twotemp_chart_list.add(new chart_model(j.getString("low_temp"), j.getString("max_temp")));
+                            rain_chart_list.add(new chart_model("", j.getString("pop")));
 
                         }
 
@@ -414,7 +424,7 @@ public class MainActivity extends AppCompatActivity implements com.example.simpl
         detail_fragment.setArguments(bundle);
         searchView.setVisibility(View.GONE);
         main_consrtaintlayout.setVisibility(View.GONE);
-
+        getSupportActionBar().hide();
         getSupportFragmentManager().beginTransaction().replace(R.id.fragmentlayout, fragment).commit();
 
     }
@@ -447,6 +457,7 @@ public class MainActivity extends AppCompatActivity implements com.example.simpl
         main_consrtaintlayout.setVisibility(View.VISIBLE);
         searchView.setVisibility(View.VISIBLE);
         getSupportFragmentManager().beginTransaction().remove(fragment).commit();
+        getSupportActionBar().show();
         fragment = null;
     }
 
@@ -472,9 +483,9 @@ public class MainActivity extends AppCompatActivity implements com.example.simpl
         lottieAnimationView2.setVisibility(View.GONE);
         lottieAnimationView3.setVisibility(View.GONE);
 
-        current_consrtaintlayout.setVisibility(View.VISIBLE);
-        minute_layout.setVisibility(View.VISIBLE);
-        forcast_layout.setVisibility(View.VISIBLE);
+//        current_consrtaintlayout.setVisibility(View.VISIBLE);
+//        minute_layout.setVisibility(View.VISIBLE);
+//        forcast_layout.setVisibility(View.VISIBLE);
         current_consrtaintlayout.animate().alpha(1.0f);
         minute_layout.animate().alpha(1.0f);
         forcast_layout.animate().alpha(1.0f);

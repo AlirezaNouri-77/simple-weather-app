@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
+import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.RemoteViews;
@@ -122,7 +123,6 @@ public class weather_widget extends AppWidgetProvider {
                     AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(mcontext.getApplicationContext());
 
                     views.setTextViewText(R.id.last_check_widget, "No internet connection");
-
                     appWidgetManager.updateAppWidget(mid, views);
                 }
 

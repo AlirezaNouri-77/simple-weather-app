@@ -16,7 +16,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" >
+        app:layout_constraintTop_toTopOf="parent">
 
     </FrameLayout>
 
@@ -83,10 +83,11 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/constraintLayout"
             android:layout_width="match_parent"
-            android:layout_height="250dp"
+            android:layout_height="200dp"
             android:layout_margin="10dp"
             android:background="@drawable/background_transparent"
             android:elevation="10dp"
+            android:minHeight="200dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
@@ -114,24 +115,16 @@
                 app:layout_constraintTop_toTopOf="parent">
 
 
-                <androidx.constraintlayout.widget.Guideline
-                    android:id="@+id/guideline7"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    app:layout_constraintGuide_percent="0.5" />
-
-
                 <TextView
                     android:id="@+id/date"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
-                    android:layout_marginEnd="104dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginTop="5dp"
                     android:gravity="left"
                     android:textColor="@color/black_30"
                     android:textSize="14sp"
-                    app:layout_constraintEnd_toStartOf="@+id/guideline7"
+                    app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     tools:text="2021/12/12" />
 
@@ -139,12 +132,13 @@
                     android:id="@+id/cityname"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
-                    android:layout_marginEnd="88dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="32dp"
                     android:gravity="left"
                     android:textColor="@color/black_30"
-                    android:textSize="18sp"
-                    app:layout_constraintEnd_toStartOf="@+id/guideline7"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/textView3"
                     tools:text="washington" />
 
@@ -152,85 +146,73 @@
                     android:id="@+id/textView3"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="1dp"
                     android:gravity="left"
-                    android:text="Current Weather"
                     android:textColor="@color/black_30"
                     android:textSize="15sp"
                     android:textStyle="bold"
                     app:layout_constraintEnd_toEndOf="@+id/date"
                     app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintStart_toStartOf="@+id/date"
-                    app:layout_constraintTop_toBottomOf="@+id/date" />
+                    app:layout_constraintTop_toBottomOf="@+id/date"
+                    tools:text="Current Weather" />
 
                 <TextView
                     android:id="@+id/currenttemp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginEnd="120dp"
                     android:gravity="center"
-                    android:text="30"
                     android:textColor="@color/black_30"
-                    android:textSize="42sp"
+                    android:textSize="38sp"
                     android:textStyle="bold"
-                    app:layout_constraintEnd_toStartOf="@+id/guideline7"
-                    app:layout_constraintHorizontal_bias="0.0"
-                    app:layout_constraintStart_toStartOf="@+id/cityname"
-                    app:layout_constraintTop_toBottomOf="@+id/country" />
+                    app:layout_constraintEnd_toEndOf="@+id/imageView"
+                    app:layout_constraintStart_toStartOf="@+id/imageView"
+                    app:layout_constraintTop_toBottomOf="@+id/imageView" />
 
                 <TextView
                     android:id="@+id/condition"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="28dp"
-                    android:text="TextView"
                     android:textColor="@color/textcolor"
+                    app:layout_constraintBottom_toTopOf="@+id/imageView"
                     app:layout_constraintEnd_toEndOf="@+id/imageView"
-                    app:layout_constraintStart_toStartOf="@+id/imageView"
-                    app:layout_constraintTop_toBottomOf="@+id/imageView" />
+                    app:layout_constraintStart_toStartOf="@+id/imageView" />
 
                 <ImageView
                     android:id="@+id/imageView"
                     android:layout_width="80dp"
                     android:layout_height="80dp"
-                    android:layout_marginTop="80dp"
-                    android:layout_marginEnd="28dp"
+                    android:layout_marginEnd="32dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.366"
                     tools:srcCompat="@tools:sample/avatars" />
 
                 <TextView
                     android:id="@+id/pressure"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:text="TextView"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginBottom="5dp"
                     android:textColor="@color/black_30"
-                    app:layout_constraintEnd_toStartOf="@+id/guideline7"
-                    app:layout_constraintHorizontal_bias="0.0"
-                    app:layout_constraintStart_toStartOf="@+id/currenttemp"
-                    app:layout_constraintTop_toBottomOf="@+id/currenttemp" />
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent" />
 
                 <TextView
                     android:id="@+id/clouds"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="20dp"
-                    android:text="TextView"
+                    android:layout_marginLeft="5dp"
                     android:textColor="@color/black_30"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="@+id/pressure"
-                    app:layout_constraintHorizontal_bias="1.0"
-                    app:layout_constraintStart_toStartOf="@+id/pressure" />
+                    app:layout_constraintBottom_toTopOf="@+id/pressure"
+                    app:layout_constraintStart_toStartOf="parent" />
 
                 <TextView
                     android:id="@+id/country"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="TextView"
-                    android:textSize="11sp"
                     android:textColor="@color/black_30"
+                    android:textSize="11sp"
                     app:layout_constraintEnd_toEndOf="@+id/cityname"
                     app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintStart_toStartOf="@+id/cityname"
