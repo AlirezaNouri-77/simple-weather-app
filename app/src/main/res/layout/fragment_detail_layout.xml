@@ -24,7 +24,6 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="5dp"
             android:layout_weight="2"
             android:gravity="center"
             android:orientation="vertical">
@@ -57,7 +56,7 @@
                 android:gravity="center"
                 android:text="20"
                 android:textColor="@color/textcolor"
-                android:textSize="48sp"/>
+                android:textSize="48sp" />
 
             <TextView
                 android:id="@+id/descreption"
@@ -66,13 +65,14 @@
                 android:gravity="center"
                 android:text="TextView"
                 android:textColor="@color/textcolor"
-                android:textSize="16sp"/>
+                android:textSize="16sp" />
 
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
             android:layout_marginBottom="10dp"
             android:layout_weight="1"
             android:gravity="center"
@@ -90,11 +90,11 @@
 
             <ImageView
                 android:id="@+id/imageView3"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:srcCompat="@drawable/icon_cold_temp" />
+                app:srcCompat="@drawable/icon_arrow_down" />
 
             <TextView
                 android:id="@+id/max_detail"
@@ -109,11 +109,11 @@
 
             <ImageView
                 android:id="@+id/imageView4"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/icon_hot_temp" />
+                app:srcCompat="@drawable/icon_arrow_up" />
         </LinearLayout>
 
     </LinearLayout>

@@ -40,7 +40,7 @@
         android:id="@+id/min_temp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
+        android:layout_marginStart="5dp"
         android:text="20"
         android:textAlignment="center"
         android:textColor="@color/textcolor"
@@ -53,7 +53,7 @@
         android:id="@+id/max_temp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
+        android:layout_marginEnd="5dp"
         android:text="20"
         android:textAlignment="center"
         android:textColor="@color/textcolor"
@@ -65,15 +65,15 @@
 
     <ImageView
         android:id="@+id/cool_temp_imageview"
-        android:layout_width="8dp"
-        android:layout_height="19dp"
+        android:layout_width="12dp"
+        android:layout_height="20dp"
         android:layout_marginEnd="24dp"
         android:scaleType="fitXY"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.633"
-        app:srcCompat="@drawable/icon_cold_temp" />
+        app:srcCompat="@drawable/icon_arrow_down" />
 
     <ImageView
         android:id="@+id/weathericon"
@@ -105,7 +105,7 @@
 
     <ImageView
         android:id="@+id/hot_temp_imageview"
-        android:layout_width="10dp"
+        android:layout_width="12dp"
         android:layout_height="20dp"
         android:layout_marginStart="36dp"
         android:scaleType="fitXY"
@@ -113,7 +113,7 @@
         app:layout_constraintStart_toEndOf="@+id/imageView5"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.666"
-        app:srcCompat="@drawable/icon_hot_temp" />
+        app:srcCompat="@drawable/icon_arrow_up" />
 
     <ImageView
         android:id="@+id/imageView5"

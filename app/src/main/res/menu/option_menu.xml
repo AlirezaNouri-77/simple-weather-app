@@ -13,10 +13,5 @@
         android:icon="@drawable/ic_baseline_search_24"
         android:title="Search City" />
 
-    <item
-        android:id="@+id/refresh"
-        app:showAsAction="ifRoom"
-        android:icon="@drawable/ic_baseline_refresh_actionbar"
-        android:title="Refresh"/>
 
 </menu>

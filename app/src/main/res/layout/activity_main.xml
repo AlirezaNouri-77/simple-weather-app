@@ -20,40 +20,43 @@
 
     </FrameLayout>
 
-
-    <TextView
-        android:id="@+id/empty_recyclerview"
+    <LinearLayout
+        android:id="@+id/no_internet_layout"
         android:layout_width="match_parent"
-        android:layout_height="100dp"
+        android:layout_height="match_parent"
+        android:background="@drawable/background_trasparent_noconnection"
         android:gravity="center"
-        android:text="Your entered city is not in list but you can search"
+        android:orientation="vertical"
         android:visibility="gone"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/errortextview"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:text="There is no network connection click here to try agein"
-        android:textColor="@color/white"
-        android:visibility="gone"
-        app:layout_constraintEnd_toEndOf="@+id/no_connection"
-        app:layout_constraintHorizontal_bias="0.476"
-        app:layout_constraintStart_toStartOf="@+id/no_connection"
-        app:layout_constraintTop_toBottomOf="@+id/no_connection" />
-
-    <com.airbnb.lottie.LottieAnimationView
-        android:id="@+id/no_connection"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:lottie_loop="true" />
+        tools:visibility="visible">
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/no_connection_lottie"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            app:lottie_loop="true" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:text="There is no network connection click here to try agein"
+            android:textColor="@color/black_30" />
+
+        <TextView
+            android:id="@+id/errortextview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="Try Again"
+            android:textColor="@color/black_30"
+            android:textSize="18sp" />
+
+    </LinearLayout>
 
 
     <androidx.recyclerview.widget.RecyclerView
@@ -65,306 +68,312 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:visibility="gone" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/main_constraint"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/background_grediend"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:visibility="visible">
+        app:layout_constraintStart_toStartOf="@+id/fragmentlayout"
+        app:layout_constraintTop_toTopOf="parent">
 
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/constraintLayout"
             android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:layout_margin="10dp"
-            android:background="@drawable/background_transparent"
-            android:elevation="10dp"
-            android:minHeight="200dp"
+            android:layout_height="match_parent"
+            android:background="@drawable/background_grediend"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
-            <com.airbnb.lottie.LottieAnimationView
-                android:id="@+id/lottie_one"
-                android:layout_width="120dp"
-                android:layout_height="70dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:lottie_fileName="waiting.json"
-                app:lottie_loop="true" />
-
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/constraint_one"
+                android:id="@+id/current_layout"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@android:color/transparent"
+                android:layout_height="200dp"
+                android:layout_margin="10dp"
+                android:background="@drawable/background_transparent"
+                android:elevation="10dp"
+                android:minHeight="200dp"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
 
-
-                <TextView
-                    android:id="@+id/date"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="8dp"
-                    android:layout_marginTop="5dp"
-                    android:gravity="left"
-                    android:textColor="@color/black_30"
-                    android:textSize="14sp"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    tools:text="2021/12/12" />
-
-                <TextView
-                    android:id="@+id/cityname"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginTop="32dp"
-                    android:gravity="left"
-                    android:textColor="@color/black_30"
-                    android:textSize="20sp"
-                    android:textStyle="bold"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/textView3"
-                    tools:text="washington" />
-
-                <TextView
-                    android:id="@+id/textView3"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="left"
-                    android:textColor="@color/black_30"
-                    android:textSize="15sp"
-                    android:textStyle="bold"
-                    app:layout_constraintEnd_toEndOf="@+id/date"
-                    app:layout_constraintHorizontal_bias="0.0"
-                    app:layout_constraintStart_toStartOf="@+id/date"
-                    app:layout_constraintTop_toBottomOf="@+id/date"
-                    tools:text="Current Weather" />
-
-                <TextView
-                    android:id="@+id/currenttemp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:textColor="@color/black_30"
-                    android:textSize="38sp"
-                    android:textStyle="bold"
-                    app:layout_constraintEnd_toEndOf="@+id/imageView"
-                    app:layout_constraintStart_toStartOf="@+id/imageView"
-                    app:layout_constraintTop_toBottomOf="@+id/imageView" />
-
-                <TextView
-                    android:id="@+id/condition"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/textcolor"
-                    app:layout_constraintBottom_toTopOf="@+id/imageView"
-                    app:layout_constraintEnd_toEndOf="@+id/imageView"
-                    app:layout_constraintStart_toStartOf="@+id/imageView" />
-
-                <ImageView
-                    android:id="@+id/imageView"
-                    android:layout_width="80dp"
-                    android:layout_height="80dp"
-                    android:layout_marginEnd="32dp"
+                <com.airbnb.lottie.LottieAnimationView
+                    android:id="@+id/lottie_one"
+                    android:layout_width="120dp"
+                    android:layout_height="70dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_bias="0.366"
-                    tools:srcCompat="@tools:sample/avatars" />
+                    app:lottie_fileName="waiting.json"
+                    app:lottie_loop="true" />
 
-                <TextView
-                    android:id="@+id/pressure"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="5dp"
-                    android:layout_marginBottom="5dp"
-                    android:textColor="@color/black_30"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent" />
 
-                <TextView
-                    android:id="@+id/clouds"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="5dp"
-                    android:textColor="@color/black_30"
-                    app:layout_constraintBottom_toTopOf="@+id/pressure"
-                    app:layout_constraintStart_toStartOf="parent" />
-
-                <TextView
-                    android:id="@+id/country"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/black_30"
-                    android:textSize="11sp"
-                    app:layout_constraintEnd_toEndOf="@+id/cityname"
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/constraint_one"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@android:color/transparent"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.0"
-                    app:layout_constraintStart_toStartOf="@+id/cityname"
-                    app:layout_constraintTop_toBottomOf="@+id/cityname"
-                    tools:text="United States" />
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+
+                    <TextView
+                        android:id="@+id/date"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginTop="5dp"
+                        android:gravity="left"
+                        android:textColor="@color/black_30"
+                        android:textSize="14sp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:text="2021/12/12" />
+
+                    <TextView
+                        android:id="@+id/cityname"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginTop="32dp"
+                        android:gravity="left"
+                        android:textColor="@color/black_30"
+                        android:textSize="20sp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/textView3"
+                        tools:text="washington" />
+
+                    <TextView
+                        android:id="@+id/textView3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="left"
+                        android:textColor="@color/black_30"
+                        android:textSize="15sp"
+                        app:layout_constraintEnd_toEndOf="@+id/date"
+                        app:layout_constraintHorizontal_bias="0.0"
+                        app:layout_constraintStart_toStartOf="@+id/date"
+                        app:layout_constraintTop_toBottomOf="@+id/date"
+                        tools:text="Current Weather" />
+
+                    <TextView
+                        android:id="@+id/currenttemp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:textColor="@color/black_30"
+                        android:textSize="38sp"
+                        android:textStyle="bold"
+                        app:layout_constraintEnd_toEndOf="@+id/imageView"
+                        app:layout_constraintStart_toStartOf="@+id/imageView"
+                        app:layout_constraintTop_toBottomOf="@+id/imageView" />
+
+                    <TextView
+                        android:id="@+id/condition"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/textcolor"
+                        app:layout_constraintBottom_toTopOf="@+id/imageView"
+                        app:layout_constraintEnd_toEndOf="@+id/imageView"
+                        app:layout_constraintStart_toStartOf="@+id/imageView" />
+
+                    <ImageView
+                        android:id="@+id/imageView"
+                        android:layout_width="80dp"
+                        android:layout_height="80dp"
+                        android:layout_marginEnd="32dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintVertical_bias="0.366"
+                        tools:srcCompat="@tools:sample/avatars" />
+
+                    <TextView
+                        android:id="@+id/pressure"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginBottom="5dp"
+                        android:textColor="@color/black_30"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent" />
+
+                    <TextView
+                        android:id="@+id/clouds"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="5dp"
+                        android:textColor="@color/black_30"
+                        app:layout_constraintBottom_toTopOf="@+id/pressure"
+                        app:layout_constraintStart_toStartOf="parent" />
+
+                    <TextView
+                        android:id="@+id/country"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/black_30"
+                        android:textSize="11sp"
+                        app:layout_constraintEnd_toEndOf="@+id/cityname"
+                        app:layout_constraintHorizontal_bias="0.0"
+                        app:layout_constraintStart_toStartOf="@+id/cityname"
+                        app:layout_constraintTop_toBottomOf="@+id/cityname" />
+
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/constraintLayout2"
-            android:layout_width="match_parent"
-            android:layout_height="100dp"
-            android:layout_margin="10dp"
-            android:background="@drawable/background_transparent"
-            android:elevation="10dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/constraintLayout">
-
-            <com.airbnb.lottie.LottieAnimationView
-                android:id="@+id/lottie_two"
-                android:layout_width="120dp"
-                android:layout_height="70dp"
-                app:layout_constraintBottom_toBottomOf="parent"
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/constraintLayout2"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:layout_margin="10dp"
+                android:background="@drawable/background_transparent"
+                android:elevation="10dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:lottie_fileName="waiting.json"
-                app:lottie_loop="true" />
+                app:layout_constraintTop_toBottomOf="@+id/current_layout">
 
-            <LinearLayout
-                android:id="@+id/minute_layout"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@android:color/transparent"
-                android:orientation="vertical">
+                <com.airbnb.lottie.LottieAnimationView
+                    android:id="@+id/lottie_two"
+                    android:layout_width="120dp"
+                    android:layout_height="70dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:lottie_fileName="waiting.json"
+                    app:lottie_loop="true" />
 
-
-                <TextView
-                    android:id="@+id/textView"
+                <LinearLayout
+                    android:id="@+id/minute_layout"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:background="@android:color/transparent"
-                    android:paddingLeft="10dp"
-                    android:paddingTop="8dp"
-                    android:paddingBottom="2dp"
-                    android:text="1 Hour Forcast"
-                    android:textColor="@color/textcolor"
-                    android:textSize="14sp"
-                    android:textStyle="bold"
-                    tools:layout_editor_absoluteY="240dp" />
+                    android:orientation="vertical">
 
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/minute_recyclerview"
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_margin="5dp"
-                    android:layout_marginTop="5dp"
-                    android:layout_weight="8"
-                    android:background="@android:color/transparent"
-                    android:orientation="horizontal"
-                    android:padding="2dp"
-                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                    tools:layout_editor_absoluteX="1dp"
-                    tools:layout_editor_absoluteY="259dp" />
-
-            </LinearLayout>
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_margin="10dp"
-            android:background="@drawable/background_transparent"
-            android:elevation="10dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/constraintLayout2">
-
-            <com.airbnb.lottie.LottieAnimationView
-                android:id="@+id/lottie_three"
-                android:layout_width="120dp"
-                android:layout_height="70dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:lottie_fileName="waiting.json"
-                app:lottie_loop="true" />
-
-            <LinearLayout
-                android:id="@+id/forcast_layout"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@android:color/transparent"
-                android:orientation="vertical">
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
 
                     <TextView
-                        android:id="@+id/textView2"
-                        android:layout_width="wrap_content"
+                        android:id="@+id/textView"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_alignParentLeft="true"
-                        android:gravity="left"
+                        android:background="@android:color/transparent"
                         android:paddingLeft="10dp"
                         android:paddingTop="8dp"
                         android:paddingBottom="2dp"
-                        android:text="16 day forcast"
+                        android:text="1 Hour Forcast"
                         android:textColor="@color/textcolor"
                         android:textSize="14sp"
-                        android:textStyle="bold" />
+                        android:textStyle="bold"
+                        tools:layout_editor_absoluteY="240dp" />
 
-                    <TextView
-                        android:id="@+id/chart_textview"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
-                        android:layout_marginRight="10dp"
-                        android:gravity="right"
-                        android:paddingLeft="10dp"
-                        android:paddingTop="8dp"
-                        android:paddingBottom="2dp"
-                        android:text="See Chart"
-                        android:textColor="@color/black_30"
-                        android:textSize="12sp"
-                        android:textStyle="bold" />
 
-                </RelativeLayout>
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/minute_recyclerview"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_margin="5dp"
+                        android:layout_marginTop="5dp"
+                        android:layout_weight="8"
+                        android:background="@android:color/transparent"
+                        android:orientation="horizontal"
+                        android:padding="2dp"
+                        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                        tools:layout_editor_absoluteX="1dp"
+                        tools:layout_editor_absoluteY="259dp" />
 
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/forcast_recyclerview"
+                </LinearLayout>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_margin="10dp"
+                android:background="@drawable/background_transparent"
+                android:elevation="10dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/constraintLayout2">
+
+                <com.airbnb.lottie.LottieAnimationView
+                    android:id="@+id/lottie_three"
+                    android:layout_width="120dp"
+                    android:layout_height="70dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:lottie_fileName="waiting.json"
+                    app:lottie_loop="true" />
+
+                <LinearLayout
+                    android:id="@+id/forcast_layout"
                     android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_marginTop="10dp"
-                    android:layout_weight="8"
-                    tools:layout_editor_absoluteX="0dp"
-                    tools:layout_editor_absoluteY="404dp" />
+                    android:layout_height="match_parent"
+                    android:background="@android:color/transparent"
+                    android:orientation="vertical">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:id="@+id/textView2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentLeft="true"
+                            android:gravity="left"
+                            android:paddingLeft="10dp"
+                            android:paddingTop="8dp"
+                            android:paddingBottom="2dp"
+                            android:text="16 day forcast"
+                            android:textColor="@color/textcolor"
+                            android:textSize="14sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/chart_textview"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:layout_marginRight="10dp"
+                            android:gravity="right"
+                            android:paddingLeft="10dp"
+                            android:paddingTop="8dp"
+                            android:paddingBottom="2dp"
+                            android:text="See Chart"
+                            android:textColor="@color/black_30"
+                            android:textSize="12sp"
+                            android:textStyle="bold" />
+
+                    </RelativeLayout>
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/forcast_recyclerview"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_weight="8"
+                        tools:layout_editor_absoluteX="0dp"
+                        tools:layout_editor_absoluteY="404dp" />
 
 
-            </LinearLayout>
+                </LinearLayout>
 
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

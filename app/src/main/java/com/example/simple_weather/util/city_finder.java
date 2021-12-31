@@ -50,9 +50,11 @@ public class city_finder {
 
             @Override
             public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
+                String res = response.body().string();
+
                 Log.d("TAG", "onResponse: " + "ok");
                 try {
-                    JSONArray jsonArray1 = new JSONArray(response.body().string());
+                    JSONArray jsonArray1 = new JSONArray(res);
                     for (int i = 0; jsonArray1.length() > i; i++) {
                         JSONObject jsonObject = jsonArray1.getJSONObject(i);
                         list.add(new searchview_model(jsonObject.getString("name"), change(jsonObject.getString("country"))));
@@ -63,6 +65,7 @@ public class city_finder {
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
+
             }
         });
         return liveData;

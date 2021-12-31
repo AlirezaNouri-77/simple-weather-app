@@ -5,7 +5,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.Observer;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -17,7 +16,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import android.os.Parcelable;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -25,6 +23,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.bumptech.glide.Glide;
@@ -38,6 +37,7 @@ import com.example.simple_weather.model.searchview_model;
 import com.example.simple_weather.recyckerview.forcast_recyclerview;
 import com.example.simple_weather.recyckerview.Minute_forcastRecyclerview;
 import com.example.simple_weather.recyckerview.searchview_recyclerview;
+import com.example.simple_weather.util.check_connection;
 import com.example.simple_weather.util.city_finder;
 import com.example.simple_weather.util.url_maker;
 import com.example.simple_weather.util.sharepreferenced;
@@ -65,6 +65,7 @@ public class MainActivity extends AppCompatActivity implements com.example.simpl
     private List<forcast_model> sixteen_weatherforcast_list;
     private List<minute_model> minute_model_list;
     private List<current_model> current_list;
+
     private ArrayList<chart_model> temp_chart_list;
     private ArrayList<chart_model> twotemp_chart_list;
     private ArrayList<chart_model> rain_chart_list;
@@ -87,11 +88,13 @@ public class MainActivity extends AppCompatActivity implements com.example.simpl
 
     private LottieAnimationView lottieAnimationView1, lottieAnimationView2, lottieAnimationView3, lottieAnimationView_noconnection;
 
-    private LinearLayout minute_layout, forcast_layout;
+    private LinearLayout minute_layout, forcast_layout, no_internet_layout;
 
     private url_maker local_json_city;
 
     private com.example.simple_weather.util.city_finder city_finder;
+
+    com.example.simple_weather.util.check_connection check_connection;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -104,16 +107,18 @@ public class MainActivity extends AppCompatActivity implements com.example.simpl
 
         sharepreferenced = new sharepreferenced(this);
         local_json_city = new url_maker(this);
+        check_connection = new check_connection(this);
 
         lottieAnimationView1 = findViewById(R.id.lottie_one);
         lottieAnimationView2 = findViewById(R.id.lottie_two);
         lottieAnimationView3 = findViewById(R.id.lottie_three);
-        lottieAnimationView_noconnection = findViewById(R.id.no_connection);
+        lottieAnimationView_noconnection = findViewById(R.id.no_connection_lottie);
 
         current_consrtaintlayout = findViewById(R.id.constraint_one);
         minute_layout = findViewById(R.id.minute_layout);
         forcast_layout = findViewById(R.id.forcast_layout);
         error_textview = findViewById(R.id.errortextview);
+        no_internet_layout = findViewById(R.id.no_internet_layout);
 
         detail_fragment = new detail_fragment();
         chart_fragment = new chart_fragment();
@@ -191,7 +196,12 @@ public class MainActivity extends AppCompatActivity implements com.example.simpl
                         city_finder.call_request(newText).observe(MainActivity.this, new Observer<List<searchview_model>>() {
                             @Override
                             public void onChanged(List<searchview_model> searchview_models) {
-                                searchview_rv.submitList(searchview_models);
+                                if (searchview_models.size() == 0) {
+                                    searchview_models.add(new searchview_model("Noting found please try other thing", ""));
+                                    searchview_rv.submitList(searchview_models);
+                                } else {
+                                    searchview_rv.submitList(searchview_models);
+                                }
                             }
                         });
                     }
@@ -224,13 +234,9 @@ public class MainActivity extends AppCompatActivity implements com.example.simpl
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-
         if (item.getItemId() == R.id.setting) {
             Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
             startActivity(intent);
-        } else if (item.getItemId() == R.id.refresh) {
-            Current_Weather("", "");
-            forcast_weather("", "");
         }
         return super.onOptionsItemSelected(item);
     }
@@ -250,15 +256,22 @@ public class MainActivity extends AppCompatActivity implements com.example.simpl
         ImageView imageView = findViewById(R.id.imageView);
 
         OkHttpClient okHttpClient = new OkHttpClient();
-        Request request = new Request.Builder()
-                .url(local_json_city.current_url_maker(city_name, counrtry_name))
-                .build();
+        Request request;
+        if (check_connection.is_connect()) {
+            request = new Request.Builder()
+                    .url(local_json_city.current_url_maker(city_name, counrtry_name))
+                    .build();
+        } else {
+            play_noconnection();
+            return;
+        }
+
 
         okHttpClient.newCall(request).enqueue(new Callback() {
 
             @Override
             public void onFailure(@NotNull Call call, @NotNull IOException e) {
-                play_noconnection();
+
             }
 
             @Override
@@ -266,7 +279,7 @@ public class MainActivity extends AppCompatActivity implements com.example.simpl
 
                 Log.d("TAG", "onResponse: " + local_json_city.current_url_maker(city_name, counrtry_name));
                 if (response.isSuccessful()) {
-
+                    stop_noconnection();
                     current_list.clear();
                     minute_model_list.clear();
 
@@ -311,7 +324,7 @@ public class MainActivity extends AppCompatActivity implements com.example.simpl
 
                             Glide.with(MainActivity.this).load(current_list.get(0).getIcon_url()).into(imageView);
                             Locale locale = new Locale("", current_list.get(0).getCountry());
-                            country.setText(locale.getDisplayCountry(Locale.US));
+                            country.setText(current_list.get(0).getCountry());
 
                             minute_recyclerview.setLayoutManager(new LinearLayoutManager(MainActivity.this, LinearLayoutManager.HORIZONTAL, false));
                             minute_recyclerview.setHasFixedSize(true);
@@ -326,10 +339,6 @@ public class MainActivity extends AppCompatActivity implements com.example.simpl
     }
 
     public void forcast_weather(String city_name, String country_name) {
-
-        if (lottieAnimationView_noconnection.isAnimating()) {
-            stop_noconnection();
-        }
 
         minute_recyclerview = findViewById(R.id.minute_recyclerview);
         forecast_recyclerview = findViewById(R.id.forcast_recyclerview);
@@ -465,13 +474,13 @@ public class MainActivity extends AppCompatActivity implements com.example.simpl
         lottieAnimationView1.setVisibility(View.VISIBLE);
         lottieAnimationView2.setVisibility(View.VISIBLE);
         lottieAnimationView3.setVisibility(View.VISIBLE);
-        current_consrtaintlayout.animate().alpha(0.0f);
-        minute_layout.animate().alpha(0.0f);
-        forcast_layout.animate().alpha(0.0f);
+//        current_consrtaintlayout.animate().alpha(0.0f);
+//        minute_layout.animate().alpha(0.0f);
+//        forcast_layout.animate().alpha(0.0f);
 
-//        current_consrtaintlayout.setVisibility(View.GONE);
-//        minute_layout.setVisibility(View.GONE);
-//        forcast_layout.setVisibility(View.GONE);
+        current_consrtaintlayout.setVisibility(View.GONE);
+        minute_layout.setVisibility(View.GONE);
+        forcast_layout.setVisibility(View.GONE);
 
         lottieAnimationView1.playAnimation();
         lottieAnimationView2.playAnimation();
@@ -483,12 +492,12 @@ public class MainActivity extends AppCompatActivity implements com.example.simpl
         lottieAnimationView2.setVisibility(View.GONE);
         lottieAnimationView3.setVisibility(View.GONE);
 
-//        current_consrtaintlayout.setVisibility(View.VISIBLE);
-//        minute_layout.setVisibility(View.VISIBLE);
-//        forcast_layout.setVisibility(View.VISIBLE);
-        current_consrtaintlayout.animate().alpha(1.0f);
-        minute_layout.animate().alpha(1.0f);
-        forcast_layout.animate().alpha(1.0f);
+        current_consrtaintlayout.setVisibility(View.VISIBLE);
+        minute_layout.setVisibility(View.VISIBLE);
+        forcast_layout.setVisibility(View.VISIBLE);
+//        current_consrtaintlayout.animate().alpha(1.0f);
+//        minute_layout.animate().alpha(1.0f);
+//        forcast_layout.animate().alpha(1.0f);
 
         lottieAnimationView1.pauseAnimation();
         lottieAnimationView2.pauseAnimation();
@@ -497,7 +506,8 @@ public class MainActivity extends AppCompatActivity implements com.example.simpl
 
     public void stop_noconnection() {
         new Handler(Looper.getMainLooper()).post(() -> {
-            main_consrtaintlayout.animate().alpha(1.0f);
+            main_consrtaintlayout.setVisibility(View.VISIBLE);
+            no_internet_layout.setVisibility(View.GONE);
             lottieAnimationView_noconnection.setAnimation("noconnection.json");
             lottieAnimationView_noconnection.pauseAnimation();
             lottieAnimationView_noconnection.setVisibility(View.GONE);
@@ -508,6 +518,7 @@ public class MainActivity extends AppCompatActivity implements com.example.simpl
     public void play_noconnection() {
         new Handler(Looper.getMainLooper()).post(() -> {
             main_consrtaintlayout.setVisibility(View.GONE);
+            no_internet_layout.setVisibility(View.VISIBLE);
             lottieAnimationView_noconnection.setAnimation("noconnection.json");
             lottieAnimationView_noconnection.playAnimation();
             lottieAnimationView_noconnection.setVisibility(View.VISIBLE);
