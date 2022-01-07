@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.simple_weather.R;
 import com.example.simple_weather.model.minute_model;
-import com.example.simple_weather.util.sharepreferenced;
+import com.example.simple_weather.util.My_Sharepreferenced;
 
 import java.util.List;
 
@@ -19,12 +19,12 @@ public class Minute_forcastRecyclerview extends RecyclerView.Adapter<Minute_forc
 
     Context context;
     List<minute_model> list;
-    sharepreferenced sharepreferencedSetting;
+    My_Sharepreferenced sharepreferencedSetting;
 
     public Minute_forcastRecyclerview(List<minute_model> list, Context context) {
         this.list = list;
         this.context = context;
-        sharepreferencedSetting = new sharepreferenced(context);
+        sharepreferencedSetting = new My_Sharepreferenced(context);
     }
 
     @NonNull

@@ -15,9 +15,9 @@
     </style>
 
     <style name="Theme.Weathertest.AppWidgetContainerParent" parent="@android:style/Theme.DeviceDefault">
-        <item name="appWidgetRadius">8dp</item>
-        <item name="appWidgetPadding">4dp</item>
-        <item name="appWidgetInnerRadius">4dp</item>
+        <item name="appWidgetRadius">4dp</item>
+        <item name="appWidgetPadding">2dp</item>
+        <item name="appWidgetInnerRadius">2dp</item>
     </style>
 
     <style name="Theme.simple_weather.AppWidgetContainer" parent="Theme.Weathertest.AppWidgetContainerParent" />

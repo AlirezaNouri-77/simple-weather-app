@@ -1,7 +1,10 @@
 package com.example.simple_weather;
 
+import static com.example.simple_weather.util.Constant.NOTIFICATION_REQUEST_TIME;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.SearchView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
@@ -10,12 +13,15 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.os.SystemClock;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -23,10 +29,10 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.bumptech.glide.Glide;
+import com.example.simple_weather.broadcast_receiver.notification_receiver;
 import com.example.simple_weather.fragment.chart_fragment;
 import com.example.simple_weather.fragment.detail_fragment;
 import com.example.simple_weather.model.chart_model;
@@ -37,10 +43,11 @@ import com.example.simple_weather.model.searchview_model;
 import com.example.simple_weather.recyckerview.forcast_recyclerview;
 import com.example.simple_weather.recyckerview.Minute_forcastRecyclerview;
 import com.example.simple_weather.recyckerview.searchview_recyclerview;
-import com.example.simple_weather.util.check_connection;
-import com.example.simple_weather.util.city_finder;
-import com.example.simple_weather.util.url_maker;
-import com.example.simple_weather.util.sharepreferenced;
+import com.example.simple_weather.util.Check_Connection;
+import com.example.simple_weather.util.City_Finder;
+import com.example.simple_weather.util.Url_Maker;
+import com.example.simple_weather.util.My_Sharepreferenced;
+import com.example.simple_weather.util.my_alarmmanager;
 import com.example.simple_weather.widget.weather_widget;
 
 
@@ -51,6 +58,7 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
@@ -76,7 +84,7 @@ public class MainActivity extends AppCompatActivity implements com.example.simpl
 
     private ConstraintLayout main_consrtaintlayout, current_consrtaintlayout;
 
-    private sharepreferenced sharepreferenced;
+    private My_Sharepreferenced sharepreferenced;
 
     private searchview_recyclerview searchview_rv;
 
@@ -90,24 +98,31 @@ public class MainActivity extends AppCompatActivity implements com.example.simpl
 
     private LinearLayout minute_layout, forcast_layout, no_internet_layout;
 
-    private url_maker local_json_city;
+    private Url_Maker local_json_city;
 
-    private com.example.simple_weather.util.city_finder city_finder;
+    private City_Finder city_finder;
 
-    com.example.simple_weather.util.check_connection check_connection;
+    Check_Connection check_connection;
+
+    my_alarmmanager my_alarmmanager;
+    PendingIntent pendingIntent;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
 
         fragment = null;
 
         chart_textview = findViewById(R.id.chart_textview);
 
-        sharepreferenced = new sharepreferenced(this);
-        local_json_city = new url_maker(this);
-        check_connection = new check_connection(this);
+        sharepreferenced = new My_Sharepreferenced(this);
+        local_json_city = new Url_Maker(this);
+        check_connection = new Check_Connection(this);
+        my_alarmmanager = new my_alarmmanager(this);
 
         lottieAnimationView1 = findViewById(R.id.lottie_one);
         lottieAnimationView2 = findViewById(R.id.lottie_two);
@@ -123,7 +138,7 @@ public class MainActivity extends AppCompatActivity implements com.example.simpl
         detail_fragment = new detail_fragment();
         chart_fragment = new chart_fragment();
 
-        city_finder = new city_finder();
+        city_finder = new City_Finder();
 
         sixteen_weatherforcast_list = new ArrayList<>();
         minute_model_list = new ArrayList<>();
@@ -140,8 +155,30 @@ public class MainActivity extends AppCompatActivity implements com.example.simpl
         searcheview_rv.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
         searcheview_rv.setAdapter(searchview_rv);
 
+        my_alarmmanager.Setup_Alarmanager();
+//        if (!sharepreferenced.notification_setting()) {
+//
+//            if (!my_alarmmanager.alarm_manager_isalarm()) {
+//
+//                Log.d("TAG", "onCreate: " + "sssag");
+//            }
+//        }
+
+
+//        alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+//        Intent intent = new Intent(this, notification_receiver.class);
+//        intent.setAction("com.shermanrex_weather_notification");
+//        pendingIntent = PendingIntent.getBroadcast(this, 0, intent, PendingIntent.FLAG_MUTABLE);
+//        alarmManager.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime(), AlarmManager.INTERVAL_HOUR, pendingIntent);
+//        Boolean b = PendingIntent.getBroadcast(this, 0, intent, PendingIntent.FLAG_MUTABLE) != null;
+//        if (sharepreferenced.notification_setting()) {
+//
+//        } else alarmManager.cancel(pendingIntent);
+
+
         Current_Weather("", "");
         forcast_weather("", "");
+
 
         error_textview.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -179,11 +216,7 @@ public class MainActivity extends AppCompatActivity implements com.example.simpl
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                if (query.length() != 0) {
-                    Current_Weather(query, "");
-                    forcast_weather(query, "");
-                }
-                return true;
+                return false;
             }
 
             @Override
@@ -324,7 +357,7 @@ public class MainActivity extends AppCompatActivity implements com.example.simpl
 
                             Glide.with(MainActivity.this).load(current_list.get(0).getIcon_url()).into(imageView);
                             Locale locale = new Locale("", current_list.get(0).getCountry());
-                            country.setText(current_list.get(0).getCountry());
+                            country.setText(locale.getDisplayCountry());
 
                             minute_recyclerview.setLayoutManager(new LinearLayoutManager(MainActivity.this, LinearLayoutManager.HORIZONTAL, false));
                             minute_recyclerview.setHasFixedSize(true);
@@ -368,19 +401,21 @@ public class MainActivity extends AppCompatActivity implements com.example.simpl
                         JSONArray jsonArray = jsonObject.getJSONArray("data");
                         for (int i = 1; i < jsonArray.length(); i++) {
                             JSONObject j = jsonArray.getJSONObject(i);
-                            String icon_url = "https://www.weatherbit.io/static/img/icons/" + j.getJSONObject("weather").getString("icon") + ".png";
-                            sixteen_weatherforcast_list.add(new forcast_model(j.getString("temp"),
-                                    icon_url,
-                                    j.getString("low_temp"),
-                                    j.getString("max_temp"),
-                                    j.getString("datetime"),
-                                    j.getJSONObject("weather").getString("description"),
-                                    j.getString("wind_spd"),
-                                    j.getString("pres"),
-                                    j.getString("uv"),
-                                    j.getString("vis"),
-                                    j.getString("clouds"),
-                                    j.getString("pop")));
+                            if (!j.getString("low_temp").equals("null")) {
+                                String icon_url = "https://www.weatherbit.io/static/img/icons/" + j.getJSONObject("weather").getString("icon") + ".png";
+                                sixteen_weatherforcast_list.add(new forcast_model(j.getString("temp"),
+                                        icon_url,
+                                        j.getString("low_temp"),
+                                        j.getString("max_temp"),
+                                        j.getString("datetime"),
+                                        j.getJSONObject("weather").getString("description"),
+                                        j.getString("wind_spd"),
+                                        j.getString("pres"),
+                                        j.getString("uv"),
+                                        j.getString("vis"),
+                                        j.getString("clouds"),
+                                        j.getString("pop")));
+                            } else continue;
 
                             temp_chart_list.add(new chart_model(j.getString("temp"), j.getString("datetime")));
                             twotemp_chart_list.add(new chart_model(j.getString("low_temp"), j.getString("max_temp")));
@@ -392,7 +427,6 @@ public class MainActivity extends AppCompatActivity implements com.example.simpl
 
                             forcast_recyclerview adapter = new forcast_recyclerview(sixteen_weatherforcast_list, MainActivity.this, MainActivity.this);
                             forecast_recyclerview.setLayoutManager(new LinearLayoutManager(MainActivity.this));
-                            forecast_recyclerview.setHasFixedSize(true);
                             forecast_recyclerview.addItemDecoration(new DividerItemDecoration(MainActivity.this, DividerItemDecoration.VERTICAL));
                             forecast_recyclerview.setAdapter(adapter);
 
@@ -457,6 +491,9 @@ public class MainActivity extends AppCompatActivity implements com.example.simpl
         current_list.clear();
         Current_Weather("", "");
         forcast_weather("", "");
+//        if (sharepreferenced.notification_setting()) {
+//            alarmManager.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime(), AlarmManager.INTERVAL_HOUR, pendingIntent);
+//        } else alarmManager.cancel(pendingIntent);
         super.onRestart();
     }
 
@@ -474,9 +511,6 @@ public class MainActivity extends AppCompatActivity implements com.example.simpl
         lottieAnimationView1.setVisibility(View.VISIBLE);
         lottieAnimationView2.setVisibility(View.VISIBLE);
         lottieAnimationView3.setVisibility(View.VISIBLE);
-//        current_consrtaintlayout.animate().alpha(0.0f);
-//        minute_layout.animate().alpha(0.0f);
-//        forcast_layout.animate().alpha(0.0f);
 
         current_consrtaintlayout.setVisibility(View.GONE);
         minute_layout.setVisibility(View.GONE);
@@ -495,9 +529,6 @@ public class MainActivity extends AppCompatActivity implements com.example.simpl
         current_consrtaintlayout.setVisibility(View.VISIBLE);
         minute_layout.setVisibility(View.VISIBLE);
         forcast_layout.setVisibility(View.VISIBLE);
-//        current_consrtaintlayout.animate().alpha(1.0f);
-//        minute_layout.animate().alpha(1.0f);
-//        forcast_layout.animate().alpha(1.0f);
 
         lottieAnimationView1.pauseAnimation();
         lottieAnimationView2.pauseAnimation();

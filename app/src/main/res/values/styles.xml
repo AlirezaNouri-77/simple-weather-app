@@ -2,11 +2,11 @@
 
     <style name="Widget.simple_weather.AppWidget.Container" parent="android:Widget">
         <item name="android:id">@android:id/background</item>
-        <item name="android:background">@color/transparent_white</item>
+        <item name="android:background">@drawable/widget_background</item>
     </style>
 
     <style name="Widget.Weathertest.AppWidget.InnerView" parent="android:Widget">
-        <item name="android:background">?android:attr/colorBackground</item>
+        <item name="android:background">@drawable/widget_background</item>
         <item name="android:textColor">?android:attr/textColorPrimary</item>
     </style>
 </resources>

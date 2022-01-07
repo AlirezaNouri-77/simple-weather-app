@@ -5,11 +5,11 @@ import android.content.SharedPreferences;
 
 import androidx.preference.PreferenceManager;
 
-public class sharepreferenced {
+public class My_Sharepreferenced {
 
     Context mcontext;
 
-    public sharepreferenced(Context context) {
+    public My_Sharepreferenced(Context context) {
         this.mcontext = context;
     }
 
@@ -39,6 +39,14 @@ public class sharepreferenced {
             return "I";
         }
         return "M";
+    }
+
+    public Boolean notification_setting() {
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(mcontext);
+        if (sharedPreferences.getBoolean("notification", true)) {
+            return false;
+        }
+        return true;
     }
 
     public String getsymbol() {

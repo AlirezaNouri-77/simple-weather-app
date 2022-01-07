@@ -7,17 +7,15 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
-import android.os.Handler;
 import android.util.Log;
-import android.view.View;
 import android.widget.RemoteViews;
 
 import androidx.annotation.NonNull;
 
 import com.bumptech.glide.Glide;
 import com.example.simple_weather.R;
-import com.example.simple_weather.util.url_maker;
-import com.example.simple_weather.util.sharepreferenced;
+import com.example.simple_weather.util.Url_Maker;
+import com.example.simple_weather.util.My_Sharepreferenced;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -41,21 +39,21 @@ import okhttp3.Response;
  */
 public class weather_widget extends AppWidgetProvider {
 
-    private static url_maker local_json_city;
-    private static sharepreferenced sharepreferenced;
+    private static Url_Maker local_json_city;
+    private static My_Sharepreferenced sharepreferenced;
 
     static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
                                 int appWidgetId) {
 
-        local_json_city = new url_maker(context);
-        sharepreferenced = new sharepreferenced(context);
+        local_json_city = new Url_Maker(context);
+        sharepreferenced = new My_Sharepreferenced(context);
 
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.widget_layout);
         Intent intent = new Intent(context, weather_widget.class);
         intent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
         int[] ids = new int[]{appWidgetId};
         intent.putExtra(appWidgetManager.EXTRA_APPWIDGET_IDS, ids);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, appWidgetId, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, appWidgetId, intent, PendingIntent.FLAG_MUTABLE);
         views.setOnClickPendingIntent(R.id.refresh_widget, pendingIntent);
 
         appWidgetManager.updateAppWidget(appWidgetId, views);
@@ -121,8 +119,7 @@ public class weather_widget extends AppWidgetProvider {
                 public void onFailure(@NonNull Call call, @NonNull IOException e) {
                     RemoteViews views = new RemoteViews(mcontext.getPackageName(), R.layout.widget_layout);
                     AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(mcontext.getApplicationContext());
-
-                    views.setTextViewText(R.id.last_check_widget, "No internet connection");
+                    views.setTextViewText(R.id.last_check_widget, "No Internet Connection");
                     appWidgetManager.updateAppWidget(mid, views);
                 }
 
@@ -151,7 +148,7 @@ public class weather_widget extends AppWidgetProvider {
                             String imageurl = "https://www.weatherbit.io/static/img/icons/" + jsonObject1.getJSONObject("weather").getString("icon") + ".png";
                             views.setTextViewText(R.id.city_widget, jsonObject1.getString("city_name"));
                             views.setTextViewText(R.id.country_widget, locale.getDisplayCountry());
-                            views.setTextViewText(R.id.current_temp, jsonObject1.getString("temp") + sharepreferenced.getsymbol());
+                            views.setTextViewText(R.id.current_temp, jsonObject1.getString("temp") + " " + sharepreferenced.getsymbol());
                             views.setTextViewText(R.id.last_check_widget, dateFormat.format(date));
                             views.setTextViewText(R.id.condition_widgeta, jsonObject1.getJSONObject("weather").getString("description"));
 

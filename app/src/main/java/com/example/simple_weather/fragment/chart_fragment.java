@@ -8,12 +8,11 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
 import com.example.simple_weather.R;
 import com.example.simple_weather.model.chart_model;
-import com.example.simple_weather.util.myvalueformatter;
+import com.example.simple_weather.util.MPchart_ValueFormatter;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
@@ -86,7 +85,7 @@ public class chart_fragment extends Fragment {
         x.disableAxisLineDashedLine();
         x.setPosition(XAxis.XAxisPosition.BOTTOM);
         x.setDrawGridLines(false);
-        x.setValueFormatter(new myvalueformatter(data_date));
+        x.setValueFormatter(new MPchart_ValueFormatter(data_date));
 
         YAxis yLeft = lineChart.getAxisLeft();
         yLeft.setEnabled(true);
@@ -139,7 +138,7 @@ public class chart_fragment extends Fragment {
         x.disableAxisLineDashedLine();
         x.setPosition(XAxis.XAxisPosition.BOTTOM);
         x.setDrawGridLines(false);
-        x.setValueFormatter(new myvalueformatter(data_date));
+        x.setValueFormatter(new MPchart_ValueFormatter(data_date));
 
         YAxis yLeft = lineChart2.getAxisLeft();
         yLeft.setEnabled(true);
@@ -201,7 +200,7 @@ public class chart_fragment extends Fragment {
         x.disableAxisLineDashedLine();
         x.setPosition(XAxis.XAxisPosition.BOTTOM);
         x.setDrawGridLines(false);
-        x.setValueFormatter(new myvalueformatter(data_date));
+        x.setValueFormatter(new MPchart_ValueFormatter(data_date));
 
         YAxis yLeft = lineChart3.getAxisLeft();
         yLeft.setEnabled(true);

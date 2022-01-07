@@ -1,11 +1,15 @@
 <PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <PreferenceCategory
-        app:title="Setting">
-
+    <PreferenceCategory app:title="General">
         <SwitchPreference
-            app:title="Set Temp unit to fahrenheit"
-            app:key="temp"/>
+            app:key="temp"
+            app:title="Set Temp unit to fahrenheit" />
+    </PreferenceCategory>
+
+    <PreferenceCategory app:title="Notification">
+        <SwitchPreference
+            app:key="notification"
+            app:title="disable notification" />
     </PreferenceCategory>
 
 </PreferenceScreen>

@@ -3,6 +3,8 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/Alireza/Desktop/weathertest/app/src/main/res/drawable-v21/app_widget_background.xml" value="0.2671875" />
+        <entry key="..\:/Users/Alireza/Desktop/weathertest/app/src/main/res/drawable-v21/app_widget_inner_view_background.xml" value="0.2671875" />
         <entry key="..\:/Users/Alireza/Desktop/weathertest/app/src/main/res/drawable/abow_textview.xml" value="0.2671875" />
         <entry key="..\:/Users/Alireza/Desktop/weathertest/app/src/main/res/drawable/backgourd_main.xml" value="0.2671875" />
         <entry key="..\:/Users/Alireza/Desktop/weathertest/app/src/main/res/drawable/background_gredeind.xml" value="0.2671875" />
@@ -32,15 +34,15 @@
         <entry key="..\:/Users/Alireza/Desktop/weathertest/app/src/main/res/layout/minute_forcastrecyclerview.xml" value="0.176" />
         <entry key="..\:/Users/Alireza/Desktop/weathertest/app/src/main/res/layout/recycler.xml" value="0.6" />
         <entry key="..\:/Users/Alireza/Desktop/weathertest/app/src/main/res/layout/recyclerview_detail_layout.xml" value="0.264" />
-        <entry key="..\:/Users/Alireza/Desktop/weathertest/app/src/main/res/layout/recyclerview_forcast_layout.xml" value="2.4" />
+        <entry key="..\:/Users/Alireza/Desktop/weathertest/app/src/main/res/layout/recyclerview_forcast_layout.xml" value="0.4" />
         <entry key="..\:/Users/Alireza/Desktop/weathertest/app/src/main/res/layout/recyclerview_searchview.xml" value="0.264" />
         <entry key="..\:/Users/Alireza/Desktop/weathertest/app/src/main/res/layout/recycleveiw.xml" value="0.25104166666666666" />
         <entry key="..\:/Users/Alireza/Desktop/weathertest/app/src/main/res/layout/searchview_recyclerview.xml" value="0.176" />
         <entry key="..\:/Users/Alireza/Desktop/weathertest/app/src/main/res/layout/settings_activity.xml" value="0.25416666666666665" />
         <entry key="..\:/Users/Alireza/Desktop/weathertest/app/src/main/res/layout/weather_widget.xml" value="0.25104166666666666" />
-        <entry key="..\:/Users/Alireza/Desktop/weathertest/app/src/main/res/layout/widget_layout.xml" value="0.4" />
+        <entry key="..\:/Users/Alireza/Desktop/weathertest/app/src/main/res/layout/widget_layout.xml" value="0.25462962962962965" />
         <entry key="..\:/Users/Alireza/Desktop/weathertest/app/src/main/res/menu/option_menu.xml" value="0.25" />
-        <entry key="..\:/Users/Alireza/Desktop/weathertest/app/src/main/res/xml/root_preferences.xml" value="0.264" />
+        <entry key="..\:/Users/Alireza/Desktop/weathertest/app/src/main/res/xml/root_preferences.xml" value="0.4" />
       </map>
     </option>
   </component>

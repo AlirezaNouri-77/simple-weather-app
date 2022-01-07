@@ -17,8 +17,8 @@ import com.bumptech.glide.Glide;
 import com.example.simple_weather.R;
 import com.example.simple_weather.model.detail_model;
 import com.example.simple_weather.recyckerview.detail_recyclerview;
-import com.example.simple_weather.util.get_weekname;
-import com.example.simple_weather.util.sharepreferenced;
+import com.example.simple_weather.util.Get_Weekname_FromDate;
+import com.example.simple_weather.util.My_Sharepreferenced;
 
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -29,8 +29,8 @@ public class detail_fragment extends Fragment {
     private TextView current_temp, current_weather, low_temp, high_temp, date, tomarrow;
     private ImageView imageView;
     private RecyclerView recyclerView;
-    private com.example.simple_weather.util.get_weekname get_weekname;
-    private sharepreferenced sharepreferenced;
+    private Get_Weekname_FromDate get_weekname_fromDate;
+    private My_Sharepreferenced sharepreferenced;
 
     @Nullable
     @Override
@@ -46,8 +46,8 @@ public class detail_fragment extends Fragment {
         date = view.findViewById(R.id.date_textview);
         tomarrow = view.findViewById(R.id.tomarrow_weather);
 
-        sharepreferenced = new sharepreferenced(getContext());
-        get_weekname = new get_weekname();
+        sharepreferenced = new My_Sharepreferenced(getContext());
+        get_weekname_fromDate = new Get_Weekname_FromDate();
 
 
         try {
@@ -75,7 +75,7 @@ public class detail_fragment extends Fragment {
             low_temp.setText(Math.round(Double.parseDouble(String.valueOf(getArguments().get("min")))) + sharepreferenced.getsymbol());
             high_temp.setText(Math.round(Double.parseDouble(String.valueOf(getArguments().get("max")))) + sharepreferenced.getsymbol());
             current_weather.setText(getArguments().get("description") + "");
-            date.setText(get_weekname.get_week_name(getArguments().get("time").toString()));
+            date.setText(get_weekname_fromDate.get_week_name(getArguments().get("time").toString()));
 
 
             tomarrow.setText("Tomorrow Forcast" + "\n" + "Average temp is " + Math.round(Double.parseDouble(getArguments().get("tomarrow_temp").toString())) +

@@ -25,11 +25,11 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
-public class city_finder {
+public class City_Finder {
 
     MutableLiveData<List<searchview_model>> liveData = new MutableLiveData<>();
 
-    public city_finder() {
+    public City_Finder() {
     }
 
     public LiveData<List<searchview_model>> call_request(String text) {

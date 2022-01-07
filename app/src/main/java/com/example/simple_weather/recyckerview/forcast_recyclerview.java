@@ -1,6 +1,7 @@
 package com.example.simple_weather.recyckerview;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,8 +14,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.simple_weather.R;
 import com.example.simple_weather.model.forcast_model;
-import com.example.simple_weather.util.get_weekname;
-import com.example.simple_weather.util.sharepreferenced;
+import com.example.simple_weather.util.Get_Weekname_FromDate;
+import com.example.simple_weather.util.My_Sharepreferenced;
 
 import java.text.ParseException;
 import java.util.List;
@@ -23,7 +24,7 @@ public class forcast_recyclerview extends RecyclerView.Adapter<forcast_recyclerv
 
     Context context;
     List<forcast_model> list;
-    sharepreferenced sharepreferenced;
+    My_Sharepreferenced sharepreferenced;
     private final forcastclicklistner monitemclick;
 
 
@@ -31,7 +32,7 @@ public class forcast_recyclerview extends RecyclerView.Adapter<forcast_recyclerv
         this.list = list;
         this.context = context;
         this.monitemclick = forcastclicklistner;
-        sharepreferenced = new sharepreferenced(context);
+        sharepreferenced = new My_Sharepreferenced(context);
     }
 
     @NonNull
@@ -56,8 +57,8 @@ public class forcast_recyclerview extends RecyclerView.Adapter<forcast_recyclerv
             holder.time.setText("Tomorrow");
         } else if (position <= 7) {
             try {
-                get_weekname get_weekname = new get_weekname();
-                holder.time.setText(get_weekname.get_week_name(list.get(position).time));
+                Get_Weekname_FromDate get_weekname_fromDate = new Get_Weekname_FromDate();
+                holder.time.setText(get_weekname_fromDate.get_week_name(list.get(position).time));
 
             } catch (ParseException e) {
                 e.printStackTrace();
@@ -66,10 +67,11 @@ public class forcast_recyclerview extends RecyclerView.Adapter<forcast_recyclerv
         } else {
             holder.time.setText(list.get(position).time);
         }
+        Log.d("TAG", "onBindViewHolder: " + list.size());
 
-        holder.temp.setText(Math.round(Double.parseDouble(list.get(position).temp)) + " " + sharepreferenced.getsymbol());
-        holder.min.setText(Math.round(Double.parseDouble(list.get(position).min)) + " " + sharepreferenced.getsymbol());
-        holder.max.setText(Math.round(Double.parseDouble(list.get(position).max)) + " " + sharepreferenced.getsymbol());
+        holder.temp.setText(Math.round(Double.parseDouble(list.get(position).getTemp())) + " " + sharepreferenced.getsymbol());
+        holder.min.setText(Math.round(Double.parseDouble(list.get(position).getMin())) + " " + sharepreferenced.getsymbol());
+        holder.max.setText(Math.round(Double.parseDouble(list.get(position).getMax())) + " " + sharepreferenced.getsymbol());
         holder.rain.setText(list.get(position).rainpossibilty + "%");
         Glide.with(context).load(list.get(position).icon).into(holder.imageView);
 

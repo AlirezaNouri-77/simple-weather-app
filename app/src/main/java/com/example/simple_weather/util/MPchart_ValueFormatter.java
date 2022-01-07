@@ -2,11 +2,11 @@ package com.example.simple_weather.util;
 
 import com.github.mikephil.charting.formatter.ValueFormatter;
 
-public class myvalueformatter extends ValueFormatter {
+public class MPchart_ValueFormatter extends ValueFormatter {
 
     String[] data;
 
-    public myvalueformatter(String[] data) {
+    public MPchart_ValueFormatter(String[] data) {
         this.data = data;
     }
 

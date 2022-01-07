@@ -1,28 +1,32 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    style="@style/Widget.simple_weather.AppWidget.Container"
     android:layout_width="match_parent"
+    android:padding="3dp"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:theme="@style/Theme.simple_weather.AppWidgetContainer">
+    android:background="@drawable/widget_background"
+    android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center|top"
+        android:background="@android:color/transparent"
         android:orientation="vertical">
 
         <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:background="@android:color/transparent"
             android:orientation="horizontal">
 
             <TextView
                 android:id="@+id/city_widget"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
                 android:textColor="@color/black_30"
-                android:textSize="12sp"
+                android:textSize="11sp"
                 tools:text="London" />
 
             <TextView
@@ -30,6 +34,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="5dp"
+                android:background="@android:color/transparent"
                 android:textColor="@color/black_30"
                 android:textSize="11sp"
                 tools:text="united kingdom" />
@@ -39,9 +44,11 @@
 
         <TextView
             android:id="@+id/current_temp"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:layout_margin="6dp"
+            android:background="@android:color/transparent"
             android:gravity="center"
             android:textColor="@color/black_30"
             android:textSize="17sp" />
@@ -49,6 +56,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
             android:gravity="center_horizontal"
             android:orientation="horizontal">
 
@@ -57,6 +65,7 @@
                 android:layout_width="25dp"
                 android:layout_height="25dp"
                 android:layout_marginRight="2dp"
+                android:background="@android:color/transparent"
                 android:scaleType="fitCenter" />
 
             <TextView
@@ -64,6 +73,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:background="@android:color/transparent"
                 android:textColor="@color/black_30"
                 android:textSize="11sp"
                 tools:text="Sunny" />
@@ -76,6 +86,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center|bottom"
+        android:background="@android:color/transparent"
         android:orientation="horizontal">
 
         <ImageButton
@@ -90,6 +101,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:background="@android:color/transparent"
             android:gravity="center"
             android:textColor="@color/black_30"
             android:textSize="10sp" />
