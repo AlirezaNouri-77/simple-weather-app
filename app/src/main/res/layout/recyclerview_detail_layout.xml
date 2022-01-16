@@ -15,11 +15,11 @@
         android:orientation="horizontal">
 
         <ImageView
-            android:scaleType="fitCenter"
             android:id="@+id/detail_icon"
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:padding="8dp" />
+            android:padding="8dp"
+            android:scaleType="fitCenter" />
 
         <TextView
             android:id="@+id/subject"
