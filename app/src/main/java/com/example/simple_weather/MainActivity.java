@@ -1,7 +1,5 @@
 package com.example.simple_weather;
 
-import static com.example.simple_weather.util.Constant.NOTIFICATION_REQUEST_TIME;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
@@ -13,15 +11,12 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.app.AlarmManager;
-import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import android.os.SystemClock;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -32,7 +27,6 @@ import android.widget.TextView;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.bumptech.glide.Glide;
-import com.example.simple_weather.broadcast_receiver.notification_receiver;
 import com.example.simple_weather.fragment.chart_fragment;
 import com.example.simple_weather.fragment.detail_fragment;
 import com.example.simple_weather.model.chart_model;
@@ -58,7 +52,6 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
@@ -80,7 +73,7 @@ public class MainActivity extends AppCompatActivity implements com.example.simpl
 
     private RecyclerView forecast_recyclerview, minute_recyclerview, searcheview_rv;
 
-    private TextView cityname, currenttemp, condition, clouds, pressure, country, error_textview, chart_textview, date_textview, current_textview;
+    private TextView cityname, currenttemp, condition, clouds, pressure, country, error_textview, chart_textview, date_textview, current_textview, current_uv;
 
     private ConstraintLayout main_consrtaintlayout, current_consrtaintlayout;
 
@@ -96,7 +89,7 @@ public class MainActivity extends AppCompatActivity implements com.example.simpl
 
     private LottieAnimationView lottieAnimationView1, lottieAnimationView2, lottieAnimationView3, lottieAnimationView_noconnection;
 
-    private LinearLayout minute_layout, forcast_layout, no_internet_layout;
+    private LinearLayout minute_layout, forecast_layout, no_internet_layout;
 
     private Url_Maker local_json_city;
 
@@ -105,7 +98,6 @@ public class MainActivity extends AppCompatActivity implements com.example.simpl
     Check_Connection check_connection;
 
     my_alarmmanager my_alarmmanager;
-    PendingIntent pendingIntent;
 
 
     @Override
@@ -113,7 +105,6 @@ public class MainActivity extends AppCompatActivity implements com.example.simpl
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
 
         fragment = null;
 
@@ -131,13 +122,12 @@ public class MainActivity extends AppCompatActivity implements com.example.simpl
 
         current_consrtaintlayout = findViewById(R.id.constraint_one);
         minute_layout = findViewById(R.id.minute_layout);
-        forcast_layout = findViewById(R.id.forcast_layout);
+        forecast_layout = findViewById(R.id.forcast_layout);
         error_textview = findViewById(R.id.errortextview);
         no_internet_layout = findViewById(R.id.no_internet_layout);
 
         detail_fragment = new detail_fragment();
         chart_fragment = new chart_fragment();
-
         city_finder = new City_Finder();
 
         sixteen_weatherforcast_list = new ArrayList<>();
@@ -155,30 +145,17 @@ public class MainActivity extends AppCompatActivity implements com.example.simpl
         searcheview_rv.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
         searcheview_rv.setAdapter(searchview_rv);
 
-        my_alarmmanager.Setup_Alarmanager();
-//        if (!sharepreferenced.notification_setting()) {
-//
-//            if (!my_alarmmanager.alarm_manager_isalarm()) {
-//
-//                Log.d("TAG", "onCreate: " + "sssag");
-//            }
-//        }
-
-
-//        alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
-//        Intent intent = new Intent(this, notification_receiver.class);
-//        intent.setAction("com.shermanrex_weather_notification");
-//        pendingIntent = PendingIntent.getBroadcast(this, 0, intent, PendingIntent.FLAG_MUTABLE);
-//        alarmManager.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime(), AlarmManager.INTERVAL_HOUR, pendingIntent);
-//        Boolean b = PendingIntent.getBroadcast(this, 0, intent, PendingIntent.FLAG_MUTABLE) != null;
-//        if (sharepreferenced.notification_setting()) {
-//
-//        } else alarmManager.cancel(pendingIntent);
-
-
         Current_Weather("", "");
         forcast_weather("", "");
 
+        Log.d("TAG", "noti: " + sharepreferenced.notification_setting());
+        Log.d("TAG", "is alarm: " + my_alarmmanager.alarm_manager_isalarm());
+
+        if (!sharepreferenced.notification_setting()) {
+            if (!my_alarmmanager.alarm_manager_isalarm()) {
+                my_alarmmanager.Setup_Alarmanager();
+            }
+        }
 
         error_textview.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -281,25 +258,24 @@ public class MainActivity extends AppCompatActivity implements com.example.simpl
         cityname = findViewById(R.id.cityname);
         currenttemp = findViewById(R.id.currenttemp);
         condition = findViewById(R.id.condition);
-        pressure = findViewById(R.id.pressure);
+        pressure = findViewById(R.id.visibility);
         clouds = findViewById(R.id.clouds);
         country = findViewById(R.id.country);
         date_textview = findViewById(R.id.date);
         current_textview = findViewById(R.id.textView3);
         ImageView imageView = findViewById(R.id.imageView);
+        current_uv = findViewById(R.id.current_uv_textview);
 
         OkHttpClient okHttpClient = new OkHttpClient();
         Request request;
         if (check_connection.is_connect()) {
-            request = new Request.Builder()
-                    .url(local_json_city.current_url_maker(city_name, counrtry_name))
+            request = new Request.Builder().url(local_json_city
+                    .current_url_maker(city_name, counrtry_name))
                     .build();
         } else {
             play_noconnection();
             return;
         }
-
-
         okHttpClient.newCall(request).enqueue(new Callback() {
 
             @Override
@@ -310,8 +286,8 @@ public class MainActivity extends AppCompatActivity implements com.example.simpl
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
 
-                Log.d("TAG", "onResponse: " + local_json_city.current_url_maker(city_name, counrtry_name));
                 if (response.isSuccessful()) {
+
                     stop_noconnection();
                     current_list.clear();
                     minute_model_list.clear();
@@ -329,8 +305,9 @@ public class MainActivity extends AppCompatActivity implements com.example.simpl
                                     jsonobj.getString("city_name").toUpperCase(),
                                     "https://www.weatherbit.io/static/img/icons/" + jsonobj.getJSONObject("weather").getString("icon") + ".png",
                                     jsonobj.getString("clouds"),
-                                    jsonobj.getString("pres"),
-                                    jsonobj.getString("country_code")
+                                    jsonobj.getString("vis"),
+                                    jsonobj.getString("country_code"),
+                                    jsonobj.getString("uv")
                             ));
                         }
 
@@ -339,6 +316,7 @@ public class MainActivity extends AppCompatActivity implements com.example.simpl
                             JSONObject j = jsonArray2.getJSONObject(i);
                             minute_model_list.add(new minute_model(j.getString("timestamp_local").substring(11, 16), j.getString("temp")));
                         }
+
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -349,10 +327,11 @@ public class MainActivity extends AppCompatActivity implements com.example.simpl
 
                             condition.setText(current_list.get(0).getDescription());
                             cityname.setText(current_list.get(0).getCityname());
-                            clouds.setText("Cloud coverage " + current_list.get(0).getCloud() + "%");
-                            pressure.setText("Average Pressure " + current_list.get(0).getPressure());
+                            clouds.setText("Cloud " + current_list.get(0).getCloud() + " %");
+                            pressure.setText("Visibility " + current_list.get(0).getVisibility() + " KM");
                             currenttemp.setText(current_list.get(0).getTemp() + sharepreferenced.getsymbol());
                             date_textview.setText(current_list.get(0).getDate().substring(0, 10));
+                            current_uv.setText("Uv Index " + current_list.get(0).getVisibility());
                             current_textview.setText("Current Weather");
 
                             Glide.with(MainActivity.this).load(current_list.get(0).getIcon_url()).into(imageView);
@@ -491,9 +470,6 @@ public class MainActivity extends AppCompatActivity implements com.example.simpl
         current_list.clear();
         Current_Weather("", "");
         forcast_weather("", "");
-//        if (sharepreferenced.notification_setting()) {
-//            alarmManager.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime(), AlarmManager.INTERVAL_HOUR, pendingIntent);
-//        } else alarmManager.cancel(pendingIntent);
         super.onRestart();
     }
 
@@ -514,7 +490,7 @@ public class MainActivity extends AppCompatActivity implements com.example.simpl
 
         current_consrtaintlayout.setVisibility(View.GONE);
         minute_layout.setVisibility(View.GONE);
-        forcast_layout.setVisibility(View.GONE);
+        forecast_layout.setVisibility(View.GONE);
 
         lottieAnimationView1.playAnimation();
         lottieAnimationView2.playAnimation();
@@ -528,7 +504,7 @@ public class MainActivity extends AppCompatActivity implements com.example.simpl
 
         current_consrtaintlayout.setVisibility(View.VISIBLE);
         minute_layout.setVisibility(View.VISIBLE);
-        forcast_layout.setVisibility(View.VISIBLE);
+        forecast_layout.setVisibility(View.VISIBLE);
 
         lottieAnimationView1.pauseAnimation();
         lottieAnimationView2.pauseAnimation();

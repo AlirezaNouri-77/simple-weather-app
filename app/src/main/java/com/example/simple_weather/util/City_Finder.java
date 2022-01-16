@@ -29,8 +29,7 @@ public class City_Finder {
 
     MutableLiveData<List<searchview_model>> liveData = new MutableLiveData<>();
 
-    public City_Finder() {
-    }
+    public City_Finder() {}
 
     public LiveData<List<searchview_model>> call_request(String text) {
 
@@ -38,20 +37,18 @@ public class City_Finder {
         List<searchview_model> list = new ArrayList<>();
 
         String url = "https://api.openweathermap.org/geo/1.0/direct?q=" + text + "&limit=20&appid=" + API_KEY_OPENMAPWEARGER;
-
         Request request = new Request.Builder().url(url).build();
         Log.d("TAG", "call_request: " + url);
 
         OkHttpClient okHttpClient = new OkHttpClient();
         okHttpClient.newCall(request).enqueue(new Callback() {
             @Override
-            public void onFailure(@NonNull Call call, @NonNull IOException e) {
-            }
+            public void onFailure(@NonNull Call call, @NonNull IOException e) {}
 
             @Override
             public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
-                String res = response.body().string();
 
+                String res = response.body().string();
                 Log.d("TAG", "onResponse: " + "ok");
                 try {
                     JSONArray jsonArray1 = new JSONArray(res);

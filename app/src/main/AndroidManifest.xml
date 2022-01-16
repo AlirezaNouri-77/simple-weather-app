@@ -4,8 +4,9 @@
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM"/>
-    <uses-permission android:name="android.permission.SET_ALARM"/>
+    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
+    <uses-permission android:name="android.permission.SET_ALARM" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
     <application
         android:allowBackup="true"
@@ -35,12 +36,14 @@
                 android:resource="@xml/weather_widget_info" />
         </receiver>
 
-        <receiver android:name=".broadcast_receiver.notification_receiver"
+        <receiver
+            android:name=".broadcast_receiver.notification_receiver"
             android:exported="true">
             <intent-filter>
                 <action android:name="com.shermanrex_weather_notification" />
             </intent-filter>
         </receiver>
+
 
         <activity
             android:name=".SettingsActivity"

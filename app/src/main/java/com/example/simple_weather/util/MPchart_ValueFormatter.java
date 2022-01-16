@@ -4,7 +4,9 @@ import com.github.mikephil.charting.formatter.ValueFormatter;
 
 public class MPchart_ValueFormatter extends ValueFormatter {
 
-    String[] data;
+    // this class use for set String to x axis value becuase mpchart not allow set String to x axis
+
+    private final String[] data;
 
     public MPchart_ValueFormatter(String[] data) {
         this.data = data;

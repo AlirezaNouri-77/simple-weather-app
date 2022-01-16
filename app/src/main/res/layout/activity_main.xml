@@ -185,35 +185,40 @@
                         app:layout_constraintEnd_toEndOf="@+id/imageView"
                         app:layout_constraintStart_toStartOf="@+id/imageView" />
 
+
                     <ImageView
                         android:id="@+id/imageView"
                         android:layout_width="80dp"
                         android:layout_height="80dp"
-                        android:layout_marginEnd="32dp"
+                        android:layout_marginEnd="36dp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintVertical_bias="0.366"
+                        app:layout_constraintVertical_bias="0.475"
                         tools:srcCompat="@tools:sample/avatars" />
 
                     <TextView
-                        android:id="@+id/pressure"
+                        android:id="@+id/visibility"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="5dp"
                         android:layout_marginBottom="5dp"
                         android:textColor="@color/black_30"
+                        android:textSize="12sp"
                         app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toStartOf="parent" />
+                        app:layout_constraintStart_toStartOf="@+id/clouds"
+                        tools:text="Visibility" />
 
                     <TextView
                         android:id="@+id/clouds"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="5dp"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginBottom="4dp"
                         android:textColor="@color/black_30"
-                        app:layout_constraintBottom_toTopOf="@+id/pressure"
-                        app:layout_constraintStart_toStartOf="parent" />
+                        android:textSize="12sp"
+                        app:layout_constraintBottom_toTopOf="@+id/visibility"
+                        app:layout_constraintStart_toStartOf="parent"
+                        tools:text="Cloud" />
 
                     <TextView
                         android:id="@+id/country"
@@ -226,6 +231,18 @@
                         app:layout_constraintStart_toStartOf="@+id/cityname"
                         app:layout_constraintTop_toBottomOf="@+id/cityname" />
 
+                    <TextView
+                        android:id="@+id/current_uv_textview"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="5dp"
+                        android:textColor="@color/black_30"
+                        android:textSize="12sp"
+                        app:layout_constraintBottom_toTopOf="@+id/clouds"
+                        app:layout_constraintEnd_toEndOf="@+id/clouds"
+                        app:layout_constraintHorizontal_bias="0.0"
+                        app:layout_constraintStart_toStartOf="@+id/clouds" />
+
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -235,7 +252,7 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/constraintLayout2"
                 android:layout_width="match_parent"
-                android:layout_height="100dp"
+                android:layout_height="wrap_content"
                 android:layout_margin="10dp"
                 android:background="@drawable/background_transparent"
                 android:elevation="10dp"
@@ -257,24 +274,39 @@
                 <LinearLayout
                     android:id="@+id/minute_layout"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:background="@android:color/transparent"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    app:layout_constraintBottom_toBottomOf="@+id/lottie_two"
+                    app:layout_constraintTop_toTopOf="@+id/lottie_two">
 
 
-                    <TextView
-                        android:id="@+id/textView"
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:background="@android:color/transparent"
-                        android:paddingLeft="10dp"
-                        android:paddingTop="8dp"
-                        android:paddingBottom="2dp"
-                        android:text="1 Hour Forcast"
-                        android:textColor="@color/textcolor"
-                        android:textSize="14sp"
-                        android:textStyle="bold"
-                        tools:layout_editor_absoluteY="240dp" />
+                        android:background="@android:color/transparent">
+
+                        <ImageView
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:padding="6dp"
+                            android:scaleType="fitCenter"
+                            android:src="@drawable/sixtityminutes" />
+
+                        <TextView
+                            android:id="@+id/textView"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:background="@android:color/transparent"
+                            android:text="1 Hour Forcast"
+                            android:textColor="@color/textcolor"
+                            android:textSize="14sp"
+                            android:textStyle="bold"
+                            tools:layout_editor_absoluteY="240dp" />
+
+
+                    </LinearLayout>
 
 
                     <androidx.recyclerview.widget.RecyclerView
@@ -329,15 +361,26 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
 
+                        <ImageView
+                            android:id="@+id/forecast_imageview"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:padding="8dp"
+                            android:scaleType="fitCenter"
+                            android:src="@drawable/tomorrow" />
+
                         <TextView
                             android:id="@+id/textView2"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_alignLeft="@+id/forecast_imageview"
                             android:layout_alignParentLeft="true"
+                            android:layout_alignParentTop="true"
+                            android:layout_marginStart="2dp"
+                            android:layout_marginLeft="32dp"
+                            android:layout_marginTop="6dp"
+                            android:layout_toEndOf="@+id/forecast_imageview"
                             android:gravity="left"
-                            android:paddingLeft="10dp"
-                            android:paddingTop="8dp"
-                            android:paddingBottom="2dp"
                             android:text="16 day forcast"
                             android:textColor="@color/textcolor"
                             android:textSize="14sp"

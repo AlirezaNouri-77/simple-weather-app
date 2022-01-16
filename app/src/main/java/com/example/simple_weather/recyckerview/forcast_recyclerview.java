@@ -67,7 +67,6 @@ public class forcast_recyclerview extends RecyclerView.Adapter<forcast_recyclerv
         } else {
             holder.time.setText(list.get(position).time);
         }
-        Log.d("TAG", "onBindViewHolder: " + list.size());
 
         holder.temp.setText(Math.round(Double.parseDouble(list.get(position).getTemp())) + " " + sharepreferenced.getsymbol());
         holder.min.setText(Math.round(Double.parseDouble(list.get(position).getMin())) + " " + sharepreferenced.getsymbol());

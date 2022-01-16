@@ -5,6 +5,8 @@ import android.app.NotificationManager;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Build;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -21,6 +23,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -34,6 +38,7 @@ public class current_notification {
     My_Sharepreferenced my_sharepreferenced;
     Check_Connection check_connection;
 
+    // constractor of call which for requiet to server and get current weather and send notification
 
     public current_notification(Context context) {
         this.context = context;
@@ -48,54 +53,117 @@ public class current_notification {
     }
 
     public void request_notification() {
-        new Request().execute();
         if (check_connection.is_connect()) {
+            req req = new req(context);
+            req.notifi();
         }
     }
 
-    private class Request extends AsyncTask<Void, Void, Void> {
+    private static class req {
 
-        @Override
-        protected Void doInBackground(Void... voids) {
+        Context context;
 
-            String url = url_maker.current_url_maker("", "");
+        public req(Context context) {
+            this.context = context;
+        }
 
-            okhttp3.Request request = new okhttp3.Request.Builder()
-                    .url(url).build();
+        public void notifi() {
 
-            OkHttpClient okHttpClient = new OkHttpClient();
-            okHttpClient.newCall(request).enqueue(new Callback() {
-                @Override
-                public void onFailure(@NonNull Call call, @NonNull IOException e) {
-                }
+            Url_Maker url_maker = new Url_Maker(context);
+            My_Sharepreferenced mysharepreferenced = new My_Sharepreferenced(context);
+            ExecutorService executorService = Executors.newSingleThreadExecutor();
 
-                @Override
-                public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
+            executorService.execute(() -> {
 
-                    if (response.isSuccessful()) {
-                        JSONObject jsonObject1 = new JSONObject();
-                        try {
-                            JSONObject jsonObject = new JSONObject(response.body().string());
-                            JSONArray jsonArray1 = jsonObject.getJSONArray("data");
-                            for (int i = 0; i < jsonArray1.length(); i++) {
-                                jsonObject1 = jsonArray1.getJSONObject(i);
-                            }
+                String url = url_maker.current_url_maker("", "");
 
-                            String temp = jsonObject1.getString("temp");
-                            NotificationCompat.Builder notificationCompat = new NotificationCompat.Builder(context, "weather")
-                                    .setSmallIcon(R.drawable.notification_small_icon)
-                                    .setContentTitle("Current Temp is " + Math.round(Double.parseDouble(temp)) + " " + my_sharepreferenced.getsymbol())
-                                    .setPriority(NotificationCompat.PRIORITY_HIGH);
-                            NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
-                            notificationManager.notify(1, notificationCompat.build());
+                okhttp3.Request request = new okhttp3.Request.Builder()
+                        .url(url).build();
 
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
+                OkHttpClient okHttpClient = new OkHttpClient();
+                okHttpClient.newCall(request).enqueue(new Callback() {
+                    @Override
+                    public void onFailure(@NonNull Call call, @NonNull IOException e) {
                     }
-                }
+
+                    @Override
+                    public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
+
+                        if (response.isSuccessful()) {
+                            JSONObject jsonObject1 = new JSONObject();
+                            try {
+                                JSONObject jsonObject = new JSONObject(response.body().string());
+                                JSONArray jsonArray1 = jsonObject.getJSONArray("data");
+                                for (int i = 0; i < jsonArray1.length(); i++) {
+                                    jsonObject1 = jsonArray1.getJSONObject(i);
+                                }
+
+                                String temp = jsonObject1.getString("temp");
+                                NotificationCompat.Builder notificationCompat = new NotificationCompat.Builder(context, "weather")
+                                        .setSmallIcon(R.drawable.notification_small_icon)
+                                        .setContentTitle("Current Temp is " + Math.round(Double.parseDouble(temp)) + " " + mysharepreferenced.getsymbol())
+                                        .setPriority(NotificationCompat.PRIORITY_HIGH);
+                                NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
+                                notificationManager.notify(1, notificationCompat.build());
+
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+
+                    }
+                });
+
             });
-            return null;
         }
+
     }
+//
+//    private class Request extends AsyncTask<Void, Void, Void> {
+//
+//        @Override
+//        protected Void doInBackground(Void... voids) {
+//
+//            String url = url_maker.current_url_maker("", "");
+//
+//            okhttp3.Request request = new okhttp3.Request.Builder()
+//                    .url(url).build();
+//
+//            OkHttpClient okHttpClient = new OkHttpClient();
+//            okHttpClient.newCall(request).enqueue(new Callback() {
+//                @Override
+//                public void onFailure(@NonNull Call call, @NonNull IOException e) {
+//                }
+//
+//                @Override
+//                public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
+//
+//                    if (response.isSuccessful()) {
+//                        JSONObject jsonObject1 = new JSONObject();
+//                        try {
+//                            JSONObject jsonObject = new JSONObject(response.body().string());
+//                            JSONArray jsonArray1 = jsonObject.getJSONArray("data");
+//                            for (int i = 0; i < jsonArray1.length(); i++) {
+//                                jsonObject1 = jsonArray1.getJSONObject(i);
+//                            }
+//
+//                            String temp = jsonObject1.getString("temp");
+//                            NotificationCompat.Builder notificationCompat = new NotificationCompat.Builder(context, "weather")
+//                                    .setSmallIcon(R.drawable.notification_small_icon)
+//                                    .setContentTitle("Current Temp is " + Math.round(Double.parseDouble(temp)) + " " + my_sharepreferenced.getsymbol())
+//                                    .setPriority(NotificationCompat.PRIORITY_HIGH);
+//                            NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
+//                            notificationManager.notify(1, notificationCompat.build());
+//
+//                        } catch (JSONException e) {
+//                            e.printStackTrace();
+//                        }
+//                    }
+//
+//                }
+//            });
+//            return null;
+//        }
+//    }
+
 }

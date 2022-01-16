@@ -43,10 +43,7 @@ public class My_Sharepreferenced {
 
     public Boolean notification_setting() {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(mcontext);
-        if (sharedPreferences.getBoolean("notification", true)) {
-            return false;
-        }
-        return true;
+        return sharedPreferences.getBoolean("notification", false);
     }
 
     public String getsymbol() {

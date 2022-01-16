@@ -5,11 +5,15 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.SystemClock;
+import android.util.Log;
+
+import androidx.annotation.RequiresApi;
 
 import com.example.simple_weather.broadcast_receiver.notification_receiver;
 
-public class my_alarmmanager {
+public class my_alarmmanager{
 
     AlarmManager alarmManager;
     Context context;
@@ -22,21 +26,23 @@ public class my_alarmmanager {
     public void Setup_Alarmanager() {
         Intent intent = new Intent(context, notification_receiver.class);
         intent.setAction("com.shermanrex_weather_notification");
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_MUTABLE);
-        alarmManager.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime(), 10000, pendingIntent);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_IMMUTABLE);
+        alarmManager.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime(), AlarmManager.INTERVAL_HOUR, pendingIntent);
     }
+
 
     public Boolean alarm_manager_isalarm() {
         Intent intent = new Intent(context, notification_receiver.class);
         intent.setAction("com.shermanrex_weather_notification");
-        Boolean isalarm = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_MUTABLE) != null;
-        return isalarm;
+        return PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_NO_CREATE) != null;
     }
 
     public void cancel_alarmmanager() {
         Intent intent = new Intent(context, notification_receiver.class);
         intent.setAction("com.shermanrex_weather_notification");
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_MUTABLE);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_IMMUTABLE);
         alarmManager.cancel(pendingIntent);
+        pendingIntent.cancel();
     }
+
 }

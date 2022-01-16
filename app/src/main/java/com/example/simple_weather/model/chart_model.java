@@ -4,25 +4,25 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 public class chart_model implements Parcelable {
-    String x;
-    String week;
+    String y_axis;
+    String x_axis;
 
-    public chart_model(String week, String x) {
-        this.x = x;
-        this.week = week;
+    public chart_model(String x_axis, String y_axis) {
+        this.y_axis = y_axis;
+        this.x_axis = x_axis;
     }
 
-    public String getX() {
-        return x;
+    public String getY_axis() {
+        return y_axis;
     }
 
-    public String getWeek() {
-        return week;
+    public String getX_axis() {
+        return x_axis;
     }
 
     protected chart_model(Parcel in) {
-        x = in.readString();
-        week = in.readString();
+        y_axis = in.readString();
+        x_axis = in.readString();
     }
 
     public static final Creator<chart_model> CREATOR = new Creator<chart_model>() {
@@ -44,7 +44,7 @@ public class chart_model implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(x);
-        dest.writeString(week);
+        dest.writeString(y_axis);
+        dest.writeString(x_axis);
     }
 }

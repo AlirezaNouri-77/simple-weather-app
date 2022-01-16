@@ -75,17 +75,17 @@ public class chart_fragment extends Fragment {
 
         List<Entry> temp_data = new ArrayList<>();
         for (int index = 0; index < temp_chart_mydata.size(); index++) {
-            temp_data.add(new Entry(index, Float.parseFloat(temp_chart_mydata.get(index).getWeek())));
+            temp_data.add(new Entry(index, Float.parseFloat(temp_chart_mydata.get(index).getX_axis())));
         }
 
 
 
-        XAxis x = lineChart.getXAxis();
-        x.setEnabled(true);
-        x.disableAxisLineDashedLine();
-        x.setPosition(XAxis.XAxisPosition.BOTTOM);
-        x.setDrawGridLines(false);
-        x.setValueFormatter(new MPchart_ValueFormatter(data_date));
+        XAxis xAxis = lineChart.getXAxis();
+        xAxis.setEnabled(true);
+        xAxis.disableAxisLineDashedLine();
+        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
+        xAxis.setDrawGridLines(false);
+        xAxis.setValueFormatter(new MPchart_ValueFormatter(data_date));
 
         YAxis yLeft = lineChart.getAxisLeft();
         yLeft.setEnabled(true);
@@ -128,8 +128,8 @@ public class chart_fragment extends Fragment {
         List<Entry> min_temp = new ArrayList<>();
         List<Entry> max_temp = new ArrayList<>();
         for (int index = 0; index < two_temp_chart_mydata.size(); index++) {
-            min_temp.add(new Entry(index, Float.parseFloat(two_temp_chart_mydata.get(index).getX())));
-            max_temp.add(new Entry(index, Float.parseFloat(two_temp_chart_mydata.get(index).getWeek())));
+            min_temp.add(new Entry(index, Float.parseFloat(two_temp_chart_mydata.get(index).getY_axis())));
+            max_temp.add(new Entry(index, Float.parseFloat(two_temp_chart_mydata.get(index).getX_axis())));
         }
 
 
@@ -192,7 +192,7 @@ public class chart_fragment extends Fragment {
 
         List<Entry> data = new ArrayList<>();
         for (int index = 0; index < pop_chart_list.size(); index++) {
-            data.add(new Entry(index, Float.parseFloat(pop_chart_list.get(index).getX())));
+            data.add(new Entry(index, Float.parseFloat(pop_chart_list.get(index).getY_axis())));
         }
 
         XAxis x = lineChart3.getXAxis();
@@ -239,7 +239,7 @@ public class chart_fragment extends Fragment {
         for (int i = 0; i < list.size(); i++) {
 
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
-            Date date = simpleDateFormat.parse(list.get(i).getX());
+            Date date = simpleDateFormat.parse(list.get(i).getY_axis());
             SimpleDateFormat simpleDateFormat1 = new SimpleDateFormat("EE", Locale.getDefault());
             simpleDateFormat1.format(date);
             date_set[i] = simpleDateFormat1.format(date);
