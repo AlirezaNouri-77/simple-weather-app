@@ -1,7 +1,6 @@
 package com.example.simple_weather.fragment;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,7 +9,6 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.content.res.AppCompatResources;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -85,11 +83,11 @@ public class detail_fragment extends Fragment {
                     "Min Temp is " + Math.round(Double.parseDouble(getArguments().get("tomarrow_min_temp").toString())) + sharepreferenced.getsymbol());
 
 
-            list.add(new detail_model("Average Pressure", getArguments().get("pressure").toString() + " mb", R.drawable.barometer));
-            list.add(new detail_model("Range Visibility", getArguments().get("visibility").toString() + " KM", R.drawable.visibility));
-            list.add(new detail_model("Wind Speed ", getArguments().get("windspeed").toString() + " m/s", R.drawable.storm));
-            list.add(new detail_model("UV", getArguments().get("uv").toString(), R.drawable.rays));
-            list.add(new detail_model("Clouds Coverage", getArguments().get("clouds").toString() + "%", R.drawable.cloud));
+            list.add(new detail_model("Average Pressure", getArguments().get("pressure").toString() + " mb", R.drawable.icon_pressure));
+            list.add(new detail_model("Range Visibility", getArguments().get("visibility").toString() + " KM", R.drawable.icon_visibility));
+            list.add(new detail_model("Wind Speed ", getArguments().get("windspeed").toString() + " m/s", R.drawable.icon_wind_speed));
+            list.add(new detail_model("UV", getArguments().get("uv").toString(), R.drawable.icon_uv_index));
+            list.add(new detail_model("Clouds Coverage", getArguments().get("clouds").toString() + "%", R.drawable.icon_cloud));
             list.add(new detail_model("Probability of Precipitation", getArguments().get("Probability").toString() + "%", R.drawable.icon_precipitation));
 
             com.example.simple_weather.recyckerview.detail_recyclerview detail_recyclerview = new detail_recyclerview(list, getContext());

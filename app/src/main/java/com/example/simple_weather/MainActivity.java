@@ -24,6 +24,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.airbnb.lottie.LottieAnimationView;
@@ -38,7 +39,7 @@ import com.example.simple_weather.model.forcast_model;
 import com.example.simple_weather.model.searchview_model;
 import com.example.simple_weather.recyckerview.current_recyclerview;
 import com.example.simple_weather.recyckerview.forcast_recyclerview;
-import com.example.simple_weather.recyckerview.Minute_forcastRecyclerview;
+import com.example.simple_weather.recyckerview.minute_forecastRecyclerview;
 import com.example.simple_weather.recyckerview.searchview_recyclerview;
 import com.example.simple_weather.util.Check_Connection;
 import com.example.simple_weather.util.City_Finder;
@@ -66,7 +67,7 @@ import okhttp3.Response;
 
 public class MainActivity extends AppCompatActivity implements com.example.simple_weather.recyckerview.forcast_recyclerview.forcastclicklistner, searchview_recyclerview.searchview_onclick {
 
-    private List<forcast_model> sixteen_weatherforcast_list;
+    private List<forcast_model> sixteen_weatherforecast_list;
     private List<minute_model> minute_model_list;
     private List<current_model> current_list;
     private List<detail_model> current_list_rv;
@@ -75,9 +76,9 @@ public class MainActivity extends AppCompatActivity implements com.example.simpl
     private ArrayList<chart_model> twotemp_chart_list;
     private ArrayList<chart_model> rain_chart_list;
 
-    private RecyclerView forecast_recyclerview, minute_recyclerview, searcheview_rv, current_rv;
+    private RecyclerView Forecast_Rv, Minute_Rv, SearchView_Rv, Current_Rv;
 
-    private TextView cityname, currenttemp, condition, clouds, pressure, country, error_textview, chart_textview, date_textview, current_textview, current_uv;
+    private TextView City_Name_Textview, Current_Temp_TextView, Condition_TextView, Country_Name_TextView, Error_TextView, SeeChart_TextView, date_textview;
 
     private NestedScrollView scrollView;
 
@@ -91,9 +92,11 @@ public class MainActivity extends AppCompatActivity implements com.example.simpl
     private chart_fragment chart_fragment;
     private Fragment fragment;
 
-    private LottieAnimationView lottieAnimationView_noconnection;
+    private LottieAnimationView lottieAnimationView_noconnection, lottie_loading;
 
-    private LinearLayout minute_layout, forecast_layout, no_internet_layout;
+    private LinearLayout minute_layout, no_internet_layout;
+
+    RelativeLayout waiting_layout;
 
     private Url_Maker local_json_city;
 
@@ -113,7 +116,7 @@ public class MainActivity extends AppCompatActivity implements com.example.simpl
 
         fragment = null;
 
-        chart_textview = findViewById(R.id.chart_textview);
+        SeeChart_TextView = findViewById(R.id.chart_textview);
 
         sharepreferenced = new My_Sharepreferenced(this);
         local_json_city = new Url_Maker(this);
@@ -121,18 +124,19 @@ public class MainActivity extends AppCompatActivity implements com.example.simpl
         my_alarmmanager = new my_alarmmanager(this);
 
         lottieAnimationView_noconnection = findViewById(R.id.no_connection_lottie);
+        lottie_loading = findViewById(R.id.lottie_loading);
 
-        // current_consrtaintlayout = findViewById(R.id.constraint_one);
         minute_layout = findViewById(R.id.minute_layout);
-        error_textview = findViewById(R.id.errortextview);
+        Error_TextView = findViewById(R.id.errortextview);
         no_internet_layout = findViewById(R.id.no_internet_layout);
+        waiting_layout = findViewById(R.id.loading_layout);
 
 
         detail_fragment = new detail_fragment();
         chart_fragment = new chart_fragment();
         city_finder = new City_Finder();
 
-        sixteen_weatherforcast_list = new ArrayList<>();
+        sixteen_weatherforecast_list = new ArrayList<>();
         minute_model_list = new ArrayList<>();
         current_list = new ArrayList<>();
         temp_chart_list = new ArrayList<>();
@@ -141,12 +145,12 @@ public class MainActivity extends AppCompatActivity implements com.example.simpl
         current_list_rv = new ArrayList<>();
 
         scrollView = findViewById(R.id.scrollview);
-        searcheview_rv = findViewById(R.id.searchview_rv);
+        SearchView_Rv = findViewById(R.id.searchview_rv);
 
         searchview_rv = new searchview_recyclerview(this);
-        searcheview_rv.setLayoutManager(new LinearLayoutManager(MainActivity.this));
-        searcheview_rv.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
-        searcheview_rv.setAdapter(searchview_rv);
+        SearchView_Rv.setLayoutManager(new LinearLayoutManager(MainActivity.this));
+        SearchView_Rv.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
+        SearchView_Rv.setAdapter(searchview_rv);
 
         Current_Weather("", "");
         forcast_weather("", "");
@@ -160,7 +164,7 @@ public class MainActivity extends AppCompatActivity implements com.example.simpl
             }
         }
 
-        error_textview.setOnClickListener(new View.OnClickListener() {
+        Error_TextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Current_Weather("", "");
@@ -168,7 +172,7 @@ public class MainActivity extends AppCompatActivity implements com.example.simpl
             }
         });
 
-        chart_textview.setOnClickListener(new View.OnClickListener() {
+        SeeChart_TextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
@@ -226,11 +230,11 @@ public class MainActivity extends AppCompatActivity implements com.example.simpl
         searchView.setOnQueryTextFocusChangeListener((v, hasFocus) -> {
             if (hasFocus) {
                 hide_actionbar_items(menu, menuItem, false);
-                searcheview_rv.setVisibility(View.VISIBLE);
+                SearchView_Rv.setVisibility(View.VISIBLE);
                 scrollView.setVisibility(View.INVISIBLE);
             } else {
                 hide_actionbar_items(menu, menuItem, true);
-                searcheview_rv.setVisibility(View.GONE);
+                SearchView_Rv.setVisibility(View.GONE);
                 scrollView.setVisibility(View.VISIBLE);
             }
         });
@@ -256,22 +260,16 @@ public class MainActivity extends AppCompatActivity implements com.example.simpl
 
     public void Current_Weather(String city_name, String counrtry_name) {
 
-        // start_lottie_animation();
-
-
-        cityname = findViewById(R.id.cityname);
-        currenttemp = findViewById(R.id.currenttemp);
-        condition = findViewById(R.id.condition);
-        pressure = findViewById(R.id.visibility);
-        clouds = findViewById(R.id.clouds);
-        country = findViewById(R.id.country);
+        City_Name_Textview = findViewById(R.id.City_Name);
+        Current_Temp_TextView = findViewById(R.id.currenttemp);
+        Condition_TextView = findViewById(R.id.condition);
+        Country_Name_TextView = findViewById(R.id.Country_Name);
         date_textview = findViewById(R.id.date);
-        current_textview = findViewById(R.id.textView3);
         ImageView imageView = findViewById(R.id.imageView);
-        current_uv = findViewById(R.id.current_uv_textview);
 
         OkHttpClient okHttpClient = new OkHttpClient();
         Request request;
+
         if (check_connection.is_connect()) {
             request = new Request.Builder().url(local_json_city
                     .current_url_maker(city_name, counrtry_name))
@@ -295,6 +293,7 @@ public class MainActivity extends AppCompatActivity implements com.example.simpl
                     stop_noconnection();
                     current_list.clear();
                     minute_model_list.clear();
+                    current_list_rv.clear();
 
                     try {
 
@@ -308,22 +307,19 @@ public class MainActivity extends AppCompatActivity implements com.example.simpl
                                     String.valueOf(Math.round(Float.parseFloat(jsonobj.getString("temp")))),
                                     jsonobj.getString("city_name").toUpperCase(),
                                     "https://www.weatherbit.io/static/img/icons/" + jsonobj.getJSONObject("weather").getString("icon") + ".png",
-                                    jsonobj.getString("clouds"),
-                                    jsonobj.getString("vis"),
-                                    jsonobj.getString("country_code"),
-                                    jsonobj.getString("uv")
+                                    jsonobj.getString("country_code")
                             ));
 
-                            current_list_rv.add(new detail_model("Average Pressure", jsonobj.getString("pres") + " mb", R.drawable.barometer));
-                            current_list_rv.add(new detail_model("Range Visibility", jsonobj.getString("vis") + " KM", R.drawable.visibility));
-                            current_list_rv.add(new detail_model("Wind Speed ", jsonobj.getString("wind_spd") + " m/s", R.drawable.storm));
-                            current_list_rv.add(new detail_model("UV", jsonobj.getString("uv"), R.drawable.rays));
-                            current_list_rv.add(new detail_model("Clouds Coverage", jsonobj.getString("clouds") + "%", R.drawable.cloud));
+                            current_list_rv.add(new detail_model("Average Pressure", jsonobj.getString("pres") + " mb", R.drawable.icon_pressure));
+                            current_list_rv.add(new detail_model("Range Visibility", jsonobj.getString("vis") + " KM", R.drawable.icon_visibility));
+                            current_list_rv.add(new detail_model("Wind Speed ", jsonobj.getString("wind_spd") + " m/s", R.drawable.icon_wind_speed));
+                            current_list_rv.add(new detail_model("UV", jsonobj.getString("uv"), R.drawable.icon_uv_index));
+                            current_list_rv.add(new detail_model("Solar Radiation", jsonobj.getString("solar_rad") + " W/m^2" , R.drawable.icon_solar_radition));
+                            current_list_rv.add(new detail_model("Solar elevation angle", jsonobj.getString("elev_angle") + "\u00B0", R.drawable.icon_solarangle));
+                            current_list_rv.add(new detail_model("Clouds Coverage", jsonobj.getString("clouds") + "%", R.drawable.icon_cloud));
                             current_list_rv.add(new detail_model("Probability of Precipitation", jsonobj.getString("precip") + "%", R.drawable.icon_precipitation));
 
-
                         }
-
 
                         JSONArray jsonArray2 = jsonObject.getJSONArray("minutely");
                         for (int i = 0; i < jsonArray2.length(); i++) {
@@ -339,28 +335,24 @@ public class MainActivity extends AppCompatActivity implements com.example.simpl
 
                         if (current_list.size() != 0) {
 
-                            condition.setText(current_list.get(0).getDescription());
-                            cityname.setText(current_list.get(0).getCityname());
-                            clouds.setText("Cloud " + current_list.get(0).getCloud() + " %");
-                            pressure.setText("Visibility " + current_list.get(0).getVisibility() + " KM");
-                            currenttemp.setText(current_list.get(0).getTemp() + sharepreferenced.getsymbol());
+                            Condition_TextView.setText(current_list.get(0).getDescription());
+                            City_Name_Textview.setText(current_list.get(0).getCityname());
+                            Current_Temp_TextView.setText(current_list.get(0).getTemp() + sharepreferenced.getsymbol());
                             date_textview.setText(current_list.get(0).getDate().substring(0, 10));
-                            current_uv.setText("Uv Index " + current_list.get(0).getVisibility());
-                            current_textview.setText("Current Weather");
 
                             Glide.with(MainActivity.this).load(current_list.get(0).getIcon_url()).into(imageView);
                             Locale locale = new Locale("", current_list.get(0).getCountry());
-                            country.setText(locale.getDisplayCountry());
+                            Country_Name_TextView.setText(locale.getDisplayCountry());
 
-                            minute_recyclerview.setLayoutManager(new LinearLayoutManager(MainActivity.this, LinearLayoutManager.HORIZONTAL, false));
-                            minute_recyclerview.setHasFixedSize(true);
-                            Minute_forcastRecyclerview minute_forcastRecyclerview = new Minute_forcastRecyclerview(minute_model_list, MainActivity.this);
-                            minute_recyclerview.setAdapter(minute_forcastRecyclerview);
+                            Minute_Rv.setLayoutManager(new LinearLayoutManager(MainActivity.this, LinearLayoutManager.HORIZONTAL, false));
+                            Minute_Rv.setHasFixedSize(true);
+                            minute_forecastRecyclerview minute_forecastRecyclerview = new minute_forecastRecyclerview(minute_model_list, MainActivity.this);
+                            Minute_Rv.setAdapter(minute_forecastRecyclerview);
 
-                            current_rv.setLayoutManager(new GridLayoutManager(MainActivity.this, 2));
-                            current_rv.setHasFixedSize(true);
+                            Current_Rv.setLayoutManager(new GridLayoutManager(MainActivity.this, 2));
+                            Current_Rv.setHasFixedSize(true);
                             current_recyclerview current_recyclerview = new current_recyclerview(current_list_rv);
-                            current_rv.setAdapter(current_recyclerview);
+                            Current_Rv.setAdapter(current_recyclerview);
 
                         }
                     });
@@ -371,11 +363,11 @@ public class MainActivity extends AppCompatActivity implements com.example.simpl
 
     public void forcast_weather(String city_name, String country_name) {
 
-        minute_recyclerview = findViewById(R.id.minute_recyclerview);
-        current_rv = findViewById(R.id.current_rv);
-        forecast_recyclerview = findViewById(R.id.forcast_recyclerview);
+        Minute_Rv = findViewById(R.id.minute_recyclerview);
+        Current_Rv = findViewById(R.id.current_rv);
+        Forecast_Rv = findViewById(R.id.forcast_recyclerview);
 
-        scrollView.setVisibility(View.GONE);
+        start_lottie_animation();
 
         OkHttpClient okHttpClient1 = new OkHttpClient();
         Request request1 = new Request.Builder().url(local_json_city.forcast_url_maker(city_name, country_name)).build();
@@ -395,7 +387,7 @@ public class MainActivity extends AppCompatActivity implements com.example.simpl
                     temp_chart_list.clear();
                     twotemp_chart_list.clear();
                     rain_chart_list.clear();
-                    sixteen_weatherforcast_list.clear();
+                    sixteen_weatherforecast_list.clear();
 
                     try {
                         jsonObject = new JSONObject(res);
@@ -404,7 +396,7 @@ public class MainActivity extends AppCompatActivity implements com.example.simpl
                             JSONObject j = jsonArray.getJSONObject(i);
                             if (!j.getString("low_temp").equals("null")) {
                                 String icon_url = "https://www.weatherbit.io/static/img/icons/" + j.getJSONObject("weather").getString("icon") + ".png";
-                                sixteen_weatherforcast_list.add(new forcast_model(j.getString("temp"),
+                                sixteen_weatherforecast_list.add(new forcast_model(j.getString("temp"),
                                         icon_url,
                                         j.getString("low_temp"),
                                         j.getString("max_temp"),
@@ -426,14 +418,13 @@ public class MainActivity extends AppCompatActivity implements com.example.simpl
 
                         runOnUiThread(() -> {
 
-                            forcast_recyclerview adapter = new forcast_recyclerview(sixteen_weatherforcast_list, MainActivity.this, MainActivity.this);
-                            forecast_recyclerview.setLayoutManager(new LinearLayoutManager(MainActivity.this));
-                            forecast_recyclerview.addItemDecoration(new DividerItemDecoration(MainActivity.this, DividerItemDecoration.VERTICAL));
-                            forecast_recyclerview.setAdapter(adapter);
+                            forcast_recyclerview adapter = new forcast_recyclerview(sixteen_weatherforecast_list, MainActivity.this, MainActivity.this);
+                            Forecast_Rv.setLayoutManager(new LinearLayoutManager(MainActivity.this));
+                            Forecast_Rv.addItemDecoration(new DividerItemDecoration(MainActivity.this, DividerItemDecoration.VERTICAL));
+                            Forecast_Rv.setAdapter(adapter);
 
-                            //stop_lottie_animation();
                             widget_update_broadcast();
-                            scrollView.setVisibility(View.VISIBLE);
+                            stop_lottie_animation();
 
                         });
                     } catch (JSONException e) {
@@ -450,21 +441,21 @@ public class MainActivity extends AppCompatActivity implements com.example.simpl
         fragment = detail_fragment;
 
         Bundle bundle = new Bundle();
-        bundle.putString("Temp", sixteen_weatherforcast_list.get(p).getTemp());
-        bundle.putString("time", sixteen_weatherforcast_list.get(p).getTime());
-        bundle.putString("min", sixteen_weatherforcast_list.get(p).getMin());
-        bundle.putString("max", sixteen_weatherforcast_list.get(p).getMax());
-        bundle.putString("iconurl", sixteen_weatherforcast_list.get(p).getIcon());
-        bundle.putString("description", sixteen_weatherforcast_list.get(p).getDescription());
-        bundle.putString("windspeed", sixteen_weatherforcast_list.get(p).getWindspeed());
-        bundle.putString("uv", sixteen_weatherforcast_list.get(p).getUv());
-        bundle.putString("clouds", sixteen_weatherforcast_list.get(p).getClouds());
-        bundle.putString("visibility", sixteen_weatherforcast_list.get(p).getVisibility());
-        bundle.putString("pressure", sixteen_weatherforcast_list.get(p).getPressure());
-        bundle.putString("Probability", sixteen_weatherforcast_list.get(p).getRainpossibilty());
-        bundle.putString("tomarrow_temp", sixteen_weatherforcast_list.get(p + 1).getTemp());
-        bundle.putString("tomarrow_max_temp", sixteen_weatherforcast_list.get(p + 1).getMax());
-        bundle.putString("tomarrow_min_temp", sixteen_weatherforcast_list.get(p + 1).getMin());
+        bundle.putString("Temp", sixteen_weatherforecast_list.get(p).getTemp());
+        bundle.putString("time", sixteen_weatherforecast_list.get(p).getTime());
+        bundle.putString("min", sixteen_weatherforecast_list.get(p).getMin());
+        bundle.putString("max", sixteen_weatherforecast_list.get(p).getMax());
+        bundle.putString("iconurl", sixteen_weatherforecast_list.get(p).getIcon());
+        bundle.putString("description", sixteen_weatherforecast_list.get(p).getDescription());
+        bundle.putString("windspeed", sixteen_weatherforecast_list.get(p).getWindspeed());
+        bundle.putString("uv", sixteen_weatherforecast_list.get(p).getUv());
+        bundle.putString("clouds", sixteen_weatherforecast_list.get(p).getClouds());
+        bundle.putString("visibility", sixteen_weatherforecast_list.get(p).getVisibility());
+        bundle.putString("pressure", sixteen_weatherforecast_list.get(p).getPressure());
+        bundle.putString("Probability", sixteen_weatherforecast_list.get(p).getRainpossibilty());
+        bundle.putString("tomarrow_temp", sixteen_weatherforecast_list.get(p + 1).getTemp());
+        bundle.putString("tomarrow_max_temp", sixteen_weatherforecast_list.get(p + 1).getMax());
+        bundle.putString("tomarrow_min_temp", sixteen_weatherforecast_list.get(p + 1).getMin());
 
         detail_fragment.setArguments(bundle);
         searchView.setVisibility(View.GONE);
@@ -480,7 +471,7 @@ public class MainActivity extends AppCompatActivity implements com.example.simpl
         sharepreferenced.setdefualt(searchview_rv.getCurrentList().get(i).getCity(), searchview_rv.getCurrentList().get(i).getCountry());
         searchView.clearFocus();
         searchView.onActionViewCollapsed();
-        searcheview_rv.setVisibility(View.GONE);
+        SearchView_Rv.setVisibility(View.GONE);
         Current_Weather(searchview_rv.getCurrentList().get(i).getCity().trim(), searchview_rv.getCurrentList().get(i).getCountry().trim());
         forcast_weather(searchview_rv.getCurrentList().get(i).getCity().trim(), searchview_rv.getCurrentList().get(i).getCountry().trim());
 
@@ -488,7 +479,7 @@ public class MainActivity extends AppCompatActivity implements com.example.simpl
 
     @Override
     protected void onRestart() {
-        sixteen_weatherforcast_list.clear();
+        sixteen_weatherforecast_list.clear();
         minute_model_list.clear();
         current_list.clear();
         Current_Weather("", "");
@@ -505,21 +496,19 @@ public class MainActivity extends AppCompatActivity implements com.example.simpl
         getSupportActionBar().show();
         fragment = null;
     }
-//
-//    public void start_lottie_animation() {
-//        current_consrtaintlayout.setVisibility(View.GONE);
-//        minute_layout.setVisibility(View.GONE);
-//        forecast_layout.setVisibility(View.GONE);
-//
-//    }
-//
-//    public void stop_lottie_animation() {
-//
-//        current_consrtaintlayout.setVisibility(View.VISIBLE);
-//        minute_layout.setVisibility(View.VISIBLE);
-//        forecast_layout.setVisibility(View.VISIBLE);
-//
-//    }
+
+    public void start_lottie_animation() {
+        scrollView.setVisibility(View.GONE);
+        waiting_layout.setVisibility(View.VISIBLE);
+        lottie_loading.setAnimation("waiting.json");
+        lottie_loading.playAnimation();
+    }
+
+    public void stop_lottie_animation() {
+        waiting_layout.setVisibility(View.GONE);
+        scrollView.setVisibility(View.VISIBLE);
+        lottie_loading.pauseAnimation();
+    }
 
     public void stop_noconnection() {
         new Handler(Looper.getMainLooper()).post(() -> {
@@ -528,7 +517,7 @@ public class MainActivity extends AppCompatActivity implements com.example.simpl
             lottieAnimationView_noconnection.setAnimation("noconnection.json");
             lottieAnimationView_noconnection.pauseAnimation();
             lottieAnimationView_noconnection.setVisibility(View.GONE);
-            error_textview.setVisibility(View.GONE);
+            Error_TextView.setVisibility(View.GONE);
         });
     }
 
@@ -539,7 +528,7 @@ public class MainActivity extends AppCompatActivity implements com.example.simpl
             lottieAnimationView_noconnection.setAnimation("noconnection.json");
             lottieAnimationView_noconnection.playAnimation();
             lottieAnimationView_noconnection.setVisibility(View.VISIBLE);
-            error_textview.setVisibility(View.VISIBLE);
+            Error_TextView.setVisibility(View.VISIBLE);
         });
 
     }

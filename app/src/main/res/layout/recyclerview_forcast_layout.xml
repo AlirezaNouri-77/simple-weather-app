@@ -37,42 +37,31 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/min_temp"
+        android:id="@+id/min_max_temp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="5dp"
         android:text="20"
         android:textAlignment="center"
         android:textColor="@color/textcolor"
         android:textSize="12sp"
-        app:layout_constraintBottom_toBottomOf="@+id/hot_temp_imageview"
-        app:layout_constraintStart_toEndOf="@+id/hot_temp_imageview"
-        app:layout_constraintTop_toTopOf="@+id/hot_temp_imageview" />
-
-    <TextView
-        android:id="@+id/max_temp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="5dp"
-        android:text="20"
-        android:textAlignment="center"
-        android:textColor="@color/textcolor"
-        android:textSize="12sp"
-        app:layout_constraintBottom_toBottomOf="@+id/cool_temp_imageview"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/cool_temp_imageview"
-        app:layout_constraintTop_toTopOf="@+id/cool_temp_imageview"
-        app:layout_constraintVertical_bias="0.75" />
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/hot_temp_imageview"
+        app:layout_constraintTop_toTopOf="parent" />
+
 
     <ImageView
         android:id="@+id/cool_temp_imageview"
-        android:layout_width="12dp"
-        android:layout_height="20dp"
-        android:layout_marginEnd="24dp"
+        android:layout_width="10dp"
+        android:layout_height="14dp"
+        android:layout_marginStart="5dp"
         android:scaleType="fitXY"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toBottomOf="@+id/min_max_temp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.633"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/min_max_temp"
+        app:layout_constraintTop_toTopOf="@+id/min_max_temp"
         app:srcCompat="@drawable/icon_arrow_down" />
 
     <ImageView
@@ -105,14 +94,16 @@
 
     <ImageView
         android:id="@+id/hot_temp_imageview"
-        android:layout_width="12dp"
-        android:layout_height="20dp"
-        android:layout_marginStart="36dp"
+        android:layout_width="10dp"
+        android:layout_height="14dp"
+        android:layout_marginEnd="5dp"
         android:scaleType="fitXY"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/imageView5"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.666"
+        app:layout_constraintBottom_toBottomOf="@+id/min_max_temp"
+        app:layout_constraintEnd_toStartOf="@+id/min_max_temp"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintStart_toEndOf="@+id/rain"
+        app:layout_constraintTop_toTopOf="@+id/min_max_temp"
         app:srcCompat="@drawable/icon_arrow_up" />
 
     <ImageView
@@ -129,8 +120,9 @@
     <TextView
         android:id="@+id/rain"
         android:layout_width="wrap_content"
-        android:layout_height="17dp"
+        android:layout_height="wrap_content"
         android:text="20%"
+        android:textColor="@color/black_30"
         android:textSize="12sp"
         app:layout_constraintEnd_toEndOf="@+id/imageView5"
         app:layout_constraintStart_toStartOf="@+id/imageView5"

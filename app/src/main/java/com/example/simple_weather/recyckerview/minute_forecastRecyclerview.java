@@ -15,28 +15,28 @@ import com.example.simple_weather.util.My_Sharepreferenced;
 
 import java.util.List;
 
-public class Minute_forcastRecyclerview extends RecyclerView.Adapter<Minute_forcastRecyclerview.Viewholder> {
+public class minute_forecastRecyclerview extends RecyclerView.Adapter<minute_forecastRecyclerview.ViewHolder> {
 
     Context context;
-    List<minute_model> list;
-    My_Sharepreferenced sharepreferencedSetting;
+    private final List<minute_model> list;
+    private final My_Sharepreferenced my_sharepreferenced;
 
-    public Minute_forcastRecyclerview(List<minute_model> list, Context context) {
+    public minute_forecastRecyclerview(List<minute_model> list, Context context) {
         this.list = list;
         this.context = context;
-        sharepreferencedSetting = new My_Sharepreferenced(context);
+        my_sharepreferenced = new My_Sharepreferenced(context);
     }
 
     @NonNull
     @Override
-    public Viewholder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recyclerview_minutely_forcast, parent, false);
-        return new Viewholder(view);
+        return new ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull Viewholder holder, int position) {
-        holder.temp.setText(list.get(position).getTemp() + " "+sharepreferencedSetting.getsymbol());
+    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+        holder.temp.setText(list.get(position).getTemp() + " " + my_sharepreferenced.getsymbol());
         holder.time.setText(list.get(position).getTime());
     }
 
@@ -45,15 +45,16 @@ public class Minute_forcastRecyclerview extends RecyclerView.Adapter<Minute_forc
         return list.size();
     }
 
-    public static class Viewholder extends RecyclerView.ViewHolder {
+    public static class ViewHolder extends RecyclerView.ViewHolder {
 
         TextView temp;
         TextView time;
 
-        public Viewholder(@NonNull View itemView) {
+        public ViewHolder(@NonNull View itemView) {
             super(itemView);
             temp = itemView.findViewById(R.id.temp);
             time = itemView.findViewById(R.id.time);
+
         }
     }
 }

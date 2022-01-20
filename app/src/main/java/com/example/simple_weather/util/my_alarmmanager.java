@@ -24,6 +24,7 @@ public class my_alarmmanager{
     }
 
     public void Setup_Alarmanager() {
+        Log.d("TAG", "Setup_Alarmanager: " + "alarm set");
         Intent intent = new Intent(context, notification_receiver.class);
         intent.setAction("com.shermanrex_weather_notification");
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_IMMUTABLE);

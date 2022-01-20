@@ -60,7 +60,7 @@ public class searchview_recyclerview extends ListAdapter<searchview_model, searc
         public searchview_viewholder(@NonNull View itemView) {
             super(itemView);
             city_textview = itemView.findViewById(R.id.city);
-            country_textview = itemView.findViewById(R.id.country);
+            country_textview = itemView.findViewById(R.id.Country_Name);
         }
 
     }

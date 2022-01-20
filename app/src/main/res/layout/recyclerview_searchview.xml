@@ -17,7 +17,7 @@
         android:textColor="@color/black" />
 
     <TextView
-        android:id="@+id/country"
+        android:id="@+id/Country_Name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center|left"

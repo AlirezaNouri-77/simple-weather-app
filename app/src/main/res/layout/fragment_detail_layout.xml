@@ -144,7 +144,7 @@
             android:textStyle="bold">
 
             <ImageView
-                android:src="@drawable/tomorrow"
+                android:src="@drawable/icon_tomarrow"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:padding="8dp"

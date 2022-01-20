@@ -68,24 +68,25 @@ public class weather_widget extends AppWidgetProvider {
     @Override
     public void onReceive(Context context, Intent intent) {
         super.onReceive(context, intent);
+
         req req = new req(context);
         if (intent.getAction().equals(AppWidgetManager.ACTION_APPWIDGET_UPDATE)) {
 
-            Log.d("TAG", "onReceive: " + "click");
+            Log.d("TAG", "onReceive: " + "click22");
             int[] id = intent.getIntArrayExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS);
             req.request(id[0]);
 
-        } else if (intent.getAction().equals(Intent.ACTION_BOOT_COMPLETED)) {
+        } else if (intent.getAction().equals("android.intent.action.BOOT_COMPLETED")) {
 
+            Log.d("TAG", "onReceive: " + "boot");
             my_alarmmanager my_alarmmanager = new my_alarmmanager(context);
             My_Sharepreferenced my_sharepreferenced = new My_Sharepreferenced(context);
             if (!my_sharepreferenced.notification_setting()) {
                 my_alarmmanager.Setup_Alarmanager();
             }
-            Log.d("TAG", "onReceive: " + "boot");
             int[] id = intent.getIntArrayExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS);
             req.request(id[0]);
-            // new request(context, id[0]).execute();
+
         }
     }
 

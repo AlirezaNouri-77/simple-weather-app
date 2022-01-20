@@ -22,149 +22,110 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <LinearLayout
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/current_cardview"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
-                app:cardBackgroundColor="@android:color/transparent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
+                android:background="@drawable/background_transparent"
+                android:padding="15dp"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:layout_editor_absoluteX="10dp">
 
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/constraint_one"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@drawable/background_transparent"
+
+                <TextView
+                    android:id="@+id/currenttemp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/condition"
+                    android:gravity="center"
+                    android:textColor="@color/black_30"
+                    android:textSize="28sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="@+id/condition"
+                    app:layout_constraintStart_toStartOf="@+id/condition"
+                    app:layout_constraintTop_toBottomOf="@+id/condition"
+                    tools:text="5 C" />
+
+                <TextView
+                    android:id="@+id/condition"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/imageView"
+                    android:layout_alignStart="@+id/imageView"
+                    android:layout_alignEnd="@+id/imageView"
+                    android:textColor="@color/black_30"
+                    app:layout_constraintBottom_toTopOf="@+id/currenttemp"
+                    app:layout_constraintEnd_toEndOf="@+id/imageView"
+                    app:layout_constraintStart_toStartOf="@+id/imageView"
+                    app:layout_constraintTop_toBottomOf="@+id/imageView"
+                    tools:text="Suuny" />
+
+                <ImageView
+                    android:id="@+id/imageView"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginEnd="40dp"
+                    app:layout_constraintBottom_toTopOf="@+id/condition"
                     app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_chainStyle="packed"
+                    tools:srcCompat="@tools:sample/avatars" />
+
+
+                <TextView
+                    android:id="@+id/City_Name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black_30"
+                    android:textSize="20sp"
+                    app:layout_constraintBottom_toTopOf="@+id/Country_Name"
+                    app:layout_constraintEnd_toEndOf="@+id/Country_Name"
                     app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="@+id/Country_Name"
+                    tools:text="city" />
+
+                <TextView
+                    android:id="@+id/Country_Name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginBottom="4dp"
+                    android:textColor="@color/black_30"
+                    android:textSize="12sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent">
+                    tools:text="Country" />
+
+                <TextView
+                    android:id="@+id/date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="16dp"
+                    android:textColor="@color/black_30"
+                    android:textSize="14sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:text="2021/12/12" />
+
+                <TextView
+                    android:id="@+id/textView3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/date"
+                    android:text="Current Weather"
+                    android:textColor="@color/black_30"
+                    android:textSize="15sp"
+                    app:layout_constraintEnd_toEndOf="@+id/date"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="@+id/date"
+                    app:layout_constraintTop_toBottomOf="@+id/date" />
 
 
-                    <TextView
-                        android:id="@+id/date"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="8dp"
-                        android:layout_marginTop="5dp"
-                        android:gravity="left"
-                        android:textColor="@color/black_30"
-                        android:textSize="14sp"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        tools:text="2021/12/12" />
-
-                    <TextView
-                        android:id="@+id/cityname"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="8dp"
-                        android:layout_marginTop="32dp"
-                        android:gravity="left"
-                        android:textColor="@color/black_30"
-                        android:textSize="20sp"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/textView3"
-                        tools:text="washington" />
-
-                    <TextView
-                        android:id="@+id/textView3"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:gravity="left"
-                        android:textColor="@color/black_30"
-                        android:textSize="15sp"
-                        app:layout_constraintEnd_toEndOf="@+id/date"
-                        app:layout_constraintHorizontal_bias="0.0"
-                        app:layout_constraintStart_toStartOf="@+id/date"
-                        app:layout_constraintTop_toBottomOf="@+id/date"
-                        tools:text="Current Weather" />
-
-                    <TextView
-                        android:id="@+id/currenttemp"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:textColor="@color/black_30"
-                        android:textSize="38sp"
-                        android:textStyle="bold"
-                        app:layout_constraintEnd_toEndOf="@+id/imageView"
-                        app:layout_constraintStart_toStartOf="@+id/imageView"
-                        app:layout_constraintTop_toBottomOf="@+id/imageView" />
-
-                    <TextView
-                        android:id="@+id/condition"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textColor="@color/textcolor"
-                        app:layout_constraintBottom_toTopOf="@+id/imageView"
-                        app:layout_constraintEnd_toEndOf="@+id/imageView"
-                        app:layout_constraintStart_toStartOf="@+id/imageView" />
-
-
-                    <ImageView
-                        android:id="@+id/imageView"
-                        android:layout_width="80dp"
-                        android:layout_height="80dp"
-                        android:layout_marginEnd="36dp"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintVertical_bias="0.475"
-                        tools:srcCompat="@tools:sample/avatars" />
-
-                    <TextView
-                        android:id="@+id/visibility"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="5dp"
-                        android:textColor="@color/black_30"
-                        android:textSize="12sp"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toStartOf="@+id/clouds"
-                        tools:text="Visibility" />
-
-                    <TextView
-                        android:id="@+id/clouds"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="8dp"
-                        android:layout_marginBottom="4dp"
-                        android:textColor="@color/black_30"
-                        android:textSize="12sp"
-                        app:layout_constraintBottom_toTopOf="@+id/visibility"
-                        app:layout_constraintStart_toStartOf="parent"
-                        tools:text="Cloud" />
-
-                    <TextView
-                        android:id="@+id/country"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textColor="@color/black_30"
-                        android:textSize="11sp"
-                        app:layout_constraintEnd_toEndOf="@+id/cityname"
-                        app:layout_constraintHorizontal_bias="0.0"
-                        app:layout_constraintStart_toStartOf="@+id/cityname"
-                        app:layout_constraintTop_toBottomOf="@+id/cityname" />
-
-                    <TextView
-                        android:id="@+id/current_uv_textview"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="5dp"
-                        android:textColor="@color/black_30"
-                        android:textSize="12sp"
-                        app:layout_constraintBottom_toTopOf="@+id/clouds"
-                        app:layout_constraintEnd_toEndOf="@+id/clouds"
-                        app:layout_constraintHorizontal_bias="0.0"
-                        app:layout_constraintStart_toStartOf="@+id/clouds" />
-
-
-                </androidx.constraintlayout.widget.ConstraintLayout>
-
-            </LinearLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
             <LinearLayout
                 android:id="@+id/minitely_cardview"
@@ -195,7 +156,7 @@
                             android:layout_height="30dp"
                             android:padding="6dp"
                             android:scaleType="fitCenter"
-                            android:src="@drawable/sixtityminutes" />
+                            android:src="@drawable/icon_one_hour" />
 
                         <TextView
                             android:id="@+id/textView"
@@ -211,7 +172,6 @@
 
 
                     </LinearLayout>
-
 
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/minute_recyclerview"
@@ -259,7 +219,7 @@
                             android:layout_height="30dp"
                             android:padding="8dp"
                             android:scaleType="fitCenter"
-                            android:src="@drawable/tomorrow" />
+                            android:src="@drawable/icon_tomarrow" />
 
                         <TextView
                             android:id="@+id/textView2"
@@ -381,6 +341,31 @@
 
     </LinearLayout>
 
+
+    <RelativeLayout
+        android:id="@+id/loading_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/background_transparent"
+        android:visibility="gone">
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/lottie_loading"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_centerInParent="true" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/lottie_loading"
+            android:layout_alignStart="@+id/lottie_loading"
+            android:layout_alignEnd="@+id/lottie_loading"
+            android:gravity="center"
+            android:text="Please Wait..." />
+
+
+    </RelativeLayout>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/searchview_rv"
